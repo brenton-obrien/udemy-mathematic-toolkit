@@ -48,6 +48,7 @@ import pyttsx3
 import threading
 import random
 
+
 ### TKINTER WINDOW CONFIGURATION ###
 
 # Tkinter window configuration
