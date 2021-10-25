@@ -17,9 +17,9 @@
 # Unit Converter (temp, currency, volume, mass and more) [complete] - change this program to use the internet for conversions
 # Alarm Clock [complete] - add text wrapping to song title, stop song button on message box
 # Distance Between Two Cities [complete] - change colour to blue for drop down boxes?
-# Credit Card Validator [complete] - add examples for credit card numbers, drop down box? , add focus if needed
-# Tax Calculator [complete] , add focus if needed
-# Factorial Finder [complete] , add focus if needed
+# Credit Card Validator [complete] - add examples for credit card numbers, drop down box?
+# Tax Calculator [complete]
+# Factorial Finder [complete] - add scroll bar to results
 # Happy Numbers [complete] - add calculations to a scroll bar , add focus if needed
 # Number Names [complete] , add focus if needed
 # Coin Flip Simulation [complete] , add focus if needed
@@ -36,7 +36,7 @@ import decimal
 import winsound
 import datetime
 import math
-import numpy
+import numpy # potentially need to remove this if not used
 from tkinter import messagebox
 from tkinter import filedialog
 import os
@@ -47,29 +47,79 @@ import requests
 import pyttsx3
 import threading
 import random
+### END OF IMPORTS ###
 
 
 ### TKINTER WINDOW CONFIGURATION ###
-
-# Tkinter window configuration
 window = Tk()
 window.title("Udemy Mathematics Capstone Project")
 window.resizable(True, True)
 window.state("zoomed")
 window.rowconfigure(0, weight=1)
 window.columnconfigure(0, weight=1)
+### END OF TKINTER WINDOW CONFIGURATION ###
 
+
+### INITIALISE SOUND ###
 # Initialise Pygame mixer
 pygame.mixer.init()
 
 # Initial text to speech engine
 engine = pyttsx3.init()
+### END OF INITIALISE SOUND ###
 
 
 ### TKINTER FRAME CONFIGURATION ###
+# Creates all the frames and sets their background to blue
+welcome_screen_frame = Frame(window, bg='royalblue4')
+pi_to_nth_digit_frame = Frame(window, bg='royalblue4')
+e_to_nth_digit_frame = Frame(window, bg='royalblue4')
+fibonacci_sequence_frame = Frame(window, bg='royalblue4')
+prime_factorization_frame = Frame(window, bg='royalblue4')
+next_prime_frame = Frame(window, bg='royalblue4')
+w_x_h_floor_frame = Frame(window, bg='royalblue4')
+morgage_calculator_frame = Frame(window, bg='royalblue4')
+binary_to_decimal_frame = Frame(window, bg='royalblue4')
+change_return_frame = Frame(window, bg='royalblue4')
+calculator_frame = Frame(window, bg='royalblue4')
+unit_converter_frame = Frame(window, bg='royalblue4')
+alarm_clock_frame = Frame(window, bg='royalblue4')
+distance_two_cities_frame = Frame(window, bg='royalblue4')
+credit_card_validator_frame = Frame(window, bg='royalblue4')
+tax_calculator_frame = Frame(window, bg='royalblue4')
+factorial_finder_frame = Frame(window, bg='royalblue4')
+happy_number_frame = Frame(window, bg='royalblue4')
+number_name_frame = Frame(window, bg='royalblue4')
+coin_flip_frame = Frame(window, bg='royalblue4')
+exponentiation_frame = Frame(window, bg='royalblue4')
 
-#  Allows different frames to be shown when required, also adds focus to the entry box if relevant
+# Stretches all frame to fit window
+for frame in (welcome_screen_frame,
+              pi_to_nth_digit_frame,
+              e_to_nth_digit_frame,
+              fibonacci_sequence_frame,
+              next_prime_frame,
+              prime_factorization_frame,
+              w_x_h_floor_frame,
+              morgage_calculator_frame,
+              change_return_frame,
+              binary_to_decimal_frame,
+              calculator_frame,
+              unit_converter_frame,
+              alarm_clock_frame,
+              distance_two_cities_frame,
+              credit_card_validator_frame,
+              tax_calculator_frame,
+              factorial_finder_frame,
+              happy_number_frame,
+              number_name_frame,
+              coin_flip_frame,
+              exponentiation_frame):
+    frame.grid(row=0, column=0, sticky="nsew")
+
+# Allows different frames to be shown when clicking on the menubar, also adds focus to the entry box if relevant
 def show_frame(frame_parameter):
+
     frame_parameter.tkraise()
 
     if frame_parameter == pi_to_nth_digit_frame:
@@ -88,60 +138,29 @@ def show_frame(frame_parameter):
         change_return_item_cost_entry.focus()
     elif frame_parameter == binary_to_decimal_frame:
         binary_to_decimal_entry.focus()
+    elif frame_parameter == credit_card_validator_frame:
+        card_validator_entry.focus()
+    elif frame_parameter == tax_calculator_frame:
+        simple_tax_entry.focus()
+    elif frame_parameter == factorial_finder_frame:
+        factorial_finder_entry.focus()
+    elif frame_parameter == happy_number_frame:
+        happy_numbers_entry.focus()
+    elif frame_parameter == number_name_frame:
+        number_name_entry.focus()
+    elif frame_parameter == coin_flip_frame:
+        coin_flip_entry.focus()
+    elif frame_parameter == exponentiation_frame:
+        exponentiation_x_entry.focus()
 
 
-# Frame creation
-welcome_screen_frame = Frame(window, bg='royalblue4')
-pi_to_nth_digit_frame = Frame(window, bg='royalblue4')
-e_to_nth_digit_frame = Frame(window, bg='royalblue4')
-fibonacci_sequence_frame = Frame(window, bg='royalblue4')
-prime_factorization_frame = Frame(window, bg='royalblue4')
-next_prime_frame = Frame(window, bg='royalblue4')
-w_x_h_floor_frame = Frame(window, bg='royalblue4')
-morgage_calculator_frame = Frame(window, bg='royalblue4')
-change_return_frame = Frame(window, bg='royalblue4')
-binary_to_decimal_frame = Frame(window, bg='royalblue4')
-calculator_frame = Frame(window, bg='royalblue4')
-unit_converter_frame = Frame(window, bg='royalblue4')
-alarm_clock_frame = Frame(window, bg='royalblue4')
-distance_two_cities_frame = Frame(window, bg='royalblue4')
-credit_card_validator_frame = Frame(window, bg='royalblue4')
-tax_calculator_frame = Frame(window, bg='royalblue4')
-factorial_finder_frame = Frame(window, bg='royalblue4')
-happy_number_frame = Frame(window, bg='royalblue4')
-number_name_frame = Frame(window, bg='royalblue4')
-coin_flip_frame = Frame(window, bg='royalblue4')
-fast_exponentiation_frame = Frame(window, bg='royalblue4')
-
-for frame in (welcome_screen_frame,  # Stretches frame to fit window
-              pi_to_nth_digit_frame,
-              e_to_nth_digit_frame,
-              fibonacci_sequence_frame,
-              next_prime_frame,
-              w_x_h_floor_frame,
-              morgage_calculator_frame,
-              change_return_frame,
-              binary_to_decimal_frame,
-              calculator_frame,
-              unit_converter_frame,
-              alarm_clock_frame,
-              distance_two_cities_frame,
-              credit_card_validator_frame,
-              tax_calculator_frame,
-              factorial_finder_frame,
-              prime_factorization_frame,
-              happy_number_frame,
-              number_name_frame,
-              coin_flip_frame,
-              fast_exponentiation_frame):
-    frame.grid(row=0, column=0, sticky="nsew")
-
-### TKINTER MENU BAR ###
-
-menubar = Menu(window)  # Creates menubar that has a list of all the frames
+# Creates menubar that has a list of all the frames
+menubar = Menu(window)
 
 select_program = Menu(menubar, tearoff=0)
+
 menubar.add_cascade(label='Select Program', menu=select_program)
+
 select_program.add_command(label='Welcome Screen', command=lambda: show_frame(welcome_screen_frame))
 select_program.add_separator()
 select_program.add_command(label='Find Pi to the nth digit', command=lambda: show_frame(pi_to_nth_digit_frame))
@@ -152,8 +171,7 @@ select_program.add_command(label='Next prime number', command=lambda: show_frame
 select_program.add_command(label='Cost to cover W x H floor', command=lambda: show_frame(w_x_h_floor_frame))
 select_program.add_command(label='Mortgage calculator', command=lambda: show_frame(morgage_calculator_frame))
 select_program.add_command(label='Change return', command=lambda: show_frame(change_return_frame))
-select_program.add_command(label='Binary to Decimal and Back Converter',
-                           command=lambda: show_frame(binary_to_decimal_frame))
+select_program.add_command(label='Binary to Decimal and Back Converter', command=lambda: show_frame(binary_to_decimal_frame))
 select_program.add_command(label='Scientific Calculator', command=lambda: show_frame(calculator_frame))
 select_program.add_command(label='Unit Converter', command=lambda: show_frame(unit_converter_frame))
 select_program.add_command(label='Alarm Clock', command=lambda: show_frame(alarm_clock_frame))
@@ -164,7 +182,7 @@ select_program.add_command(label='Factorial Finder', command=lambda: show_frame(
 select_program.add_command(label='Happy Numbers', command=lambda: show_frame(happy_number_frame))
 select_program.add_command(label='Number Names', command=lambda: show_frame(number_name_frame))
 select_program.add_command(label='Coin Flip Simulation', command=lambda: show_frame(coin_flip_frame))
-select_program.add_command(label='Exponentiation', command=lambda: show_frame(fast_exponentiation_frame))
+select_program.add_command(label='Exponentiation', command=lambda: show_frame(exponentiation_frame))
 select_program.add_separator()
 select_program.add_command(label='Exit', command=exit)
 
@@ -4158,32 +4176,32 @@ coin_flip_text_box = scrolledtext.ScrolledText(coin_flip_frame, bg='royalblue4',
 coin_flip_text_box.grid(row=4, column=5, columnspan=1, rowspan=10, pady=25, sticky='W')
 
 ### Exponentiation ###
-exponentiation_title = Label(fast_exponentiation_frame, text="Exponentiation", bg='royalblue4', fg='snow1',
+exponentiation_title = Label(exponentiation_frame, text="Exponentiation", bg='royalblue4', fg='snow1',
                              font=('helvetica', 50))
 exponentiation_title.grid(row=0, column=0, sticky="nsew", padx=500, columnspan=6)
 
-exponentiation_instructions = Label(fast_exponentiation_frame,
+exponentiation_instructions = Label(exponentiation_frame,
                                     text="Enter x to the power of y in the entry boxes and click submit to get the result.",
                                     bg='royalblue4', fg='snow1', font=('helvetica', 25))
 exponentiation_instructions.grid(row=1, column=0, columnspan=6, pady=50)
 
-exponentiation_x_entry = Entry(fast_exponentiation_frame, font=('helvetica', 25), width=15, relief=RIDGE, bd=4,
+exponentiation_x_entry = Entry(exponentiation_frame, font=('helvetica', 25), width=15, relief=RIDGE, bd=4,
                                bg='Dodger Blue', fg='snow2')
 exponentiation_x_entry.grid(row=2, column=1, columnspan=6, sticky='W')
 
-exponentiation_to_the_power_of_label = Label(fast_exponentiation_frame, text="to the power of", bg='royalblue4',
+exponentiation_to_the_power_of_label = Label(exponentiation_frame, text="to the power of", bg='royalblue4',
                                              fg='snow1', font=('helvetica', 25))
 exponentiation_to_the_power_of_label.grid(row=2, column=0, columnspan=6, pady=25)
 
-exponentiation_y_entry = Entry(fast_exponentiation_frame, font=('helvetica', 25), width=15, relief=RIDGE, bd=4,
+exponentiation_y_entry = Entry(exponentiation_frame, font=('helvetica', 25), width=15, relief=RIDGE, bd=4,
                                bg='Dodger Blue', fg='snow2')
 exponentiation_y_entry.grid(row=2, column=4, columnspan=6, sticky='W')
 
-exponentiation_button = Button(fast_exponentiation_frame, text='Submit', width=7, font=('helvetica', 20), relief=RAISED,
+exponentiation_button = Button(exponentiation_frame, text='Submit', width=7, font=('helvetica', 20), relief=RAISED,
                                bd=4, bg='Dodger Blue', fg='snow2', command=exponentiation_submit)
 exponentiation_button.grid(row=3, column=0, columnspan=6, pady=2)
 
-exponentiation_results = Label(fast_exponentiation_frame, text="", bg='royalblue4', fg='snow1', font=('helvetica', 25),
+exponentiation_results = Label(exponentiation_frame, text="", bg='royalblue4', fg='snow1', font=('helvetica', 25),
                                wraplength=1000, justify="center")
 exponentiation_results.grid(row=4, column=0, columnspan=6, pady=50)
 
