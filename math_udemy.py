@@ -4,26 +4,32 @@
 
 # The programs are as follows:
 
-# Find Pi to the nth digit [complete] - reformat functions
-# Find E to the nth digit  [complete] - tidy gui, centralise widgets properly, change result to scrollbar, update limit
-# Fibonacci sequence [complete] - tidy gui, centralise widgets properly, change result to scrollbar, update limit
-# Prime Factorization [complete] - tidy gui, centralise widgets properly, change result to scrollbar, update limit
-# Next prime number [complete] - tidy gui, centralise widgets properly, change result to scrollbar, update limit
-# Find the cost to cover W x H floor [complete] - tidy gui
-# Mortgage calculator [complete] - tidy gui
-# Change return program [complete]  - tidy gui, allow results ro remain central, fix code?
-# Binary to Decimal and Back Converter [complete] - tidy gui
-# Scientific Calculator [complete] - remove print statements
-# Unit Converter (temp, currency, volume, mass and more) [complete] - change this program to use the internet for conversions
-# Alarm Clock [complete] - add text wrapping to song title, stop song button on message box
-# Distance Between Two Cities [complete] - change colour to blue for drop down boxes?
-# Credit Card Validator [complete] - add examples for credit card numbers, drop down box?
+# Find Pi to the nth digit [complete]
+# Find E to the nth digit  [complete]
+
+# Fibonacci sequence [incomplete] - tidy gui, centralise widgets properly, change result to scrollbar, update limit
+# Prime Factorization [incomplete] - tidy gui, centralise widgets properly, change result to scrollbar, update limit
+# Next prime number [incomplete] - tidy gui, centralise widgets properly, change result to scrollbar, update limit
+# Find the cost to cover W x H floor [incomplete] - tidy gui
+# Mortgage calculator [incomplete] - tidy gui
+# Change return program [incomplete]  - tidy gui, allow results ro remain central, fix code?
+# Binary to Decimal and Back Converter [incomplete] - tidy gui
+
+# Scientific Calculator [complete]
+
+# Unit Converter (temp, currency, volume, mass and more) [incomplete] - change this program to use the internet for conversions
+# Alarm Clock [incomplete] - add text wrapping to song title, stop song button on message box
+# Distance Between Two Cities [incomplete] - change colour to blue for drop down boxes?
+# Credit Card Validator [incomplete] - add examples for credit card numbers, drop down box?
+
 # Tax Calculator [complete]
-# Factorial Finder [complete] - add scroll bar to results
-# Happy Numbers [complete] - add calculations to a scroll bar , add focus if needed
-# Number Names [complete] , add focus if needed
-# Coin Flip Simulation [complete] , add focus if needed
-# Exponentiation [complete] , add focus if needed
+
+# Factorial Finder [incomplete] - add scroll bar to results
+# Happy Numbers [incomplete] - add calculations to a scroll bar , add focus if needed
+
+# Number Names [complete]
+# Coin Flip Simulation [complete]
+# Exponentiation [complete]
 
 # once all completed, upload to GITHUB
 
@@ -33,6 +39,7 @@ from mpmath import mp
 from tkinter import ttk
 import tkinter.scrolledtext as scrolledtext
 import decimal
+import sympy
 import winsound
 import datetime
 import math
@@ -185,8 +192,10 @@ select_program.add_command(label='Coin Flip Simulation', command=lambda: show_fr
 select_program.add_command(label='Exponentiation', command=lambda: show_frame(exponentiation_frame))
 select_program.add_separator()
 select_program.add_command(label='Exit', command=exit)
+### END OF TKINTER FRAME CONFIGURATION ###
 
-# Global variables for number to text:
+
+# Global variables for number to text: - potentially need to remove this once I get to it
 one_to_nine_dict = {'0': 'zero', '1': 'one', '2': 'two', '3': 'three', '4': 'four', '5': 'five', '6': 'six',
                     '7': 'seven', '8': 'eight', '9': 'nine'}
 ten_to_nineteen_dict = {'10': 'ten', '11': 'eleven', '12': 'twelve', '13': 'thirteen', '14': 'fourteen',
@@ -203,7 +212,6 @@ text_output = ''
 ### Pi to nth Digit ###
 def pi_to_nth_digit_submit():
     try:
-
         pi_to_nth_digit_results.delete('1.0', END)
 
         if 0 < int(pi_to_nth_digit_entry.get()) <= 10000:
@@ -212,6 +220,7 @@ def pi_to_nth_digit_submit():
 
         else:
             pi_to_nth_digit_results.insert(END, 'Please enter a valid number between 1-10,000')
+            pi_to_nth_digit_entry.delete(0, END)
 
     except ValueError:
         pi_to_nth_digit_results.insert(END, 'Please enter a valid number between 1-10,000')
@@ -220,20 +229,20 @@ def pi_to_nth_digit_submit():
 
 ### e to the nth digit button ###
 def e_to_nth_digit_submit():
-    from math import e
+
     try:
-        message_text = f'e to {e_to_nth_digit_entry.get()} digits is:\n\n'
-        if int(e_to_nth_digit_entry.get()) > 50 or int(e_to_nth_digit_entry.get()) < 1:
-            e_to_nth_digit_results.config(text='Please enter a valid number between 1-50')
-            e_to_nth_digit_entry.delete(0, END)
+        e_to_nth_digit_results.delete('1.0', END)
+
+        if 0 < int(e_to_nth_digit_entry.get()) <= 10000:
+            e_to_nth_digit_results.insert(END, f'e to {e_to_nth_digit_entry.get()} digits is:\n\n{sympy.N(sympy.E, int(e_to_nth_digit_entry.get()))}')
+
         else:
-            e_digits = int(e_to_nth_digit_entry.get())
-            e_to_nth_digit_results.config(text=message_text + '%.*f' % (e_digits, e))
-            e_to_nth_digit_entry.delete(0, END)
+            e_to_nth_digit_results.insert(END, 'Please enter a valid number between 1-10,000')
+            e_to_nth_digit_results.delete(0, END)
 
     except ValueError:
-        e_to_nth_digit_results.config(text='Please enter a valid number between 1-50')
-        e_to_nth_digit_entry.delete(0, END)
+        e_to_nth_digit_results.insert(END, 'Please enter a valid number between 1-10,000')
+        e_to_nth_digit_results.delete(0, END)
 
 
 ### fibonachi sequence ###
@@ -475,7 +484,6 @@ def calc_all_clear():
     calculator_entry.config(state=NORMAL)
     calculator_entry.delete(0, END)
     calculator_string = ''
-    print('calculator string cleared')
     calculator_entry.config(state=DISABLED)
 
 
@@ -484,7 +492,6 @@ def calc_delete_last():
     calculator_entry.config(state=NORMAL)
     calculator_entry.delete(calculator_entry.index("end") - 1)
     calculator_string = calculator_string[:-1]
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -497,9 +504,6 @@ def calc_equals():
         calculator_entry.insert(0, calculator_string)
 
         ans_string = f'{calculator_string}'
-
-        print('equals button pressed')
-        print(calculator_string)
         calculator_entry.config(state=DISABLED)
     except SyntaxError:
         calculator_entry.insert(0, 'Syntax ERROR')
@@ -515,7 +519,6 @@ def calc_1():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), 1)
     calculator_string += '1'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -524,7 +527,6 @@ def calc_2():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), 2)
     calculator_string += '2'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -533,7 +535,6 @@ def calc_3():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), 3)
     calculator_string += '3'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -542,7 +543,6 @@ def calc_4():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), 4)
     calculator_string += '4'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -551,7 +551,6 @@ def calc_5():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), 5)
     calculator_string += '5'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -560,7 +559,6 @@ def calc_6():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), 6)
     calculator_string += '6'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -569,7 +567,6 @@ def calc_7():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), 7)
     calculator_string += '7'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -578,7 +575,6 @@ def calc_8():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), 8)
     calculator_string += '8'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -587,7 +583,6 @@ def calc_9():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), 9)
     calculator_string += '9'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -596,7 +591,6 @@ def calc_0():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), 0)
     calculator_string += '0'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -605,7 +599,6 @@ def calc_plus():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), '+')
     calculator_string += '+'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -614,7 +607,6 @@ def calc_minus():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), '-')
     calculator_string += '-'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -623,7 +615,6 @@ def calc_decimal():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), '.')
     calculator_string += '.'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -632,7 +623,6 @@ def calc_multiply():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), 'x')
     calculator_string += '*'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -641,7 +631,6 @@ def calc_divide():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), '÷')
     calculator_string += '/'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -650,7 +639,6 @@ def calc_left_bracket():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), '(')
     calculator_string += '('
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -659,7 +647,6 @@ def calc_right_bracket():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), ')')
     calculator_string += ')'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -668,7 +655,6 @@ def calc_pi():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), 'π')
     calculator_string += 'math.pi'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -677,7 +663,6 @@ def calc_square():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), '^2')
     calculator_string += '**2'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -686,7 +671,6 @@ def calc_cube():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), '^3')
     calculator_string += '**3'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -695,7 +679,6 @@ def calc_power():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), '^')
     calculator_string += '**'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -704,7 +687,6 @@ def calc_sin():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), 'sin(')
     calculator_string += 'math.sin('
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -713,7 +695,6 @@ def calc_cos():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), 'cos(')
     calculator_string += 'math.cos('
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -722,7 +703,6 @@ def calc_tan():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), 'tan(')
     calculator_string += 'math.tan('
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -731,7 +711,6 @@ def calc_sqrt():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), '√(')
     calculator_string += 'math.sqrt('
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -740,7 +719,6 @@ def calc_inverse():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), '^(-1)')
     calculator_string += '**(-1)'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -749,7 +727,6 @@ def calc_percent():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), '%')
     calculator_string += '/(100)'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -758,7 +735,6 @@ def calc_third_root():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), '3√(')
     calculator_string += 'numpy.cbrt('
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -767,7 +743,6 @@ def calc_abs():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), 'Abs(')
     calculator_string += 'abs('
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -776,7 +751,6 @@ def calc_log():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), 'log(')
     calculator_string += 'math.log10('
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -785,7 +759,6 @@ def calc_ln():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), 'ln(')
     calculator_string += 'math.log('
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -794,7 +767,6 @@ def calc_e():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), 'e')
     calculator_string += 'math.e'
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -803,7 +775,6 @@ def calc_factorial():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), 'factorial(')
     calculator_string += 'math.factorial('
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -812,7 +783,6 @@ def calc_ans():
     calculator_entry.config(state=NORMAL)
     calculator_entry.insert(calculator_entry.index("end"), 'Ans')
     calculator_string += ans_string
-    print(calculator_string)
     calculator_entry.config(state=DISABLED)
 
 
@@ -3231,13 +3201,11 @@ welcome_screen_frame.rowconfigure(0, weight=1)
 welcome_screen_frame.columnconfigure(0, weight=1)
 
 # Title label
-welcome_label = Label(welcome_screen_frame,
-                      text="Mathematics Toolkit", bg='royalblue4', fg='snow1', font=('helvetica', 50))
+welcome_label = Label(welcome_screen_frame, text="Mathematics Toolkit", bg='royalblue4', fg='snow1', font=('helvetica', 50))
 welcome_label.grid(row=0)
 
 # Creator label
-creator_label = Label(welcome_screen_frame,
-                      text="Created by Brenton O'Brien", bg='royalblue4', fg='snow1', font=('helvetica', 20))
+creator_label = Label(welcome_screen_frame, text="Created by Brenton O'Brien", bg='royalblue4', fg='snow1', font=('helvetica', 20))
 creator_label.grid(row=1)
 ### END OF WELCOME FRAME TKINTER CONFIG ###
 
@@ -3247,56 +3215,52 @@ creator_label.grid(row=1)
 pi_to_nth_digit_frame.columnconfigure(0, weight=1)
 
 # Title label
-pi_to_nth_digit_label = Label(pi_to_nth_digit_frame,
-                              text="Pi to the nth digit", bg='royalblue4', fg='snow1', font=('helvetica', 50))
+pi_to_nth_digit_label = Label(pi_to_nth_digit_frame, text="Pi to the nth digit", bg='royalblue4', fg='snow1', font=('helvetica', 50))
 pi_to_nth_digit_label.grid(row=0)
 
 # Instructions label
-pi_to_nth_digit_instructions = Label(pi_to_nth_digit_frame,
-                                     text="Enter a number and the program will generate π (pi) up to that many digits. Limit is 10,000 digits.",
-                                     bg='royalblue4', fg='snow1', font=('helvetica', 20), pady=50)
+pi_to_nth_digit_instructions = Label(pi_to_nth_digit_frame, text="Enter a to generate π (pi) up to that many digits. Limit is 10,000 digits.", bg='royalblue4', fg='snow1', font=('helvetica', 20), pady=50)
 pi_to_nth_digit_instructions.grid(row=1)
 
 # Entry box
-pi_to_nth_digit_entry = Entry(pi_to_nth_digit_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4,
-                              bg='Dodger Blue', fg='snow2')
+pi_to_nth_digit_entry = Entry(pi_to_nth_digit_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2')
 pi_to_nth_digit_entry.grid(row=2)
 
 # Submit button
-pi_to_nth_digit_submit_button = Button(pi_to_nth_digit_frame, text='Submit', font=('helvetica', 20), relief=RAISED,
-                                       bd=4, bg='Dodger Blue', fg='snow2', command=pi_to_nth_digit_submit)
+pi_to_nth_digit_submit_button = Button(pi_to_nth_digit_frame, text='Submit', font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=pi_to_nth_digit_submit)
 pi_to_nth_digit_submit_button.grid(row=3, pady=2)
 
 # Scrolled results box
-pi_to_nth_digit_results = scrolledtext.ScrolledText(pi_to_nth_digit_frame, bg='royalblue4', fg='snow1',
-                                                    font=('helvetica', 20), height=12, wrap=WORD)
+pi_to_nth_digit_results = scrolledtext.ScrolledText(pi_to_nth_digit_frame, bg='royalblue4', fg='snow1', font=('helvetica', 20), height=12, wrap=WORD)
 pi_to_nth_digit_results.grid(row=4, pady=2)
 ### END OF PI TO THE NTH DIGIT TKINTER CONFIG ###
 
 
 ### E TO THE NTH DIGIT TKINTER CONFIG ###
+# Frame config
 e_to_nth_digit_frame.columnconfigure(0, weight=1)
 
-e_to_nth_digit_label = Label(e_to_nth_digit_frame, text="e to the nth digit", bg='royalblue4', fg='snow1',
-                             font=('helvetica', 50))
+# Title label
+e_to_nth_digit_label = Label(e_to_nth_digit_frame, text="e to the nth digit", bg='royalblue4', fg='snow1',font=('helvetica', 50))
 e_to_nth_digit_label.grid(row=0, sticky='N')
 
-e_to_nth_digit_instructions = Label(e_to_nth_digit_frame,
-                                    text="Enter a number and the program will generate e up to that many decimal places. Limit is 50 decimal places.",
-                                    bg='royalblue4', fg='snow1', font=('helvetica', 20), pady=50)
+# Instructions label
+e_to_nth_digit_instructions = Label(e_to_nth_digit_frame, text="Enter a number to generate e up to that many digits. Limit is 10,000 digits.", bg='royalblue4', fg='snow1', font=('helvetica', 20), pady=50)
 e_to_nth_digit_instructions.grid(row=1)
 
-e_to_nth_digit_entry = Entry(e_to_nth_digit_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4,
-                             bg='Dodger Blue', fg='snow2')
+# Entry box
+e_to_nth_digit_entry = Entry(e_to_nth_digit_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2')
 e_to_nth_digit_entry.grid(row=2)
 
-e_to_nth_digit_submit_button = Button(e_to_nth_digit_frame, text='Submit', font=('helvetica', 20),
-                                      command=e_to_nth_digit_submit)
+# Submit button
+e_to_nth_digit_submit_button = Button(e_to_nth_digit_frame, text='Submit', font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=e_to_nth_digit_submit)
 e_to_nth_digit_submit_button.grid(row=3, pady=2)
 
-e_to_nth_digit_results = Label(e_to_nth_digit_frame, text="", bg='royalblue4', fg='snow1', font=('helvetica', 40))
-e_to_nth_digit_results.grid(row=4, pady=50)
+# Scrolled results box
+e_to_nth_digit_results = scrolledtext.ScrolledText(e_to_nth_digit_frame, bg='royalblue4', fg='snow1', font=('helvetica', 20), height=12, wrap=WORD)
+e_to_nth_digit_results.grid(row=4, pady=2)
 ### END OF E TO THE NTH DIGIT TKINTER CONFIG ###
+
 
 ### fibonachi sequence ###
 fibonacci_sequence_frame.columnconfigure(0, weight=1)
