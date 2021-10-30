@@ -7,7 +7,7 @@
 # Find Pi to the nth digit [complete]
 # Find E to the nth digit  [complete]
 
-# Fibonacci sequence [incomplete] - tidy gui, centralise widgets properly, change result to scrollbar, update limit
+# Fibonacci sequence [incomplete] - tidy gui, shorten instructions, change result to scrollbar, update limit to 10,00 ish depending on lag
 # Prime Factorization [incomplete] - tidy gui, centralise widgets properly, change result to scrollbar, update limit
 # Next prime number [incomplete] - tidy gui, centralise widgets properly, change result to scrollbar, update limit
 # Find the cost to cover W x H floor [incomplete] - tidy gui
@@ -209,7 +209,7 @@ text_output = ''
 
 ### BUTTON FUNCTIONS ###
 
-### Pi to nth Digit ###
+### PI TO THE NTH DIGIT FUNCTION ###
 def pi_to_nth_digit_submit():
     try:
         pi_to_nth_digit_results.delete('1.0', END)
@@ -225,9 +225,10 @@ def pi_to_nth_digit_submit():
     except ValueError:
         pi_to_nth_digit_results.insert(END, 'Please enter a valid number between 1-10,000')
         pi_to_nth_digit_entry.delete(0, END)
+### END OF PI TO THE NTH DIGIT FUNCTION ###
 
 
-### e to the nth digit button ###
+### E TO THE NTH DIGIT FUNCTION ###
 def e_to_nth_digit_submit():
 
     try:
@@ -243,19 +244,20 @@ def e_to_nth_digit_submit():
     except ValueError:
         e_to_nth_digit_results.insert(END, 'Please enter a valid number between 1-10,000')
         e_to_nth_digit_results.delete(0, END)
+### END OF E TO THE NTH DIGIT FUNCTION ###
 
 
-### fibonachi sequence ###
+### FIBONACCI SEQUENCE FUNCTION ###
 def fibonacci_sequence_submit():
     num_1 = 0
     num_2 = 1
     fib_seq = []
 
     try:
-        if int(fibonacci_sequence_entry.get()) > 30 or int(fibonacci_sequence_entry.get()) < 1:
-            fibonacci_sequence_results.config(text='Please enter a valid number between 1-30')
-            fibonacci_sequence_entry.delete(0, END)
-        else:
+        fibonacci_sequence_results.delete('1.0', END)
+
+        if 0 < int(fibonacci_sequence_entry.get()) <= 10000:
+
             digits = int(fibonacci_sequence_entry.get())
 
             for digit in range(int(digits)):
@@ -264,16 +266,18 @@ def fibonacci_sequence_submit():
                 num_1 = num_2
                 num_2 = next_fib
 
-            fib_text = ', '.join(fib_seq)
+            fib_text = ',\n'.join(fib_seq)
 
-            fibonacci_sequence_results.config(
-                text=f'The first {fibonacci_sequence_entry.get()} numbers in the fibonacci sequence are:\n\n{fib_text}')
+            fibonacci_sequence_results.insert(END, f'The first {fibonacci_sequence_entry.get()} numbers in the fibonacci sequence are:\n\n{fib_text}')
+
+        else:
+            fibonacci_sequence_results.insert('Please enter a valid number between 1-10,000')
             fibonacci_sequence_entry.delete(0, END)
 
     except ValueError:
-        fibonacci_sequence_results.config(text='Please enter a valid number between 1-30')
+        fibonacci_sequence_results.insert('Please enter a valid number between 1-10,000')
         fibonacci_sequence_entry.delete(0, END)
-
+### FIBONACCI SEQUENCE FUNCTION ###
 
 ### Next prime number ###
 def next_prime_submit():
@@ -3262,29 +3266,31 @@ e_to_nth_digit_results.grid(row=4, pady=2)
 ### END OF E TO THE NTH DIGIT TKINTER CONFIG ###
 
 
-### fibonachi sequence ###
+### FIBONACHI SEQUENCE TKINTER CONFIG ###
+# Frame config
 fibonacci_sequence_frame.columnconfigure(0, weight=1)
 
-fibonacci_sequence_label = Label(fibonacci_sequence_frame, text="Fibonacci Sequence", bg='royalblue4', fg='snow1',
-                                 font=('helvetica', 50))
+# Title label
+fibonacci_sequence_label = Label(fibonacci_sequence_frame, text="Fibonacci Sequence", bg='royalblue4', fg='snow1',font=('helvetica', 50))
 fibonacci_sequence_label.grid(row=0, sticky='N')
 
-fibonacci_sequence_instructions = Label(fibonacci_sequence_frame,
-                                        text="Enter a number and the program will generate the fibonacci sequence up to that many numbers. Limit is 30 numbers.",
-                                        bg='royalblue4', fg='snow1', font=('helvetica', 20), pady=50)
+# Instructions label
+fibonacci_sequence_instructions = Label(fibonacci_sequence_frame, text="Enter the number of fibonacci numbers to generate. Limit is 10,000 numbers.", bg='royalblue4', fg='snow1', font=('helvetica', 20), pady=50)
 fibonacci_sequence_instructions.grid(row=1)
 
-fibonacci_sequence_entry = Entry(fibonacci_sequence_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4,
-                                 bg='Dodger Blue', fg='snow2')
+# Entry box
+fibonacci_sequence_entry = Entry(fibonacci_sequence_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2')
 fibonacci_sequence_entry.grid(row=2)
 
-fibonacci_sequence_submit_button = Button(fibonacci_sequence_frame, text='Submit', font=('helvetica', 20),
-                                          command=fibonacci_sequence_submit)
+# Submit button
+fibonacci_sequence_submit_button = Button(fibonacci_sequence_frame, text='Submit', font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=fibonacci_sequence_submit)
 fibonacci_sequence_submit_button.grid(row=3, pady=2)
 
-fibonacci_sequence_results = Label(fibonacci_sequence_frame, text="", bg='royalblue4', fg='snow1',
-                                   font=('helvetica', 16))
-fibonacci_sequence_results.grid(row=4, pady=50)
+# Scrolled results box
+fibonacci_sequence_results = scrolledtext.ScrolledText(fibonacci_sequence_frame, bg='royalblue4', fg='snow1', font=('helvetica', 20), height=12, wrap=WORD)
+fibonacci_sequence_results.grid(row=4, pady=2)
+### END OF FIBONACHI SEQUENCE TKINTER CONFIG ###
+
 
 ### Next prime number ###
 next_prime_frame.columnconfigure(0, weight=1)
