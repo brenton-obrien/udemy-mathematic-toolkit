@@ -1,6 +1,6 @@
 # udemy-mathematic-toolkit
 
-This is GUI program that showcases almost almost all the math projects located in the Udemy course.
+This is GUI program that showcases almost all the math projects located in the Udemy course.
 
 This projects purpose is mainly for my personal python coding experience, and also my first upload to github.
 The individual tools in this toolkit are as follows:  

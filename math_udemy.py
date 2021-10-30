@@ -6,16 +6,16 @@
 
 # Find Pi to the nth digit [complete]
 # Find E to the nth digit  [complete]
+# Fibonacci sequence [complete]
+# Prime Factorization [complete]
+# Prime number generator [complete]
 
-# Fibonacci sequence [incomplete] - tidy gui, shorten instructions, change result to scrollbar, update limit to 10,00 ish depending on lag
-# Prime Factorization [incomplete] - tidy gui, centralise widgets properly, change result to scrollbar, update limit
-# Next prime number [incomplete] - tidy gui, centralise widgets properly, change result to scrollbar, update limit
-# Find the cost to cover W x H floor [incomplete] - tidy gui
+# Find the cost to cover W x H floor [incomplete] - tidy gui (line up titles), make it match earlier frames, add error messages, add result box
 # Mortgage calculator [incomplete] - tidy gui
 # Change return program [incomplete]  - tidy gui, allow results ro remain central, fix code?
 # Binary to Decimal and Back Converter [incomplete] - tidy gui
 
-# Scientific Calculator [complete]
+# Scientific Calculator [incomplete] - Refacter code format? fix numpy being greyed out
 
 # Unit Converter (temp, currency, volume, mass and more) [incomplete] - change this program to use the internet for conversions
 # Alarm Clock [incomplete] - add text wrapping to song title, stop song button on message box
@@ -83,7 +83,7 @@ pi_to_nth_digit_frame = Frame(window, bg='royalblue4')
 e_to_nth_digit_frame = Frame(window, bg='royalblue4')
 fibonacci_sequence_frame = Frame(window, bg='royalblue4')
 prime_factorization_frame = Frame(window, bg='royalblue4')
-next_prime_frame = Frame(window, bg='royalblue4')
+prime_number_generator_frame = Frame(window, bg='royalblue4')
 w_x_h_floor_frame = Frame(window, bg='royalblue4')
 morgage_calculator_frame = Frame(window, bg='royalblue4')
 binary_to_decimal_frame = Frame(window, bg='royalblue4')
@@ -105,7 +105,7 @@ for frame in (welcome_screen_frame,
               pi_to_nth_digit_frame,
               e_to_nth_digit_frame,
               fibonacci_sequence_frame,
-              next_prime_frame,
+              prime_number_generator_frame,
               prime_factorization_frame,
               w_x_h_floor_frame,
               morgage_calculator_frame,
@@ -135,8 +135,10 @@ def show_frame(frame_parameter):
         e_to_nth_digit_entry.focus()
     elif frame_parameter == fibonacci_sequence_frame:
         fibonacci_sequence_entry.focus()
-    elif frame_parameter == next_prime_frame:
-        next_prime_entry.focus()
+    elif frame_parameter == prime_factorization_frame:
+        prime_factorization_entry.focus()
+    elif frame_parameter == prime_number_generator_frame:
+        prime_number_generator_entry.focus()
     elif frame_parameter == w_x_h_floor_frame:
         w_x_h_floor_cost_label.focus()
     elif frame_parameter == morgage_calculator_frame:
@@ -174,7 +176,7 @@ select_program.add_command(label='Find Pi to the nth digit', command=lambda: sho
 select_program.add_command(label='Find e to the nth digit', command=lambda: show_frame(e_to_nth_digit_frame))
 select_program.add_command(label='Fibonachi Sequence', command=lambda: show_frame(fibonacci_sequence_frame))
 select_program.add_command(label='Prime Factorization', command=lambda: show_frame(prime_factorization_frame))
-select_program.add_command(label='Next prime number', command=lambda: show_frame(next_prime_frame))
+select_program.add_command(label='Prime Number Generator', command=lambda: show_frame(prime_number_generator_frame))
 select_program.add_command(label='Cost to cover W x H floor', command=lambda: show_frame(w_x_h_floor_frame))
 select_program.add_command(label='Mortgage calculator', command=lambda: show_frame(morgage_calculator_frame))
 select_program.add_command(label='Change return', command=lambda: show_frame(change_return_frame))
@@ -277,43 +279,86 @@ def fibonacci_sequence_submit():
     except ValueError:
         fibonacci_sequence_results.insert('Please enter a valid number between 1-10,000')
         fibonacci_sequence_entry.delete(0, END)
-### FIBONACCI SEQUENCE FUNCTION ###
+### END OF FIBONACCI SEQUENCE FUNCTION ###
 
-### Next prime number ###
-def next_prime_submit():
-    prime_counter = 0
-    prime_index = 2
-    prime_list = []
+
+### PRIME FACTORIZATION FUNCTION ###
+def prime_factorizaton_func():
 
     try:
-        if int(next_prime_entry.get()) > 40 or int(next_prime_entry.get()) < 1:
-            next_prime_results.config(text='Please enter a valid number between 1-40')
-            next_prime_entry.delete(0, END)
+        prime_factorization_results.delete('1.0', END)
 
+        if 0 < int(prime_factorization_entry.get()) <= 1000000:
+
+            user_num = int(prime_factorization_entry.get())
+            number = user_num
+            prime_list = []
+
+            for num in range(2, int(number / 2) + 1):
+
+                while number % int(num) == 0:
+                    prime_list.append(str(num))
+                    number = number / int(num)
+
+                    if number % int(num) != 0:
+
+                        if num > int(math.sqrt(number)):
+                            num += 1
+
+            if len(prime_list) == 0:
+                prime_factorization_results.insert(END, f"{user_num} is a prime number. ")
+
+            elif len(prime_list) != 0:
+                new_prime_list = ",\n".join(prime_list)
+                prime_factorization_results.insert(END, f"The Prime Factorization of {user_num} is:\n\n{new_prime_list}")
+
+            else:
+                prime_factorization_results.insert(END, 'Please enter a valid number between 1-1,000,000')
+                prime_factorization_entry.delete(0, END)
         else:
-            total_prime_request = int(next_prime_entry.get())
-
-            while prime_counter < total_prime_request:
-                prime_check = 0
-                if prime_index > 1:
-                    for prime_index_2 in range(2, prime_index):
-                        if (prime_index % prime_index_2) == 0:
-                            prime_check = 1
-                if prime_check == 0:
-                    prime_counter += 1
-
-                    prime_list.append(str(prime_index))
-
-                prime_text = ', '.join(prime_list)
-
-                next_prime_results.config(text=f'The first {total_prime_request} prime numbers are:\n\n{prime_text}')
-
-                prime_index += 1
-                next_prime_entry.delete(0, END)
+            prime_factorization_results.insert(END, 'Please enter a valid number between 1-1,000,000')
+            prime_factorization_entry.delete(0, END)
 
     except ValueError:
-        next_prime_results.config(text='Please enter a valid number between 1-40')
-        next_prime_entry.delete(0, END)
+        prime_factorization_results.insert(END, 'Please enter a valid number between 1-1,000,000')
+        prime_factorization_entry.delete(0, END)
+### END OF PRIME FACTORIZATION FUNCTION ###
+
+
+### PRIME NUMBER GENERATOR FUNCTION ###
+def prime_generator_submit():
+    try:
+        prime_number_generator_results.delete('1.0', END)
+
+        if 0 < int(prime_number_generator_entry.get()) <= 1000:
+
+            number_of_primes_found = 0
+            current_number_to_check = 1
+            prime_list = []
+
+            while number_of_primes_found < int(prime_number_generator_entry.get()):
+                current_number_to_check += 1
+                more_than_two_factors = False
+
+                for num in range(2, current_number_to_check):
+                    if (current_number_to_check % num) == 0:
+                        more_than_two_factors = True
+
+                if not more_than_two_factors:
+                    number_of_primes_found += 1
+                    prime_list.append(str(current_number_to_check))
+
+            prime_text = ',\n'.join(prime_list)
+            prime_number_generator_results.insert(END, f'The first {int(prime_number_generator_entry.get())} prime numbers are:\n\n{prime_text}')
+
+        else:
+            prime_number_generator_results.insert(END, 'Please enter a valid number between 1-1000')
+            prime_number_generator_entry.delete(0, END)
+
+    except ValueError:
+        prime_number_generator_results.insert(END, 'Please enter a valid number between 1-1000')
+        prime_number_generator_entry.delete(0, END)
+### END OF PRIME NUMBER GENERATOR FUNCTION ###
 
 
 ### Cost to cover W x H floor ###
@@ -500,7 +545,7 @@ def calc_delete_last():
 
 
 def calc_equals():
-    global calculator_string, ans_string
+    global calculator_string, ans_string, numpy
     calculator_entry.config(state=NORMAL)
     calculator_entry.delete(0, END)
     try:
@@ -2894,34 +2939,6 @@ def factorial_finder():
         factorial_finder_results.config(text='Please enter a valid number.')
 
 
-### Prime Factorization ###
-
-
-def prime_factorizaton_func():
-    user_num = int(prime_factorization_entry.get())
-    number = user_num
-
-    prime_list = []
-
-    for num in range(2, int(number / 2) + 1):
-
-        while number % int(num) == 0:
-            prime_list.append(str(num))
-            number = number / int(num)
-
-            if number % int(num) != 0:
-
-                if num > int(math.sqrt(number)):
-                    num += 1
-
-    if len(prime_list) == 0:
-        prime_factorization_results.config(text=f"{user_num} has no prime factors.")
-    else:
-
-        new_prime_list = ", ".join(prime_list)
-
-        prime_factorization_results.config(text=f"The Prime Factorization of {user_num} is:\n {new_prime_list}")
-
 
 ### HAPPY NUMBERS ###
 
@@ -3196,7 +3213,7 @@ def exponentiation_submit():
         exponentiation_results.config(text='Enter a valid number')
 
 
-### FRAME WIDGET CONFIG ###
+### WIDGET CONFIGURATION FOR EACH FRAME ###
 
 
 ### WELCOME FRAME TKINTER CONFIG ###
@@ -3246,7 +3263,7 @@ e_to_nth_digit_frame.columnconfigure(0, weight=1)
 
 # Title label
 e_to_nth_digit_label = Label(e_to_nth_digit_frame, text="e to the nth digit", bg='royalblue4', fg='snow1',font=('helvetica', 50))
-e_to_nth_digit_label.grid(row=0, sticky='N')
+e_to_nth_digit_label.grid(row=0)
 
 # Instructions label
 e_to_nth_digit_instructions = Label(e_to_nth_digit_frame, text="Enter a number to generate e up to that many digits. Limit is 10,000 digits.", bg='royalblue4', fg='snow1', font=('helvetica', 20), pady=50)
@@ -3272,7 +3289,7 @@ fibonacci_sequence_frame.columnconfigure(0, weight=1)
 
 # Title label
 fibonacci_sequence_label = Label(fibonacci_sequence_frame, text="Fibonacci Sequence", bg='royalblue4', fg='snow1',font=('helvetica', 50))
-fibonacci_sequence_label.grid(row=0, sticky='N')
+fibonacci_sequence_label.grid(row=0)
 
 # Instructions label
 fibonacci_sequence_instructions = Label(fibonacci_sequence_frame, text="Enter the number of fibonacci numbers to generate. Limit is 10,000 numbers.", bg='royalblue4', fg='snow1', font=('helvetica', 20), pady=50)
@@ -3292,27 +3309,56 @@ fibonacci_sequence_results.grid(row=4, pady=2)
 ### END OF FIBONACHI SEQUENCE TKINTER CONFIG ###
 
 
-### Next prime number ###
-next_prime_frame.columnconfigure(0, weight=1)
+### PRIME FACTORIZATION TKINTER CONFIG ###
+# Frame config
+prime_factorization_frame.columnconfigure(0, weight=1)
 
-next_prime_label = Label(next_prime_frame, text="Prime Number generator", bg='royalblue4', fg='snow1',
-                         font=('helvetica', 50))
-next_prime_label.grid(row=0, sticky='N')
+# Title label
+prime_factorization_title = Label(prime_factorization_frame, text="Prime Factorization", bg='royalblue4', fg='snow1', font=('helvetica', 50))
+prime_factorization_title.grid(row=0)
 
-next_prime_instructions = Label(next_prime_frame,
-                                text="Enter a number and the program will generate that many prime numbers. Limit is 40 numbers.",
-                                bg='royalblue4', fg='snow1', font=('helvetica', 20), pady=50)
-next_prime_instructions.grid(row=1)
+# Instructions Label
+prime_factorization_instructions = Label(prime_factorization_frame, text="Enter a number to find all its prime factors. Limit is 1,000,000.", bg='royalblue4', fg='snow1', font=('helvetica', 20), pady=50)
+prime_factorization_instructions.grid(row=1)
 
-next_prime_entry = Entry(next_prime_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4, bg='Dodger Blue',
-                         fg='snow2')
-next_prime_entry.grid(row=2)
+# Entry box
+prime_factorization_entry = Entry(prime_factorization_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2')
+prime_factorization_entry.grid(row=2)
 
-next_prime_submit_button = Button(next_prime_frame, text='Submit', font=('helvetica', 20), command=next_prime_submit)
-next_prime_submit_button.grid(row=3, pady=2)
+# Submit button
+prime_factorization_button = Button(prime_factorization_frame, text='Submit', font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=prime_factorizaton_func)
+prime_factorization_button.grid(row=3, pady=2)
 
-next_prime_results = Label(next_prime_frame, text="", bg='royalblue4', fg='snow1', font=('helvetica', 15))
-next_prime_results.grid(row=4, pady=50)
+# Scrolled results box
+prime_factorization_results = scrolledtext.ScrolledText(prime_factorization_frame, bg='royalblue4', fg='snow1', font=('helvetica', 20), height=12, wrap=WORD)
+prime_factorization_results.grid(row=4, pady=2)
+### END OF PRIME FACTORIZATION TKINTER CONFIG ###
+
+
+### PRIME NUMBER GENERATOR TKINTER CONFIG ###
+# Frame config
+prime_number_generator_frame.columnconfigure(0, weight=1)
+
+# Title label
+prime_number_generator_label = Label(prime_number_generator_frame, text="Prime Number generator", bg='royalblue4', fg='snow1', font=('helvetica', 50))
+prime_number_generator_label.grid(row=0)
+
+# Instructions Label
+prime_number_generator_instructions = Label(prime_number_generator_frame, text="Enter a number to generate that many prime numbers. Limit is 1000 numbers.", bg='royalblue4', fg='snow1', font=('helvetica', 20), pady=50)
+prime_number_generator_instructions.grid(row=1)
+
+# Entry box
+prime_number_generator_entry = Entry(prime_number_generator_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2')
+prime_number_generator_entry.grid(row=2)
+
+# Submit button
+prime_number_generator_submit = Button(prime_number_generator_frame, text='Submit', font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=prime_generator_submit)
+prime_number_generator_submit.grid(row=3, pady=2)
+
+prime_number_generator_results = scrolledtext.ScrolledText(prime_number_generator_frame, bg='royalblue4', fg='snow1', font=('helvetica', 20), height=12, wrap=WORD)
+prime_number_generator_results.grid(row=4, pady=2)
+### END OF PRIME NUMBER GENERATOR TKINTER CONFIG ###
+
 
 ### Cost to cover W x H floor ###
 w_x_h_floor_frame.columnconfigure(0, weight=1)
@@ -4036,27 +4082,6 @@ factorial_finder_button.grid(row=3, column=0, columnspan=6, pady=2)
 factorial_finder_results = Label(factorial_finder_frame, text="", bg='royalblue4', fg='snow1', font=('helvetica', 25))
 factorial_finder_results.grid(row=4, column=0, columnspan=6, pady=20)
 
-### Prime Factorization ###
-prime_factorization_title = Label(prime_factorization_frame, text="Prime Factorization", bg='royalblue4', fg='snow1',
-                                  font=('helvetica', 50))
-prime_factorization_title.grid(row=0, column=0, sticky="nsew", padx=525, columnspan=6)
-
-prime_factorization_instructions = Label(prime_factorization_frame,
-                                         text="Enter a number and click submit to find all its prime factors.",
-                                         bg='royalblue4', fg='snow1', font=('helvetica', 25))
-prime_factorization_instructions.grid(row=1, column=0, columnspan=6, pady=50)
-
-prime_factorization_entry = Entry(prime_factorization_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4,
-                                  bg='Dodger Blue', fg='snow2')
-prime_factorization_entry.grid(row=2, column=0, columnspan=6)
-
-prime_factorization_button = Button(prime_factorization_frame, text='Submit', width=7, font=('helvetica', 20),
-                                    relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=prime_factorizaton_func)
-prime_factorization_button.grid(row=3, column=0, columnspan=6, pady=2)
-
-prime_factorization_results = Label(prime_factorization_frame, text="", bg='royalblue4', fg='snow1',
-                                    font=('helvetica', 25))
-prime_factorization_results.grid(row=4, column=0, columnspan=6, pady=20)
 
 # HAPPY NUMBERS #
 happy_numbers_title = Label(happy_number_frame, text="Happy numbers", bg='royalblue4', fg='snow1',
