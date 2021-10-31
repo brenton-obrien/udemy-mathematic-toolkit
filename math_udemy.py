@@ -9,10 +9,10 @@
 # Fibonacci sequence [complete]
 # Prime Factorization [complete]
 # Prime number generator [complete]
+# Find the cost to cover W x H floor [complete]
+# Mortgage calculator [complete]
+# Change return program [complete]
 
-# Find the cost to cover W x H floor [incomplete] - tidy gui (line up titles), make it match earlier frames, add error messages, add result box
-# Mortgage calculator [incomplete] - tidy gui
-# Change return program [incomplete]  - tidy gui, allow results ro remain central, fix code?
 # Binary to Decimal and Back Converter [incomplete] - tidy gui
 
 # Scientific Calculator [incomplete] - Refacter code format? fix numpy being greyed out
@@ -197,6 +197,30 @@ select_program.add_command(label='Exit', command=exit)
 ### END OF TKINTER FRAME CONFIGURATION ###
 
 
+### GLOBAL COMBOBOX THEME CONFIGURATION ###
+# Combobox theme creation
+style = ttk.Style()
+style.theme_use('alt')
+
+# the following alters the Listbox
+window.option_add('*TCombobox*Listbox*Background', 'Dodger Blue')
+window.option_add('*TCombobox*Listbox*Foreground', 'snow1')
+window.option_add('*TCombobox*Listbox*selectBackground', 'snow1')
+window.option_add('*TCombobox*Listbox*selectForeground', 'royalblue4')
+window.option_add("*TCombobox*Listbox*Font", ('helvetica', 25))
+
+# the following alters the Combobox entry field
+style.map('TCombobox', fieldbackground=[('readonly', 'Dodger Blue')])
+style.map('TCombobox', selectbackground=[('readonly', 'Dodger Blue')])
+style.map('TCombobox', selectforeground=[('readonly', 'snow1')])
+style.map('TCombobox', background=[('readonly', 'Dodger Blue')])
+style.map('TCombobox', foreground=[('readonly', 'snow1')])
+style.map('TCombobox', relief=[('readonly', RIDGE)])
+style.configure('TCombobox', arrowsize=30)
+style.configure('Vertical.TScrollbar', arrowsize=28)
+### END OF GLOBAL COMBOBOX THEME CONFIGURATION ###
+
+
 # Global variables for number to text: - potentially need to remove this once I get to it
 one_to_nine_dict = {'0': 'zero', '1': 'one', '2': 'two', '3': 'three', '4': 'four', '5': 'five', '6': 'six',
                     '7': 'seven', '8': 'eight', '9': 'nine'}
@@ -361,24 +385,29 @@ def prime_generator_submit():
 ### END OF PRIME NUMBER GENERATOR FUNCTION ###
 
 
-### Cost to cover W x H floor ###
+### COST TO COVER W X H FLOOR FUNCTION ###
 def w_x_h_floor_button():
     try:
+        w_x_h_floor_results.delete('1.0', END)
+
         tile_cost = float(w_x_h_floor_cost_entry.get())
         tile_height = int(w_x_h_floor_height_entry.get())
         tile_width = int(w_x_h_floor_width_entry.get())
 
-        tile_text = tile_cost * tile_height * tile_width
+        total_cost = tile_cost * tile_height * tile_width
 
-        w_x_h_floor_results.config(text=f'\nTotal cost to tile the floor is:\n ${"{0:.2f}".format(tile_text)}')
+        w_x_h_floor_results.insert(END, f'Total cost to tile the floor is:\n${"{0:.2f}".format(total_cost)}')
 
     except ValueError:
-        w_x_h_floor_results.config(text='\n\n\n\nPlease enter a valid number.')
+        w_x_h_floor_results.insert(END, f'Please enter valid values')
+### END OF COST TO COVER W X H FLOOR FUNCTION ###
 
 
-### Morgage Calculator ###
+### MORGAGE CALCULATOR FUNCTION ###
 def morgage_calculator_button():
     try:
+        morgage_calculator_results.delete('1.0', END)
+
         total = float(morgage_calculator_total_entry.get())
         interest = float(morgage_calculator_interest_rate_entry.get())
         years = float(morgage_calculator_year_of_loan_entry.get())
@@ -388,36 +417,32 @@ def morgage_calculator_button():
         months = years * 12
 
         if float(morgage_calculator_total_entry.get()) < 0:
-            morgage_calculator_results.config(text='Morgage total needs to be larger than 0.')
+            morgage_calculator_results.insert(END, 'Morgage total needs to be larger than 0.')
 
         elif float(morgage_calculator_interest_rate_entry.get()) < 0:
-            morgage_calculator_results.config(text='Interest rate needs to be larger than 0.')
+            morgage_calculator_results.insert(END, 'Interest rate needs to be larger than 0.')
 
         elif float(morgage_calculator_year_of_loan_entry.get()) < 0:
-            morgage_calculator_results.config(text='Total months of loan needs to be larger than 0.')
+            morgage_calculator_results.insert(END, 'Total months of loan needs to be larger than 0.')
 
         else:
-
-            monthly_amount = float("{0:.2f}".format(total * (monthly_interest * ((1 + monthly_interest) ** months)) / (
-                    (1 + monthly_interest) ** months - 1)))
+            monthly_amount = float("{0:.2f}".format(total * (monthly_interest * ((1 + monthly_interest) ** months)) / ((1 + monthly_interest) ** months - 1)))
 
             if morgage_calculator_combobox.get() == 'Monthly':
-                morgage_calculator_results.config(
-                    text=f'Your morgage repayment are:\n ${monthly_amount} per month, for {int(months)} months')
+                morgage_calculator_results.insert(END, f'Your morgage repayment are:\n ${monthly_amount} per month, for {int(months)} months')
 
             elif morgage_calculator_combobox.get() == 'Fortnightly':
-                morgage_calculator_results.config(
-                    text=f'Your morgage repayment are:\n ${monthly_amount / 2} per Fortnight, for {int(months * 2)} Fortnights')
+                morgage_calculator_results.insert(END, f'Your morgage repayment are:\n ${monthly_amount / 2} per fortnight, for {int(months * 2)} fortnights')
 
             else:
-                morgage_calculator_results.config(
-                    text=f'Your morgage repayment are:\n ${monthly_amount / 4} per week, for {int(months * 4)} weeks')
+                morgage_calculator_results.insert(END, f'Your morgage repayment are:\n ${monthly_amount / 4} per week, for {int(months * 4)} weeks')
 
     except ValueError:
-        morgage_calculator_results.config(text='Please enter valid numbers into fields.')
+        morgage_calculator_results.insert(END, 'Please enter valid numbers into fields.')
+### END OF MORGAGE CALCULATOR FUNCTION ###
 
 
-### Change return program ###
+### CHANGE RETURN FUNCTION ###
 def change_return_submit():
     fifty_dollars = 0
     twenty_dollars = 0
@@ -479,22 +504,23 @@ def change_return_submit():
             five_cents += 1
             difference -= 5
 
-        change_return_results.config(text=f'$50 notes:     {fifty_dollars}\n'
-                                          f'$20 notes:     {twenty_dollars}\n'
-                                          f'$10 notes:     {ten_dollars}\n'
-                                          f'$5 notes:      {five_dollars}\n'
-                                          f'$2 coins:      {two_dollars}\n'
-                                          f'$1 coins:      {one_dollars}\n'
-                                          f'$0.50 coins: {fifty_cents}\n'
-                                          f'$0.20 coins: {twenty_cents}\n'
-                                          f'$0.10 coins: {ten_cents}\n'
-                                          f'$0.05 coins: {five_cents}')
+        fifty_dollar_result.config(text=f'{fifty_dollars}')
+        twenty_dollar_result.config(text=f'{twenty_dollars}')
+        ten_dollar_result.config(text=f'{ten_dollars}')
+        five_cent_result.config(text=f'{five_dollars}')
+        two_dollar_result.config(text=f'{two_dollars}')
+        one_dollar_result.config(text=f'{one_dollars}')
+        fifty_cent_result.config(text=f'{fifty_cents}')
+        twenty_cent_result.config(text=f'{twenty_cents}')
+        ten_cent_result.config(text=f'{ten_cents}')
+        five_cent_result.config(text=f'{five_cents}')
 
     except ValueError:
         change_return_change_owed_label.config(text='Please enter valid numbers into fields.')
 
     except decimal.InvalidOperation:
         change_return_change_owed_label.config(text='Please enter valid numbers into fields.')
+### END OF CHANGE RETURN FUNCTION ###
 
 
 ### binary to decimal converter ###
@@ -3355,161 +3381,214 @@ prime_number_generator_entry.grid(row=2)
 prime_number_generator_submit = Button(prime_number_generator_frame, text='Submit', font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=prime_generator_submit)
 prime_number_generator_submit.grid(row=3, pady=2)
 
+# Scrolled results box
 prime_number_generator_results = scrolledtext.ScrolledText(prime_number_generator_frame, bg='royalblue4', fg='snow1', font=('helvetica', 20), height=12, wrap=WORD)
 prime_number_generator_results.grid(row=4, pady=2)
 ### END OF PRIME NUMBER GENERATOR TKINTER CONFIG ###
 
 
-### Cost to cover W x H floor ###
+### COST TO COVER W X H FLOOR TKINTER CONFIG###
+# Frame config
 w_x_h_floor_frame.columnconfigure(0, weight=1)
 
-w_x_h_floor_title = Label(w_x_h_floor_frame, text="Tile cost calculator", bg='royalblue4', fg='snow1',
-                          font=('helvetica', 50))
-w_x_h_floor_title.grid(sticky='N', row=0)
+# Title label
+w_x_h_floor_title = Label(w_x_h_floor_frame, text="Tile cost calculator", bg='royalblue4', fg='snow1', font=('helvetica', 50))
+w_x_h_floor_title.grid(row=0)
 
-w_x_h_floor_instructions = Label(w_x_h_floor_frame,
-                                 text='Enter cost per tile, width and height to calculate the total cost.',
-                                 bg='royalblue4', fg='snow1', font=('helvetica', 20), pady=50)
+# Instructions Label
+w_x_h_floor_instructions = Label(w_x_h_floor_frame, text='Enter cost per tile, width and height to calculate the total cost.', bg='royalblue4', fg='snow1', font=('helvetica', 20), pady=50)
 w_x_h_floor_instructions.grid(row=1)
 
-w_x_h_floor_cost_label = Label(w_x_h_floor_frame, text='Enter cost per tile $:                  ', bg='royalblue4',
-                               fg='snow1',
-                               font=('helvetica', 20))
-w_x_h_floor_cost_label.grid(row=2)
+# Cost Label
+w_x_h_floor_cost_label = Label(w_x_h_floor_frame, text='Enter cost per tile $:', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+w_x_h_floor_cost_label.grid(row=2, sticky='w', padx=533)
 
-w_x_h_floor_cost_entry = Entry(w_x_h_floor_frame, font=('helvetica', 25), relief=RIDGE, bd=4, bg='Dodger Blue',
-                               fg='snow2', width=25)
+# Cost Entry
+w_x_h_floor_cost_entry = Entry(w_x_h_floor_frame, font=('helvetica', 25), relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2', width=25)
 w_x_h_floor_cost_entry.grid(row=3)
 
-w_x_h_floor_width_label = Label(w_x_h_floor_frame, text='\nEnter number of tiles for width:  ', bg='royalblue4',
-                                fg='snow1',
-                                font=('helvetica', 20))
-w_x_h_floor_width_label.grid(row=4)
+# Width Label
+w_x_h_floor_width_label = Label(w_x_h_floor_frame, text='Enter number of tiles for width:  ', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+w_x_h_floor_width_label.grid(row=4, sticky='w', padx=533)
 
-w_x_h_floor_width_entry = Entry(w_x_h_floor_frame, font=('helvetica', 25), relief=RIDGE, bd=4, bg='Dodger Blue',
-                                fg='snow2', width=25)
+# Width Entry
+w_x_h_floor_width_entry = Entry(w_x_h_floor_frame, font=('helvetica', 25), relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2', width=25)
 w_x_h_floor_width_entry.grid(row=5)
 
-w_x_h_floor_height_label = Label(w_x_h_floor_frame, text='\nEnter number of tiles for height: ', bg='royalblue4',
-                                 fg='snow1', font=('helvetica', 20))
-w_x_h_floor_height_label.grid(row=6)
+# Height Label
+w_x_h_floor_height_label = Label(w_x_h_floor_frame, text='Enter number of tiles for height: ', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+w_x_h_floor_height_label.grid(row=6, sticky='w', padx=533)
 
-w_x_h_floor_height_entry = Entry(w_x_h_floor_frame, font=('helvetica', 25), relief=RIDGE, bd=4, bg='Dodger Blue',
-                                 fg='snow2', width=25)
+# Height Entry
+w_x_h_floor_height_entry = Entry(w_x_h_floor_frame, font=('helvetica', 25), relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2', width=25)
 w_x_h_floor_height_entry.grid(row=7)
 
-w_x_h_floor_submit = Button(w_x_h_floor_frame, text='Submit', font=('helvetica', 20), command=w_x_h_floor_button)
+# Submit Button
+w_x_h_floor_submit = Button(w_x_h_floor_frame, text='Submit', font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=w_x_h_floor_button)
 w_x_h_floor_submit.grid(row=8, pady=2)
 
-w_x_h_floor_results = Label(w_x_h_floor_frame, text='', bg='royalblue4', fg='snow1', font=('helvetica', 40))
-w_x_h_floor_results.grid(row=9)
+# Scrolled results box
+w_x_h_floor_results = scrolledtext.ScrolledText(w_x_h_floor_frame, bg='royalblue4', fg='snow1', font=('helvetica', 20), height=5, wrap=WORD)
+w_x_h_floor_results.grid(row=9, pady=2)
+### END OF COST TO COVER W X H FLOOR TKINTER CONFIG###
 
-### Morgage Calculator ###
+
+### MORGAGE CALCULATOR TKINTER CONFIG ###
+# Frame config
 morgage_calculator_frame.columnconfigure(0, weight=1)
 
-morgage_calculator_title = Label(morgage_calculator_frame, text="Morgage Calculator", bg='royalblue4', fg='snow1',
-                                 font=('helvetica', 50))
-morgage_calculator_title.grid(row=0, sticky='N')
+# Title label
+morgage_calculator_title = Label(morgage_calculator_frame, text="Morgage Calculator", bg='royalblue4', fg='snow1', font=('helvetica', 50))
+morgage_calculator_title.grid(row=0)
 
-morgage_calculator_instructions = Label(morgage_calculator_frame,
-                                        text='Enter the total Loan Amount, monthly interest rate, length of loan in months,\n'
-                                             'and payment frequency then click submit', bg='royalblue4', fg='snow1',
-                                        font=('helvetica', 20), pady=25)
+# Instructions Label
+morgage_calculator_instructions = Label(morgage_calculator_frame, text='Enter the Morgage Amount, Interest rate, Total years of the loan,\nchoose a payment frequency then click submit', bg='royalblue4', fg='snow1', font=('helvetica', 20), pady=25)
 morgage_calculator_instructions.grid(row=1)
 
-morgage_calculator_total_label = Label(morgage_calculator_frame, text='Morgage amount $:        ', bg='royalblue4',
-                                       fg='snow1',
-                                       font=('helvetica', 20))
-morgage_calculator_total_label.grid(row=2)
+# Morgage amount label
+morgage_calculator_total_label = Label(morgage_calculator_frame, text='Morgage amount $:', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+morgage_calculator_total_label.grid(row=2, sticky='w', padx=533)
 
-morgage_calculator_total_entry = Entry(morgage_calculator_frame, font=('helvetica', 20))
+# Morgage amount entry
+morgage_calculator_total_entry = Entry(morgage_calculator_frame, font=('helvetica', 25), relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2', width=25)
 morgage_calculator_total_entry.grid(row=3, pady=(0, 20))
 
-morgage_calculator_interest_rate_label = Label(morgage_calculator_frame, text='Interest Rate %:             ',
-                                               bg='royalblue4',
-                                               fg='snow1', font=('helvetica', 20))
-morgage_calculator_interest_rate_label.grid(row=4)
+# Interest Rate Label
+morgage_calculator_interest_rate_label = Label(morgage_calculator_frame, text='Interest Rate %:', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+morgage_calculator_interest_rate_label.grid(row=4, sticky='w', padx=533)
 
-morgage_calculator_interest_rate_entry = Entry(morgage_calculator_frame, font=('helvetica', 20))
+# Interest Rate Entry
+morgage_calculator_interest_rate_entry = Entry(morgage_calculator_frame, font=('helvetica', 25), relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2', width=25)
 morgage_calculator_interest_rate_entry.grid(row=5, pady=(0, 20))
 
-morgage_calculator_year_of_loan_label = Label(morgage_calculator_frame, text='Total years of the loan:   ',
-                                              bg='royalblue4',
-                                              fg='snow1', font=('helvetica', 20))
-morgage_calculator_year_of_loan_label.grid(row=6)
+# Total years label
+morgage_calculator_year_of_loan_label = Label(morgage_calculator_frame, text='Total years of the loan:', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+morgage_calculator_year_of_loan_label.grid(row=6, sticky='w', padx=533)
 
-morgage_calculator_year_of_loan_entry = Entry(morgage_calculator_frame, font=('helvetica', 20))
+# Total years entry
+morgage_calculator_year_of_loan_entry = Entry(morgage_calculator_frame, font=('helvetica', 25), relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2', width=25)
 morgage_calculator_year_of_loan_entry.grid(row=7, pady=(0, 20))
 
-morgage_calculator_payment_frequency_label = Label(morgage_calculator_frame, text='Payment Frequency:       ',
-                                                   bg='royalblue4',
-                                                   fg='snow1', font=('helvetica', 20))
-morgage_calculator_payment_frequency_label.grid(row=8)
+# Payment frequency Label
+morgage_calculator_payment_frequency_label = Label(morgage_calculator_frame, text='Payment Frequency:', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+morgage_calculator_payment_frequency_label.grid(row=8, sticky='w', padx=533)
 
-selected_frequency = StringVar()
-morgage_calculator_combobox = ttk.Combobox(morgage_calculator_frame, textvariable=selected_frequency, width=19,
-                                           font=('helvetica', 20))
+# Payment frequency Combobox
+morgage_calculator_combobox = ttk.Combobox(morgage_calculator_frame, width=24, font=('helvetica', 25))
 morgage_calculator_combobox['values'] = ('Monthly', 'Fortnightly', 'Weekly')
 morgage_calculator_combobox['state'] = 'readonly'
 morgage_calculator_combobox.current(0)
 morgage_calculator_combobox.grid(row=9, pady=5)
 
-morgage_calculator_submit = Button(morgage_calculator_frame, text='Submit', font=('helvetica', 20),
-                                   command=morgage_calculator_button)
+# Submit button
+morgage_calculator_submit = Button(morgage_calculator_frame, text='Submit', font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=morgage_calculator_button)
 morgage_calculator_submit.grid(row=10)
 
-morgage_calculator_results = Label(morgage_calculator_frame, text='', bg='royalblue4', fg='snow1',
-                                   font=('helvetica', 30))
-morgage_calculator_results.grid(row=11, pady=25)
+# Scrolled results box
+morgage_calculator_results = scrolledtext.ScrolledText(morgage_calculator_frame, bg='royalblue4', fg='snow1', font=('helvetica', 20), height=3, wrap=WORD)
+morgage_calculator_results.grid(row=11, pady=2)
+### END OF MORGAGE CALCULATOR TKINTER CONFIG ###
 
-### Change return program ###
+
+### CHANGE RETURN PROGRAM TKINTER CONFIG###
+# Frame config
 change_return_frame.columnconfigure(0, weight=1)
 
-change_return_submit_title = Label(change_return_frame, text="Change Return Calculator", bg='royalblue4', fg='snow1',
-                                   font=('helvetica', 50))
-change_return_submit_title.grid(row=0, sticky='N')
+# Title Label
+change_return_submit_title = Label(change_return_frame, text="Change Return Calculator", bg='royalblue4', fg='snow1', font=('helvetica', 50))
+change_return_submit_title.grid(row=0)
 
-change_return_instructions = Label(change_return_frame,
-                                   text='Enter unit price and amount paid, then click submit', bg='royalblue4',
-                                   fg='snow1', font=('helvetica', 20))
-change_return_instructions.grid(row=1, pady=(0, 25))
+# Instructions Label
+change_return_instructions = Label(change_return_frame, text='Enter unit price and amount paid, then click submit', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+change_return_instructions.grid(row=1, pady=5)
 
-change_return_item_cost_label = Label(change_return_frame, text='Item cost $:                    ', bg='royalblue4',
-                                      fg='snow1',
-                                      font=('helvetica', 20))
-change_return_item_cost_label.grid(row=2)
+# Item Cost Label
+change_return_item_cost_label = Label(change_return_frame, text='Item cost $:', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+change_return_item_cost_label.grid(row=2, sticky='w', padx=533)
 
-change_return_item_cost_entry = Entry(change_return_frame, font=('helvetica', 20))
-change_return_item_cost_entry.grid(row=3, pady=(0, 20))
+# Item Cost Entry
+change_return_item_cost_entry = Entry(change_return_frame, font=('helvetica', 25), relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2', width=25)
+change_return_item_cost_entry.grid(row=3)
 
-change_return_amount_paid_label = Label(change_return_frame, text='Amount paid $:               ', bg='royalblue4',
-                                        fg='snow1',
-                                        font=('helvetica', 20))
-change_return_amount_paid_label.grid(row=4)
+# Amount Paid Label
+change_return_amount_paid_label = Label(change_return_frame, text='Amount paid $:', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+change_return_amount_paid_label.grid(row=4, sticky='w', padx=533)
 
-change_return_amount_paid_entry = Entry(change_return_frame, font=('helvetica', 20))
+# Amount Paid Entry
+change_return_amount_paid_entry = Entry(change_return_frame, font=('helvetica', 25), relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2', width=25)
 change_return_amount_paid_entry.grid(row=5)
 
-change_return_submit_button = Button(change_return_frame, text='Submit', font=('helvetica', 20),
-                                     command=change_return_submit)
-change_return_submit_button.grid(row=6, pady=2)
+# Submit Button
+change_return_submit_button = Button(change_return_frame, text='Submit', font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=change_return_submit)
+change_return_submit_button.grid(row=6)
 
-change_return_change_owed_label = Label(change_return_frame, text='Change owed: $', bg='royalblue4', fg='snow1',
-                                        font=('helvetica', 20))
-change_return_change_owed_label.grid(row=7, pady=10)
+# Change Owed Label
+change_return_change_owed_label = Label(change_return_frame, text='Change owed:', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+change_return_change_owed_label.grid(row=7, sticky='W', padx=533)
 
-change_return_results = Label(change_return_frame, text='$50 notes:    0\n'
-                                                        '$20 notes:    0\n'
-                                                        '$10 notes:    0\n'
-                                                        '$5 notes:     0\n'
-                                                        '$2 coins:     0\n'
-                                                        '$1 coins:     0\n'
-                                                        '$0.50 coins: 0\n'
-                                                        '$0.20 coins: 0\n'
-                                                        '$0.10 coins: 0\n'
-                                                        '$0.05 coins: 0', bg='royalblue4', fg='snow1',
-                              font=('helvetica', 20))
-change_return_results.grid(row=8)
+# Change Return Labels
+fifty_dollar_label = Label(change_return_frame, text='$50.00 notes:', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+fifty_dollar_label.grid(row=8, sticky='W', padx=533)
+
+twenty_dollar_label = Label(change_return_frame, text='$20.00 notes:', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+twenty_dollar_label.grid(row=9, sticky='W', padx=533)
+
+ten_dollar_label = Label(change_return_frame, text='$10.00 notes:', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+ten_dollar_label.grid(row=10, sticky='W', padx=533)
+
+five_dollar_label = Label(change_return_frame, text='$5.00 notes:', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+five_dollar_label.grid(row=11, sticky='W', padx=533)
+
+two_dollar_label = Label(change_return_frame, text='$2.00 coins:', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+two_dollar_label.grid(row=12, sticky='W', padx=533)
+
+one_dollar_label = Label(change_return_frame, text='$1.00 coins:', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+one_dollar_label.grid(row=13, sticky='W', padx=533)
+
+fifty_cent_label = Label(change_return_frame, text='$00.50 coins:', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+fifty_cent_label.grid(row=14, sticky='W', padx=533)
+
+twenty_cent_label = Label(change_return_frame, text='$00.20 coins:', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+twenty_cent_label.grid(row=15, sticky='W', padx=533)
+
+ten_cent_label = Label(change_return_frame, text='$00.10 coins:', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+ten_cent_label.grid(row=16, sticky='W', padx=533)
+
+five_cent_label = Label(change_return_frame, text='$00.05 coins:', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+five_cent_label.grid(row=17, sticky='W', padx=533)
+
+# Change return Results
+fifty_dollar_result = Label(change_return_frame, text='0', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+fifty_dollar_result.grid(row=8, sticky='W', padx=725)
+
+twenty_dollar_result = Label(change_return_frame, text='0', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+twenty_dollar_result.grid(row=9, sticky='W', padx=725)
+
+ten_dollar_result = Label(change_return_frame, text='0', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+ten_dollar_result.grid(row=10, sticky='W', padx=725)
+
+five_dollar_result = Label(change_return_frame, text='0', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+five_dollar_result.grid(row=11, sticky='W', padx=725)
+
+two_dollar_result = Label(change_return_frame, text='0', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+two_dollar_result.grid(row=12, sticky='W', padx=725)
+
+one_dollar_result = Label(change_return_frame, text='0', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+one_dollar_result.grid(row=13, sticky='W', padx=725)
+
+fifty_cent_result = Label(change_return_frame, text='0', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+fifty_cent_result.grid(row=14, sticky='W', padx=725)
+
+twenty_cent_result = Label(change_return_frame, text='0', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+twenty_cent_result.grid(row=15, sticky='W', padx=725)
+
+ten_cent_result = Label(change_return_frame, text='0', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+ten_cent_result.grid(row=16, sticky='W', padx=725)
+
+five_cent_result = Label(change_return_frame, text='0', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+five_cent_result.grid(row=17, sticky='W', padx=725)
+### END OF CHANGE RETURN PROGRAM TKINTER CONFIG###
+
 
 ### binary to decimal converter ###
 binary_to_decimal_frame.columnconfigure(0, weight=1)
