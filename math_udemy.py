@@ -12,24 +12,22 @@
 # Find the cost to cover W x H floor [complete]
 # Mortgage calculator [complete]
 # Change return program [complete]
+# Binary to Decimal and Back Converter [complete]
+# Scientific Calculator [complete]
+# Unit Converter [complete]
+# Alarm Clock [complete]
+# Distance Between Two Cities [complete]
+# Credit Card Validator [complete]
 
-# Binary to Decimal and Back Converter [incomplete] - tidy gui
-
-# Scientific Calculator [incomplete] - Refacter code format? fix numpy being greyed out
-
-# Unit Converter (temp, currency, volume, mass and more) [incomplete] - change this program to use the internet for conversions
-# Alarm Clock [incomplete] - add text wrapping to song title, stop song button on message box
-# Distance Between Two Cities [incomplete] - change colour to blue for drop down boxes?
-# Credit Card Validator [incomplete] - add examples for credit card numbers, drop down box?
-
-# Tax Calculator [complete]
+# Tax Calculator [incomplete] - Center instructions properly, perhaps split instructions up line by line
 
 # Factorial Finder [incomplete] - add scroll bar to results
 # Happy Numbers [incomplete] - add calculations to a scroll bar , add focus if needed
 
 # Number Names [complete]
 # Coin Flip Simulation [complete]
-# Exponentiation [complete]
+
+# Exponentiation [incomplete] - add scrollable text box and increase limit
 
 # once all completed, upload to GITHUB
 
@@ -43,7 +41,7 @@ import sympy
 import winsound
 import datetime
 import math
-import numpy # potentially need to remove this if not used
+import numpy # this import is used exclusively for the cube root function of the scientific calculator
 from tkinter import messagebox
 from tkinter import filedialog
 import os
@@ -147,6 +145,8 @@ def show_frame(frame_parameter):
         change_return_item_cost_entry.focus()
     elif frame_parameter == binary_to_decimal_frame:
         binary_to_decimal_entry.focus()
+    elif frame_parameter == unit_converter_frame:
+        unit_converter_left_entry.focus()
     elif frame_parameter == credit_card_validator_frame:
         card_validator_entry.focus()
     elif frame_parameter == tax_calculator_frame:
@@ -523,30 +523,28 @@ def change_return_submit():
 ### END OF CHANGE RETURN FUNCTION ###
 
 
-### binary to decimal converter ###
+### BINARY TO DECIMAL CONVERTER FUNCTION ###
 def binary_to_decimal_submit():
     try:
+        binary_to_decimal_results.delete('1.0', END)
 
         if binary_combobox.get() == 'Decimal to Binary':
             bin_dec_value = int(binary_to_decimal_entry.get())
-            binary_to_decimal_results.config(text=f'The binary value of {bin_dec_value} is:\n\n{bin(bin_dec_value)}')
-            binary_to_decimal_entry.delete(0, END)
+            binary_to_decimal_results.insert(END, f'The binary value of {bin_dec_value} is:\n\n{bin(bin_dec_value)}')
 
         elif binary_combobox.get() == 'Binary to Decimal':
             bin_dec_value = binary_to_decimal_entry.get()
-            binary_to_decimal_results.config(
-                text=f'The numerical value of {bin_dec_value} is:\n\n{int(bin_dec_value, 2)}')
-            binary_to_decimal_entry.delete(0, END)
+            binary_to_decimal_results.insert(END, f'The numerical value of {bin_dec_value} is:\n\n{int(bin_dec_value, 2)}')
 
     except ValueError:
-        binary_to_decimal_results.config(text='Please enter a valid value.')
-        binary_to_decimal_entry.delete(0, END)
+        binary_to_decimal_results.insert(END, 'Please enter a valid value.')
+### END OF BINARY TO DECIMAL CONVERTER FUNCTION ###
 
 
-## SCIENTIFIC CALCULATOR BUTTON FUNCTIONS ##
+### SCIENTIFIC CALCULATOR BUTTON FUNCTIONS ###
 calculator_string = ''
 
-
+# Returns an int if the answer ends in .0
 def formatNumber(num):
     if num % 1 == 0:
         return int(num)
@@ -859,20 +857,15 @@ def calc_ans():
     calculator_entry.insert(calculator_entry.index("end"), 'Ans')
     calculator_string += ans_string
     calculator_entry.config(state=DISABLED)
+### END OF SCIENTIFIC CALCULATOR BUTTON FUNCTIONS ###
 
 
-## UNIT CONVERTER  ##
-
-
-# TOP COMBOBOX
+### UNIT CONVERTER FUNCTION ###
+# Top Combobox Function
 def unit_converter_top_combobox(*args):
     if top_combobox.get() == "Area":
-        left_combobox['values'] = (
-            'Square kilometer', 'Square meter', 'Square mile', 'Square yard', 'Square foot', 'Square inch', 'Hectare',
-            'Acre')
-        right_combobox['values'] = (
-            'Square kilometer', 'Square meter', 'Square mile', 'Square yard', 'Square foot', 'Square inch', 'Hectare',
-            'Acre')
+        left_combobox['values'] = ('Square kilometer', 'Square meter', 'Square mile', 'Square yard', 'Square foot', 'Square inch', 'Hectare', 'Acre')
+        right_combobox['values'] = ('Square kilometer', 'Square meter', 'Square mile', 'Square yard', 'Square foot', 'Square inch', 'Hectare', 'Acre')
 
     elif top_combobox.get() == "Energy":
         left_combobox['values'] = ('Joule', 'Kilojoule', 'Watt hour', 'kilowatt hour')
@@ -883,10 +876,8 @@ def unit_converter_top_combobox(*args):
         right_combobox['values'] = ('Hertz', 'Kilohertz', 'Megahertz', 'Gigahertz')
 
     elif top_combobox.get() == "Length":
-        left_combobox['values'] = (
-            'kilometer', 'Meter', 'Centimeter', 'Millimeter', 'Mile', 'Yard', 'Foot', 'Inch', 'Nautical mile')
-        right_combobox['values'] = (
-            'kilometer', 'Meter', 'Centimeter', 'Millimeter', 'Mile', 'Yard', 'Foot', 'Inch', 'Nautical mile')
+        left_combobox['values'] = ('kilometer', 'Meter', 'Centimeter', 'Millimeter', 'Mile', 'Yard', 'Foot', 'Inch', 'Nautical mile')
+        right_combobox['values'] = ('kilometer', 'Meter', 'Centimeter', 'Millimeter', 'Mile', 'Yard', 'Foot', 'Inch', 'Nautical mile')
 
     elif top_combobox.get() == "Mass":
         left_combobox['values'] = ('tonne', 'kilogram', 'gram', 'milligram', 'Microgram')
@@ -902,11 +893,8 @@ def unit_converter_top_combobox(*args):
 
     elif top_combobox.get() == "Time":
         left_combobox['values'] = (
-            'Nanosecond', 'Microsecond', 'Millisecond', 'Second', 'Minute', 'Hour', 'Day', 'Week', 'Month', 'Year',
-            'Decade', 'Century')
-        right_combobox['values'] = (
-            'Nanosecond', 'Microsecond', 'Millisecond', 'Second', 'Minute', 'Hour', 'Day', 'Week', 'Month', 'Year',
-            'Decade', 'Century')
+            'Nanosecond', 'Microsecond', 'Millisecond', 'Second', 'Minute', 'Hour', 'Day', 'Week', 'Month', 'Year', 'Decade', 'Century')
+        right_combobox['values'] = ('Nanosecond', 'Microsecond', 'Millisecond', 'Second', 'Minute', 'Hour', 'Day', 'Week', 'Month', 'Year', 'Decade', 'Century')
 
     elif top_combobox.get() == "Volume":
         left_combobox['values'] = ('Liter', 'Milliliter', 'Cubic Meter', 'Imperial tablespoon', 'Imperial teaspoon')
@@ -916,1799 +904,61 @@ def unit_converter_top_combobox(*args):
     right_combobox.current(0)
     unit_converter_right_entry.delete(0, END)
     unit_converter_left_entry.delete(0, END)
+    unit_converter_left_entry.focus()
 
 
-### Unit convertor submit button ###
+# Unit converter Refresh button
+def unit_converter_refresh():
+    try:
+        from_units = left_combobox.get()
+        to_units = right_combobox.get()
+        from_unit_amount = unit_converter_left_entry.get()
+
+        unit_url = f'https://www.google.com/search?q=from+{from_unit_amount}+{from_units}+to+{to_units}&sxsrf=AOaemvIa19K04JwWp9NZYCFCo4KXaZqjFA%3A1635719557396&ei=hRl_YaPXF9ma4-EPsv2IwAE&oq=from+meters+to+kilometers&gs_lcp=Cgdnd3Mtd2l6EAMyBQgAEIAEMgYIABAWEB4yBggAEBYQHjIGCAAQFhAeMgYIABAWEB4yBggAEBYQHjIGCAAQFhAeMgYIABAWEB4yBggAEBYQHjIGCAAQFhAeOgcILhBDEJMCOgUIABCRAjoECAAQQzoOCC4QgAQQsQMQxwEQowI6BQguEIAEOggIABCABBCxAzoLCC4QgAQQxwEQ0QM6CAguEIAEELEDOgkIABBDEEYQggI6CAguEIAEEJMCSgQIQRgAUJDa1QJYgZTWAmDamNYCaABwAXgBgAHKAogBsSSSAQgwLjIyLjIuMZgBAKABAcABAQ&sclient=gws-wiz&ved=0ahUKEwjjra6Z2vXzAhVZzTgGHbI-AhgQ4dUDCA4&uact=5'
+
+        requests_conversion = requests.get(unit_url)
+
+        soup_distance = bs4.BeautifulSoup(requests_conversion.text, "lxml")
+
+        unit_conversion = soup_distance.find('div', {'class': "BNeawe iBp4i AP7Wnd"}).text
+
+        print(unit_conversion)
+
+        unit_converter_internet_label.config(text="Connected to the internet", fg='green')
+
+    except requests.exceptions.ConnectionError:
+        unit_converter_internet_label.config(text='No internet connection, Please try again', fg='red')
+
+
+# Unit convertor submit button
 def unit_converter_submit():
-    unit_converter_right_entry.config(state=NORMAL)
-    unit_converter_right_entry.delete(0, END)
+    try:
+        unit_converter_right_entry.delete(0, END)
 
-    # Area
+        from_units = left_combobox.get()
+        to_units = right_combobox.get()
+        from_unit_amount = unit_converter_left_entry.get()
 
-    # Square kilometer
+        if from_units == to_units:
+            unit_converter_right_entry.insert(0, unit_converter_left_entry.get())
 
-    # Square kilometer to square kilometer
-    if left_combobox.get() == 'Square kilometer' and right_combobox.get() == 'Square kilometer':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
+        else:
+            unit_url = f'https://www.google.com/search?q=from+{from_unit_amount}+{from_units}+to+{to_units}&sxsrf=AOaemvIa19K04JwWp9NZYCFCo4KXaZqjFA%3A1635719557396&ei=hRl_YaPXF9ma4-EPsv2IwAE&oq=from+meters+to+kilometers&gs_lcp=Cgdnd3Mtd2l6EAMyBQgAEIAEMgYIABAWEB4yBggAEBYQHjIGCAAQFhAeMgYIABAWEB4yBggAEBYQHjIGCAAQFhAeMgYIABAWEB4yBggAEBYQHjIGCAAQFhAeOgcILhBDEJMCOgUIABCRAjoECAAQQzoOCC4QgAQQsQMQxwEQowI6BQguEIAEOggIABCABBCxAzoLCC4QgAQQxwEQ0QM6CAguEIAEELEDOgkIABBDEEYQggI6CAguEIAEEJMCSgQIQRgAUJDa1QJYgZTWAmDamNYCaABwAXgBgAHKAogBsSSSAQgwLjIyLjIuMZgBAKABAcABAQ&sclient=gws-wiz&ved=0ahUKEwjjra6Z2vXzAhVZzTgGHbI-AhgQ4dUDCA4&uact=5'
 
-    # square kilometer to square meter
-    if left_combobox.get() == 'Square kilometer' and right_combobox.get() == 'Square meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000000)
+            requests_conversion = requests.get(unit_url)
 
-    # square kilometer to square mile
-    if left_combobox.get() == 'Square kilometer' and right_combobox.get() == 'Square mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 2.59)
+            soup_distance = bs4.BeautifulSoup(requests_conversion.text, "lxml")
 
-    # square kilometer to Square yard
-    if left_combobox.get() == 'Square kilometer' and right_combobox.get() == 'Square yard':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1195990.046301)
+            unit_conversion = soup_distance.find('div', {'class': "BNeawe iBp4i AP7Wnd"}).text
 
-    # square kilometer to Square foot
-    if left_combobox.get() == 'Square kilometer' and right_combobox.get() == 'Square foot':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 10763910.41671)
+            unit_converter_right_entry.insert(0, unit_conversion)
 
-    # square kilometer to Square inch
-    if left_combobox.get() == 'Square kilometer' and right_combobox.get() == 'Square inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1550003100.0062)
+    except requests.exceptions.ConnectionError:
+        unit_converter_internet_label.config(text='No internet connection, Please try again', fg='red')
+### END OF UNIT CONVERTER FUNCTION ###
 
-    # square kilometer to Hectare
-    if left_combobox.get() == 'Square kilometer' and right_combobox.get() == 'Hectare':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 100)
 
-    # square kilometer to Acre
-    if left_combobox.get() == 'Square kilometer' and right_combobox.get() == 'Acre':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 247.11)
-
-    # Square meter
-
-    # Square meter to square kilometer
-    if left_combobox.get() == 'Square meter' and right_combobox.get() == 'Square kilometer':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000000)
-
-    # Square meter to square meter
-    if left_combobox.get() == 'Square meter' and right_combobox.get() == 'Square meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Square meter to square mile
-    if left_combobox.get() == 'Square meter' and right_combobox.get() == 'Square mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.00000038610)
-
-    # Square meter to Square yard
-    if left_combobox.get() == 'Square meter' and right_combobox.get() == 'Square yard':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1.19599)
-
-    # Square meter to Square foot
-    if left_combobox.get() == 'Square meter' and right_combobox.get() == 'Square foot':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 10.76391041671)
-
-    # Square meter to Square inch
-    if left_combobox.get() == 'Square meter' and right_combobox.get() == 'Square inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1550.0031)
-
-    # Square meter to Hectare
-    if left_combobox.get() == 'Square meter' and right_combobox.get() == 'Hectare':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 10000)
-
-    # Square meter to Acre
-    if left_combobox.get() == 'Square meter' and right_combobox.get() == 'Acre':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 4047)
-
-    # Square mile
-
-    # Square mile to square kilometer
-    if left_combobox.get() == 'Square mile' and right_combobox.get() == 'Square kilometer':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 0.38610)
-
-    # Square mile to square meter
-    if left_combobox.get() == 'Square mile' and right_combobox.get() == 'Square meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 0.00000038610)
-
-    # Square mile to square mile
-    if left_combobox.get() == 'Square mile' and right_combobox.get() == 'Square mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Square mile to Square yard
-    if left_combobox.get() == 'Square mile' and right_combobox.get() == 'Square yard':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 3097600)
-
-    # Square mile to Square foot
-    if left_combobox.get() == 'Square mile' and right_combobox.get() == 'Square foot':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 27878400)
-
-    # Square mile to Square inch
-    if left_combobox.get() == 'Square mile' and right_combobox.get() == 'Square inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 4014489599.4792)
-
-    # Square mile to Hectare
-    if left_combobox.get() == 'Square mile' and right_combobox.get() == 'Hectare':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 258.998811)
-
-    # Square mile to Acre
-    if left_combobox.get() == 'Square mile' and right_combobox.get() == 'Acre':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 640)
-
-    # Square mile
-
-    # Square mile to square kilometer
-    if left_combobox.get() == 'Square mile' and right_combobox.get() == 'Square kilometer':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 0.38610)
-
-    # Square mile to square meter
-    if left_combobox.get() == 'Square mile' and right_combobox.get() == 'Square meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 0.00000038610)
-
-    # Square mile to square mile
-    if left_combobox.get() == 'Square mile' and right_combobox.get() == 'Square mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Square mile to Square yard
-    if left_combobox.get() == 'Square mile' and right_combobox.get() == 'Square yard':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 3097600)
-
-    # Square mile to Square foot
-    if left_combobox.get() == 'Square mile' and right_combobox.get() == 'Square foot':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 27878400)
-
-    # Square mile to Square inch
-    if left_combobox.get() == 'Square mile' and right_combobox.get() == 'Square inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 4014489599.4792)
-
-    # Square mile to Hectare
-    if left_combobox.get() == 'Square mile' and right_combobox.get() == 'Hectare':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 258.998811)
-
-    # Square mile to Acre
-    if left_combobox.get() == 'Square mile' and right_combobox.get() == 'Acre':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 640)
-
-    # Square yard
-
-    # Square yard to square kilometer
-    if left_combobox.get() == 'Square yard' and right_combobox.get() == 'Square kilometer':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.00000083613)
-
-    # Square yard to square meter
-    if left_combobox.get() == 'Square yard' and right_combobox.get() == 'Square meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1.1960)
-
-    # Square yard to square mile
-    if left_combobox.get() == 'Square yard' and right_combobox.get() == 'Square mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 3097600)
-
-    # Square yard to Square yard
-    if left_combobox.get() == 'Square yard' and right_combobox.get() == 'Square yard':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Square yard to Square foot
-    if left_combobox.get() == 'Square yard' and right_combobox.get() == 'Square foot':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 9)
-
-    # Square yard to Square inch
-    if left_combobox.get() == 'Square yard' and right_combobox.get() == 'Square inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1296)
-
-    # Square yard to Hectare
-    if left_combobox.get() == 'Square yard' and right_combobox.get() == 'Hectare':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.000083613)
-
-    # Square yard to Acre
-    if left_combobox.get() == 'Square yard' and right_combobox.get() == 'Acre':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 4840)
-
-    # Square foot
-
-    # Square foot to square kilometer
-    if left_combobox.get() == 'Square foot' and right_combobox.get() == 'Square kilometer':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.000000092903)
-
-    # Square foot to square meter
-    if left_combobox.get() == 'Square foot' and right_combobox.get() == 'Square meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.09290304)
-
-    # Square foot to square mile
-    if left_combobox.get() == 'Square foot' and right_combobox.get() == 'Square mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 27878400)
-
-    # Square foot to Square yard
-    if left_combobox.get() == 'Square foot' and right_combobox.get() == 'Square yard':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 9)
-
-    # Square foot to Square foot
-    if left_combobox.get() == 'Square foot' and right_combobox.get() == 'Square foot':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Square foot to Square inch
-    if left_combobox.get() == 'Square foot' and right_combobox.get() == 'Square inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 144)
-
-    # Square foot to Hectare
-    if left_combobox.get() == 'Square foot' and right_combobox.get() == 'Hectare':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 107639.10417)
-
-    # Square foot to Acre
-    if left_combobox.get() == 'Square foot' and right_combobox.get() == 'Acre':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 43560)
-
-    # Square inch
-
-    # Square inch to square kilometer
-    if left_combobox.get() == 'Square inch' and right_combobox.get() == 'Square kilometer':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.00000000064516)
-
-    # Square inch to square meter
-    if left_combobox.get() == 'Square inch' and right_combobox.get() == 'Square meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.000645)
-
-    # Square inch to square mile
-    if left_combobox.get() == 'Square inch' and right_combobox.get() == 'Square mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.0000000002491)
-
-    # Square inch to Square yard
-    if left_combobox.get() == 'Square inch' and right_combobox.get() == 'Square yard':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1296)
-
-    # Square inch to Square foot
-    if left_combobox.get() == 'Square inch' and right_combobox.get() == 'Square foot':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 144)
-
-    # Square inch to Square inch
-    if left_combobox.get() == 'Square inch' and right_combobox.get() == 'Square inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Square inch to Hectare
-    if left_combobox.get() == 'Square inch' and right_combobox.get() == 'Hectare':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.000000064516)
-
-    # Square inch to Acre
-    if left_combobox.get() == 'Square inch' and right_combobox.get() == 'Acre':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 6272640)
-
-    # Hectare
-
-    # Hectare to square kilometer
-    if left_combobox.get() == 'Hectare' and right_combobox.get() == 'Square kilometer':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 100)
-
-    # Hectare to square meter
-    if left_combobox.get() == 'Hectare' and right_combobox.get() == 'Square meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 10000)
-
-    # Hectare to square mile
-    if left_combobox.get() == 'Hectare' and right_combobox.get() == 'Square mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.0038610)
-
-    # Hectare to Square yard
-    if left_combobox.get() == 'Hectare' and right_combobox.get() == 'Square yard':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 11959.8993)
-
-    # Hectare to Square foot
-    if left_combobox.get() == 'Hectare' and right_combobox.get() == 'Square foot':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 107640)
-
-    # Hectare to Square inch
-    if left_combobox.get() == 'Hectare' and right_combobox.get() == 'Square inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 15500031)
-
-    # Hectare to Hectare
-    if left_combobox.get() == 'Hectare' and right_combobox.get() == 'Hectare':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Hectare to Acre
-    if left_combobox.get() == 'Hectare' and right_combobox.get() == 'Acre':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 2.4711)
-
-    # Acre
-
-    # Acre to square kilometer
-    if left_combobox.get() == 'Acre' and right_combobox.get() == 'Square kilometer':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 247.11)
-
-    # Acre to square meter
-    if left_combobox.get() == 'Acre' and right_combobox.get() == 'Square meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 0.00024711)
-
-    # Acre to square mile
-    if left_combobox.get() == 'Acre' and right_combobox.get() == 'Square mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.00156)
-
-    # Acre to Square yard
-    if left_combobox.get() == 'Acre' and right_combobox.get() == 'Square yard':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 4840)
-
-    # Acre to Square foot
-    if left_combobox.get() == 'Acre' and right_combobox.get() == 'Square foot':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 43560)
-
-    # Acre to Square inch
-    if left_combobox.get() == 'Acre' and right_combobox.get() == 'Square inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 6272640)
-
-    # Acre to Hectare
-    if left_combobox.get() == 'Acre' and right_combobox.get() == 'Hectare':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 2.4711)
-
-    # Acre to Acre
-    if left_combobox.get() == 'Acre' and right_combobox.get() == 'Acre':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # ENERGY
-
-    # Joule
-
-    # Joule to Joule
-    if left_combobox.get() == 'Joule' and right_combobox.get() == 'Joule':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Joule to Kilojoule
-    if left_combobox.get() == 'Joule' and right_combobox.get() == 'Kilojoule':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000)
-
-    # Joule to Watt hour
-    if left_combobox.get() == 'Joule' and right_combobox.get() == 'Watt hour':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 3600)
-
-    # Joule to kilowatt hour
-    if left_combobox.get() == 'Joule' and right_combobox.get() == 'kilowatt hour':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 3600000)
-
-    # Kilojoule
-
-    # Kilojoule to Joule
-    if left_combobox.get() == 'Kilojoule' and right_combobox.get() == 'Joule':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000)
-
-    # Kilojoule to Kilojoule
-    if left_combobox.get() == 'Kilojoule' and right_combobox.get() == 'Kilojoule':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Kilojoule to Watt hour
-    if left_combobox.get() == 'Kilojoule' and right_combobox.get() == 'Watt hour':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 3.6)
-
-    # Kilojoule to kilowatt hour
-    if left_combobox.get() == 'Kilojoule' and right_combobox.get() == 'kilowatt hour':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 3600)
-
-    # Watt hour
-
-    # Watt hour to Joule
-    if left_combobox.get() == 'Watt hour' and right_combobox.get() == 'Joule':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 3600)
-
-    # Watt hour to Kilojoule
-    if left_combobox.get() == 'Watt hour' and right_combobox.get() == 'Kilojoule':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 3.6)
-
-    # Watt hour to Watt hour
-    if left_combobox.get() == 'Watt hour' and right_combobox.get() == 'Watt hour':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Watt hour to kilowatt hour
-    if left_combobox.get() == 'Watt hour' and right_combobox.get() == 'kilowatt hour':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000)
-
-    # kilowatt hour
-
-    # kilowatt hour to Joule
-    if left_combobox.get() == 'kilowatt hour' and right_combobox.get() == 'Joule':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 3600000)
-
-    # kilowatt hour to Kilojoule
-    if left_combobox.get() == 'kilowatt hour' and right_combobox.get() == 'Kilojoule':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 3600)
-
-    # kilowatt hour to Watt hour
-    if left_combobox.get() == 'kilowatt hour' and right_combobox.get() == 'Watt hour':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000)
-
-    # kilowatt hour to kilowatt hour
-    if left_combobox.get() == 'kilowatt hour' and right_combobox.get() == 'kilowatt hour':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # FREQUENCY
-
-    # Hertz
-
-    # Hertz to Hertz
-    if left_combobox.get() == 'Hertz' and right_combobox.get() == 'Hertz':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Hertz to Kilohertz
-    if left_combobox.get() == 'Hertz' and right_combobox.get() == 'Kilohertz':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000)
-
-    # Hertz to Megahertz
-    if left_combobox.get() == 'Hertz' and right_combobox.get() == 'Megahertz':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000000)
-
-    # Hertz to Gigahertz
-    if left_combobox.get() == 'Hertz' and right_combobox.get() == 'Gigahertz':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000000000)
-
-    # Kilohertz
-
-    # Kilohertz to Hertz
-    if left_combobox.get() == 'Kilohertz' and right_combobox.get() == 'Hertz':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000)
-
-    # Kilohertz to Kilohertz
-    if left_combobox.get() == 'Kilohertz' and right_combobox.get() == 'Kilohertz':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Kilohertz to Megahertz
-    if left_combobox.get() == 'Kilohertz' and right_combobox.get() == 'Megahertz':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000)
-
-    # Kilohertz to Gigahertz
-    if left_combobox.get() == 'Kilohertz' and right_combobox.get() == 'Gigahertz':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000000)
-
-    # Megahertz
-
-    # Megahertz to Hertz
-    if left_combobox.get() == 'Megahertz' and right_combobox.get() == 'Hertz':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000000)
-
-    # Megahertz to Kilohertz
-    if left_combobox.get() == 'Megahertz' and right_combobox.get() == 'Kilohertz':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000)
-
-    # Megahertz to Megahertz
-    if left_combobox.get() == 'Megahertz' and right_combobox.get() == 'Megahertz':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Megahertz to Gigahertz
-    if left_combobox.get() == 'Megahertz' and right_combobox.get() == 'Gigahertz':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000)
-
-    # Gigahertz
-
-    # Gigahertz to Hertz
-    if left_combobox.get() == 'Gigahertz' and right_combobox.get() == 'Hertz':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000000000)
-
-    # Gigahertz to Kilohertz
-    if left_combobox.get() == 'Gigahertz' and right_combobox.get() == 'Kilohertz':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000000)
-
-    # Gigahertz to Megahertz
-    if left_combobox.get() == 'Gigahertz' and right_combobox.get() == 'Megahertz':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000)
-
-    # Gigahertz to Gigahertz
-    if left_combobox.get() == 'Gigahertz' and right_combobox.get() == 'Gigahertz':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # LENGTH
-
-    # kilometer
-
-    # kilometer to kilometer
-    if left_combobox.get() == 'kilometer' and right_combobox.get() == 'kilometer':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # kilometer to Meter
-    if left_combobox.get() == 'kilometer' and right_combobox.get() == 'Meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000)
-
-    # kilometer to Centimeter
-    if left_combobox.get() == 'kilometer' and right_combobox.get() == 'Centimeter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 100000)
-
-    # kilometer to Millimeter
-    if left_combobox.get() == 'kilometer' and right_combobox.get() == 'Millimeter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000000)
-
-    # kilometer to Mile
-    if left_combobox.get() == 'kilometer' and right_combobox.get() == 'Mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.6214)
-
-    # kilometer to Yard
-    if left_combobox.get() == 'kilometer' and right_combobox.get() == 'Yard':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1093.6)
-
-    # kilometer to Foot
-    if left_combobox.get() == 'kilometer' and right_combobox.get() == 'Foot':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 3280.8)
-
-    # kilometer to Inch
-    if left_combobox.get() == 'kilometer' and right_combobox.get() == 'Inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 39370.07874)
-
-    # kilometer to Nautical mile
-    if left_combobox.get() == 'kilometer' and right_combobox.get() == 'Nautical mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.53996)
-
-    # Meter
-
-    # Meter to kilometer
-    if left_combobox.get() == 'Meter' and right_combobox.get() == 'kilometer':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000)
-
-    # Meter to Meter
-    if left_combobox.get() == 'Meter' and right_combobox.get() == 'Meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Meter to Centimeter
-    if left_combobox.get() == 'Meter' and right_combobox.get() == 'Centimeter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 100)
-
-    # Meter to Millimeter
-    if left_combobox.get() == 'Meter' and right_combobox.get() == 'Millimeter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000)
-
-    # Meter to Mile
-    if left_combobox.get() == 'Meter' and right_combobox.get() == 'Mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.000621)
-
-    # Meter to Yard
-    if left_combobox.get() == 'Meter' and right_combobox.get() == 'Yard':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1.093613)
-
-    # Meter to Foot
-    if left_combobox.get() == 'Meter' and right_combobox.get() == 'Foot':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 3.2808)
-
-    # Meter to Inch
-    if left_combobox.get() == 'Meter' and right_combobox.get() == 'Inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 39.36)
-
-    # Meter to Nautical mile
-    if left_combobox.get() == 'Meter' and right_combobox.get() == 'Nautical mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1852)
-
-    # Centimeter
-
-    # Centimeter to kilometer
-    if left_combobox.get() == 'Centimeter' and right_combobox.get() == 'kilometer':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 100000)
-
-    # Centimeter to Meter
-    if left_combobox.get() == 'Centimeter' and right_combobox.get() == 'Meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 100)
-
-    # Centimeter to Centimeter
-    if left_combobox.get() == 'Centimeter' and right_combobox.get() == 'Centimeter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Centimeter to Millimeter
-    if left_combobox.get() == 'Centimeter' and right_combobox.get() == 'Millimeter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 10)
-
-    # Centimeter to Mile
-    if left_combobox.get() == 'Centimeter' and right_combobox.get() == 'Mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 160934.4)
-
-    # Centimeter to Yard
-    if left_combobox.get() == 'Centimeter' and right_combobox.get() == 'Yard':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.010936)
-
-    # Centimeter to Foot
-    if left_combobox.get() == 'Centimeter' and right_combobox.get() == 'Foot':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.0328084)
-
-    # Centimeter to Inch
-    if left_combobox.get() == 'Centimeter' and right_combobox.get() == 'Inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.39370)
-
-    # Centimeter to Nautical mile
-    if left_combobox.get() == 'Centimeter' and right_combobox.get() == 'Nautical mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.0000054)
-
-    # Millimeter
-
-    # Millimeter to kilometer
-    if left_combobox.get() == 'Millimeter' and right_combobox.get() == 'kilometer':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000000)
-
-    # Millimeter to Meter
-    if left_combobox.get() == 'Millimeter' and right_combobox.get() == 'Meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000)
-
-    # Millimeter to Centimeter
-    if left_combobox.get() == 'Millimeter' and right_combobox.get() == 'Centimeter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 10)
-
-    # Millimeter to Millimeter
-    if left_combobox.get() == 'Millimeter' and right_combobox.get() == 'Millimeter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Millimeter to Mile
-    if left_combobox.get() == 'Millimeter' and right_combobox.get() == 'Mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1609344)
-
-    # Millimeter to Yard
-    if left_combobox.get() == 'Millimeter' and right_combobox.get() == 'Yard':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.001094)
-
-    # Millimeter to Foot
-    if left_combobox.get() == 'Millimeter' and right_combobox.get() == 'Foot':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.00328084)
-
-    # Millimeter to Inch
-    if left_combobox.get() == 'Millimeter' and right_combobox.get() == 'Inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.03937)
-
-    # Millimeter to Nautical mile
-    if left_combobox.get() == 'Millimeter' and right_combobox.get() == 'Nautical mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.00000054)
-
-    # Mile
-
-    # Mile to kilometer
-    if left_combobox.get() == 'Mile' and right_combobox.get() == 'kilometer':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.6214)
-
-    # Mile to Meter
-    if left_combobox.get() == 'Mile' and right_combobox.get() == 'Meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1609.344)
-
-    # Mile to Centimeter
-    if left_combobox.get() == 'Mile' and right_combobox.get() == 'Centimeter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 160934.4)
-
-    # Mile to Millimeter
-    if left_combobox.get() == 'Mile' and right_combobox.get() == 'Millimeter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1609344)
-
-    # Mile to Mile
-    if left_combobox.get() == 'Mile' and right_combobox.get() == 'Mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Mile to Yard
-    if left_combobox.get() == 'Mile' and right_combobox.get() == 'Yard':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1760)
-
-    # Mile to Foot
-    if left_combobox.get() == 'Mile' and right_combobox.get() == 'Foot':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 5280)
-
-    # Mile to Inch
-    if left_combobox.get() == 'Mile' and right_combobox.get() == 'Inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 63360)
-
-    # Mile to Nautical mile
-    if left_combobox.get() == 'Mile' and right_combobox.get() == 'Nautical mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.86897583)
-
-    # Yard
-
-    # Yard to kilometer
-    if left_combobox.get() == 'Yard' and right_combobox.get() == 'kilometer':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.000914)
-
-    # Yard to Meter
-    if left_combobox.get() == 'Yard' and right_combobox.get() == 'Meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1.0936)
-
-    # Yard to Centimeter
-    if left_combobox.get() == 'Yard' and right_combobox.get() == 'Centimeter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 0.010936)
-
-    # Yard to Millimeter
-    if left_combobox.get() == 'Yard' and right_combobox.get() == 'Millimeter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 914.4)
-
-    # Yard to Mile
-    if left_combobox.get() == 'Yard' and right_combobox.get() == 'Mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1760)
-
-    # Yard to Yard
-    if left_combobox.get() == 'Yard' and right_combobox.get() == 'Yard':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Yard to Foot
-    if left_combobox.get() == 'Yard' and right_combobox.get() == 'Foot':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 3)
-
-    # Yard to Inch
-    if left_combobox.get() == 'Yard' and right_combobox.get() == 'Inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 36)
-
-    # Yard to Nautical mile
-    if left_combobox.get() == 'Yard' and right_combobox.get() == 'Nautical mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 2025.37183)
-
-    # Foot
-
-    # Foot to kilometer
-    if left_combobox.get() == 'Foot' and right_combobox.get() == 'kilometer':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.000305)
-
-    # Foot to Meter
-    if left_combobox.get() == 'Foot' and right_combobox.get() == 'Meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 3.2808)
-
-    # Foot to Centimeter
-    if left_combobox.get() == 'Foot' and right_combobox.get() == 'Centimeter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 0.032808)
-
-    # Foot to Millimeter
-    if left_combobox.get() == 'Foot' and right_combobox.get() == 'Millimeter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 304.8)
-
-    # Foot to Mile
-    if left_combobox.get() == 'Foot' and right_combobox.get() == 'Mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 5280)
-
-    # Foot to Yard
-    if left_combobox.get() == 'Foot' and right_combobox.get() == 'Yard':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 3)
-
-    # Foot to Foot
-    if left_combobox.get() == 'Foot' and right_combobox.get() == 'Foot':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Foot to Inch
-    if left_combobox.get() == 'Foot' and right_combobox.get() == 'Inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 12)
-
-    # Foot to Nautical mile
-    if left_combobox.get() == 'Foot' and right_combobox.get() == 'Nautical mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 6076.11549)
-
-    # Inch
-
-    # Inch to kilometer
-    if left_combobox.get() == 'Inch' and right_combobox.get() == 'kilometer':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 39370)
-
-    # Inch to Meter
-    if left_combobox.get() == 'Inch' and right_combobox.get() == 'Meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.0254)
-
-    # Inch to Centimeter
-    if left_combobox.get() == 'Inch' and right_combobox.get() == 'Centimeter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 0.39370)
-
-    # Inch to Millimeter
-    if left_combobox.get() == 'Inch' and right_combobox.get() == 'Millimeter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 25.4)
-
-    # Inch to Mile
-    if left_combobox.get() == 'Inch' and right_combobox.get() == 'Mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 63360)
-
-    # Inch to Yard
-    if left_combobox.get() == 'Inch' and right_combobox.get() == 'Yard':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 36)
-
-    # Inch to Foot
-    if left_combobox.get() == 'Inch' and right_combobox.get() == 'Foot':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 12)
-
-    # Inch to Inch
-    if left_combobox.get() == 'Inch' and right_combobox.get() == 'Inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Inch to Nautical mile
-    if left_combobox.get() == 'Inch' and right_combobox.get() == 'Nautical mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.00001371)
-
-    # Nautical mile
-
-    # Nautical mile to kilometer
-    if left_combobox.get() == 'Nautical mile' and right_combobox.get() == 'kilometer':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1.852)
-
-    # Nautical mile to Meter
-    if left_combobox.get() == 'Nautical mile' and right_combobox.get() == 'Meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 0.00053996)
-
-    # Nautical mile to Centimeter
-    if left_combobox.get() == 'Nautical mile' and right_combobox.get() == 'Centimeter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 0.0000054)
-
-    # Nautical mile to Millimeter
-    if left_combobox.get() == 'Nautical mile' and right_combobox.get() == 'Millimeter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 0.00000054)
-
-    # Nautical mile to Mile
-    if left_combobox.get() == 'Nautical mile' and right_combobox.get() == 'Mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 0.86897583)
-
-    # Nautical mile to Yard
-    if left_combobox.get() == 'Nautical mile' and right_combobox.get() == 'Yard':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 0.00049374)
-
-    # Nautical mile to Foot
-    if left_combobox.get() == 'Nautical mile' and right_combobox.get() == 'Foot':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 0.00016458)
-
-    # Nautical mile to Inch
-    if left_combobox.get() == 'Nautical mile' and right_combobox.get() == 'Inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 72913)
-
-    # Nautical mile to Nautical mile
-    if left_combobox.get() == 'Nautical mile' and right_combobox.get() == 'Nautical mile':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # MASS
-
-    # tonne
-
-    # tonne to tonne
-    if left_combobox.get() == 'tonne' and right_combobox.get() == 'tonne':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # tonne to kilogram
-    if left_combobox.get() == 'tonne' and right_combobox.get() == 'kilogram':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000)
-
-    # tonne to gram
-    if left_combobox.get() == 'tonne' and right_combobox.get() == 'gram':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000000)
-
-    # tonne to milligram
-    if left_combobox.get() == 'tonne' and right_combobox.get() == 'milligram':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000000000)
-
-    # tonne to Microgram
-    if left_combobox.get() == 'tonne' and right_combobox.get() == 'Microgram':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 0.0000000000010000)
-
-    # kilogram
-
-    # kilogram to tonne
-    if left_combobox.get() == 'kilogram' and right_combobox.get() == 'tonne':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000)
-
-    # kilogram to kilogram
-    if left_combobox.get() == 'kilogram' and right_combobox.get() == 'kilogram':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # kilogram to gram
-    if left_combobox.get() == 'kilogram' and right_combobox.get() == 'gram':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000)
-
-    # kilogram to milligram
-    if left_combobox.get() == 'kilogram' and right_combobox.get() == 'milligram':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000000)
-
-    # kilogram to Microgram
-    if left_combobox.get() == 'kilogram' and right_combobox.get() == 'Microgram':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 0.0000000010000)
-
-    # gram
-
-    # gram to tonne
-    if left_combobox.get() == 'gram' and right_combobox.get() == 'tonne':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000000)
-
-    # gram to kilogram
-    if left_combobox.get() == 'gram' and right_combobox.get() == 'kilogram':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000)
-
-    # gram to gram
-    if left_combobox.get() == 'gram' and right_combobox.get() == 'gram':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # gram to milligram
-    if left_combobox.get() == 'gram' and right_combobox.get() == 'milligram':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000)
-
-    # gram to Microgram
-    if left_combobox.get() == 'gram' and right_combobox.get() == 'Microgram':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000000)
-
-    # milligram
-
-    # milligram to tonne
-    if left_combobox.get() == 'milligram' and right_combobox.get() == 'tonne':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000000000)
-
-    # milligram to kilogram
-    if left_combobox.get() == 'milligram' and right_combobox.get() == 'kilogram':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000000)
-
-    # milligram to gram
-    if left_combobox.get() == 'milligram' and right_combobox.get() == 'gram':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000)
-
-    # milligram to milligram
-    if left_combobox.get() == 'milligram' and right_combobox.get() == 'milligram':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # milligram to Microgram
-    if left_combobox.get() == 'milligram' and right_combobox.get() == 'Microgram':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000)
-
-    # Microgram
-
-    # Microgram to tonne
-    if left_combobox.get() == 'Microgram' and right_combobox.get() == 'tonne':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000000000000)
-
-    # Microgram to kilogram
-    if left_combobox.get() == 'Microgram' and right_combobox.get() == 'kilogram':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000000000)
-
-    # Microgram to gram
-    if left_combobox.get() == 'Microgram' and right_combobox.get() == 'gram':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000000)
-
-    # Microgram to milligram
-    if left_combobox.get() == 'Microgram' and right_combobox.get() == 'milligram':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000)
-
-    # Microgram to Microgram
-    if left_combobox.get() == 'Microgram' and right_combobox.get() == 'Microgram':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # PRESSURE
-
-    # Bar
-
-    # Bar to Bar
-    if left_combobox.get() == 'Bar' and right_combobox.get() == 'Bar':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Bar to Pascal
-    if left_combobox.get() == 'Bar' and right_combobox.get() == 'Pascal':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 100000)
-
-    # Bar to pound per square inch
-    if left_combobox.get() == 'Bar' and right_combobox.get() == 'pound per square inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 14.503789)
-
-    # Bar to Standard atmosphere
-    if left_combobox.get() == 'Bar' and right_combobox.get() == 'Standard atmosphere':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.98692326671601)
-
-    # Bar to Torr
-    if left_combobox.get() == 'Bar' and right_combobox.get() == 'Torr':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 750.061683)
-
-    # Pascal
-
-    # Pascal to Bar
-    if left_combobox.get() == 'Pascal' and right_combobox.get() == 'Bar':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 100000)
-
-    # Pascal to Pascal
-    if left_combobox.get() == 'Pascal' and right_combobox.get() == 'Pascal':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Pascal to pound per square inch
-    if left_combobox.get() == 'Pascal' and right_combobox.get() == 'pound per square inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.000145)
-
-    # Pascal to Standard atmosphere
-    if left_combobox.get() == 'Pascal' and right_combobox.get() == 'Standard atmosphere':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 101325)
-
-    # Pascal to Torr
-    if left_combobox.get() == 'Pascal' and right_combobox.get() == 'Torr':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.007501)
-
-    # pound per square inch
-
-    # pound per square inch to Bar
-    if left_combobox.get() == 'pound per square inch' and right_combobox.get() == 'Bar':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 14.504)
-
-    # pound per square inch to Pascal
-    if left_combobox.get() == 'pound per square inch' and right_combobox.get() == 'Pascal':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 6894.75)
-
-    # pound per square inch to pound per square inch
-    if left_combobox.get() == 'pound per square inch' and right_combobox.get() == 'pound per square inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # pound per square inch to Standard atmosphere
-    if left_combobox.get() == 'pound per square inch' and right_combobox.get() == 'Standard atmosphere':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.068046)
-
-    # pound per square inch to Torr
-    if left_combobox.get() == 'pound per square inch' and right_combobox.get() == 'Torr':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 51.714878)
-
-    # Standard atmosphere
-
-    # Standard atmosphere to Bar
-    if left_combobox.get() == 'Standard atmosphere' and right_combobox.get() == 'Bar':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1.01325)
-
-    # Standard atmosphere to Pascal
-    if left_combobox.get() == 'Standard atmosphere' and right_combobox.get() == 'Pascal':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 101325)
-
-    # Standard atmosphere to pound per square inch
-    if left_combobox.get() == 'Standard atmosphere' and right_combobox.get() == 'pound per square inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 14.6959)
-
-    # Standard atmosphere to Standard atmosphere
-    if left_combobox.get() == 'Standard atmosphere' and right_combobox.get() == 'Standard atmosphere':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Standard atmosphere to Torr
-    if left_combobox.get() == 'Standard atmosphere' and right_combobox.get() == 'Torr':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 760)
-
-    # Torr
-
-    # Torr to Bar
-    if left_combobox.get() == 'Torr' and right_combobox.get() == 'Bar':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.001333)
-
-    # Torr to Pascal
-    if left_combobox.get() == 'Torr' and right_combobox.get() == 'Pascal':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 133.322368)
-
-    # Torr to pound per square inch
-    if left_combobox.get() == 'Torr' and right_combobox.get() == 'pound per square inch':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 51.715)
-
-    # Torr to Standard atmosphere
-    if left_combobox.get() == 'Torr' and right_combobox.get() == 'Standard atmosphere':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 760)
-
-    # Torr to Torr
-    if left_combobox.get() == 'Torr' and right_combobox.get() == 'Torr':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Temperature 'Kelvin')
-
-    # Celsius
-
-    # Celsius to Celsius
-    if left_combobox.get() == 'Celsius' and right_combobox.get() == 'Celsius':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Celsius to Fehrenheit
-    if left_combobox.get() == 'Celsius' and right_combobox.get() == 'Fehrenheit':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1.8 + 32)
-
-    # Celsius to Kelvin
-    if left_combobox.get() == 'Celsius' and right_combobox.get() == 'Kelvin':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) + 273.15)
-
-    # Fehrenheit
-
-    # Fehrenheit to Celsius
-    if left_combobox.get() == 'Fehrenheit' and right_combobox.get() == 'Celsius':
-        unit_converter_right_entry.insert(0, float((unit_converter_left_entry.get() + 32) * 1.8))
-
-    # Fehrenheit to Fehrenheit
-    if left_combobox.get() == 'Fehrenheit' and right_combobox.get() == 'Fehrenheit':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Fehrenheit to Kelvin
-    if left_combobox.get() == 'Fehrenheit' and right_combobox.get() == 'Kelvin':
-        unit_converter_right_entry.insert(0, float(((unit_converter_left_entry.get() + 32) * 1.8)) + 273.15)
-
-    # Kelvin
-
-    # Kelvin to Celsius
-    if left_combobox.get() == 'Kelvin' and right_combobox.get() == 'Celsius':
-        unit_converter_right_entry.insert(0, float((unit_converter_left_entry.get() - 273.15)))
-
-    # Kelvin to Fehrenheit
-    if left_combobox.get() == 'Kelvin' and right_combobox.get() == 'Fehrenheit':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Kelvin to Kelvin
-    if left_combobox.get() == 'Kelvin' and right_combobox.get() == 'Kelvin':
-        unit_converter_right_entry.insert(0, float(((unit_converter_left_entry.get() - 273.15) * 1.8)) + 32)
-
-    # TIME
-
-    # Nanosecond
-
-    # Nanosecond to Nanosecond
-    if left_combobox.get() == 'Nanosecond' and right_combobox.get() == 'Nanosecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Nanosecond to Microsecond
-    if left_combobox.get() == 'Nanosecond' and right_combobox.get() == 'Microsecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000)
-
-    # Nanosecond to Millisecond
-    if left_combobox.get() == 'Nanosecond' and right_combobox.get() == 'Millisecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000000)
-
-    # Nanosecond to Second
-    if left_combobox.get() == 'Nanosecond' and right_combobox.get() == 'Second':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000000000)
-
-    # Nanosecond to Minute
-    if left_combobox.get() == 'Nanosecond' and right_combobox.get() == 'Minute':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 60000000000)
-
-    # Nanosecond to Hour
-    if left_combobox.get() == 'Nanosecond' and right_combobox.get() == 'Hour':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 3600000000000)
-
-    # Nanosecond to Day
-    if left_combobox.get() == 'Nanosecond' and right_combobox.get() == 'Day':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 86400000000000)
-
-    # Nanosecond to Week
-    if left_combobox.get() == 'Nanosecond' and right_combobox.get() == 'Week':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.0000000000000016534)
-
-    # Nanosecond to Month
-    if left_combobox.get() == 'Nanosecond' and right_combobox.get() == 'Month':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.00000000000000038026)
-
-    # Nanosecond to Year
-    if left_combobox.get() == 'Nanosecond' and right_combobox.get() == 'Year':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.000000000000000031689)
-
-    # Nanosecond to Decade
-    if left_combobox.get() == 'Nanosecond' and right_combobox.get() == 'Decade':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.0000000000000000031689)
-
-    # Nanosecond to Century
-    if left_combobox.get() == 'Nanosecond' and right_combobox.get() == 'Century':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.00000000000000000031689)
-
-    # Microsecond
-
-    # Microsecond to Nanosecond
-    if left_combobox.get() == 'Microsecond' and right_combobox.get() == 'Nanosecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000)
-
-    # Microsecond to Microsecond
-    if left_combobox.get() == 'Microsecond' and right_combobox.get() == 'Microsecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Microsecond to Millisecond
-    if left_combobox.get() == 'Microsecond' and right_combobox.get() == 'Millisecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000)
-
-    # Microsecond to Second
-    if left_combobox.get() == 'Microsecond' and right_combobox.get() == 'Second':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000000)
-
-    # Microsecond to Minute
-    if left_combobox.get() == 'Microsecond' and right_combobox.get() == 'Minute':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 60000000)
-
-    # Microsecond to Hour
-    if left_combobox.get() == 'Microsecond' and right_combobox.get() == 'Hour':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 3600000000)
-
-    # Microsecond to Day
-    if left_combobox.get() == 'Microsecond' and right_combobox.get() == 'Day':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 86400000000)
-
-    # Microsecond to Week
-    if left_combobox.get() == 'Microsecond' and right_combobox.get() == 'Week':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 604800000000)
-
-    # Microsecond to Month
-    if left_combobox.get() == 'Microsecond' and right_combobox.get() == 'Month':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 2629746000000)
-
-    # Microsecond to Year
-    if left_combobox.get() == 'Microsecond' and right_combobox.get() == 'Year':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 31556952000000)
-
-    # Microsecond to Decade
-    if left_combobox.get() == 'Microsecond' and right_combobox.get() == 'Decade':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.0000000000000031689)
-
-    # Microsecond to Century
-    if left_combobox.get() == 'Microsecond' and right_combobox.get() == 'Century':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.00000000000000031689)
-
-    # Millisecond
-
-    # Millisecond to Nanosecond
-    if left_combobox.get() == 'Millisecond' and right_combobox.get() == 'Nanosecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000000)
-
-    # Millisecond to Microsecond
-    if left_combobox.get() == 'Millisecond' and right_combobox.get() == 'Microsecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000)
-
-    # Millisecond to Millisecond
-    if left_combobox.get() == 'Millisecond' and right_combobox.get() == 'Millisecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Millisecond to Second
-    if left_combobox.get() == 'Millisecond' and right_combobox.get() == 'Second':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000)
-
-    # Millisecond to Minute
-    if left_combobox.get() == 'Millisecond' and right_combobox.get() == 'Minute':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 60000)
-
-    # Millisecond to Hour
-    if left_combobox.get() == 'Millisecond' and right_combobox.get() == 'Hour':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 3600000)
-
-    # Millisecond to Day
-    if left_combobox.get() == 'Millisecond' and right_combobox.get() == 'Day':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 86400000)
-
-    # Millisecond to Week
-    if left_combobox.get() == 'Millisecond' and right_combobox.get() == 'Week':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 604800000)
-
-    # Millisecond to Month
-    if left_combobox.get() == 'Millisecond' and right_combobox.get() == 'Month':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 2629746000)
-
-    # Millisecond to Year
-    if left_combobox.get() == 'Millisecond' and right_combobox.get() == 'Year':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 31556952000)
-
-    # Millisecond to Decade
-    if left_combobox.get() == 'Millisecond' and right_combobox.get() == 'Decade':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 315569520000)
-
-    # Millisecond to Century
-    if left_combobox.get() == 'Millisecond' and right_combobox.get() == 'Century':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 3155695200000)
-
-    # Second
-
-    # Second to Nanosecond
-    if left_combobox.get() == 'Second' and right_combobox.get() == 'Nanosecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000000000)
-
-    # Second to Microsecond
-    if left_combobox.get() == 'Second' and right_combobox.get() == 'Microsecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000000)
-
-    # Second to Millisecond
-    if left_combobox.get() == 'Second' and right_combobox.get() == 'Millisecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000)
-
-    # Second to Second
-    if left_combobox.get() == 'Second' and right_combobox.get() == 'Second':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Second to Minute
-    if left_combobox.get() == 'Second' and right_combobox.get() == 'Minute':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 60)
-
-    # Second to Hour
-    if left_combobox.get() == 'Second' and right_combobox.get() == 'Hour':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 3600)
-
-    # Second to Day
-    if left_combobox.get() == 'Second' and right_combobox.get() == 'Day':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 86400)
-
-    # Second to Week
-    if left_combobox.get() == 'Second' and right_combobox.get() == 'Week':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 604800)
-
-    # Second to Month
-    if left_combobox.get() == 'Second' and right_combobox.get() == 'Month':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 2629746)
-
-    # Second to Year
-    if left_combobox.get() == 'Second' and right_combobox.get() == 'Year':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 31556952)
-
-    # Second to Decade
-    if left_combobox.get() == 'Second' and right_combobox.get() == 'Decade':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 315569520)
-
-    # Second to Century
-    if left_combobox.get() == 'Second' and right_combobox.get() == 'Century':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 3155695200)
-
-    # Minute
-
-    # Minute to Nanosecond
-    if left_combobox.get() == 'Minute' and right_combobox.get() == 'Nanosecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 60000000000)
-
-    # Minute to Microsecond
-    if left_combobox.get() == 'Minute' and right_combobox.get() == 'Microsecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 60000000)
-
-    # Minute to Millisecond
-    if left_combobox.get() == 'Minute' and right_combobox.get() == 'Millisecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 60000)
-
-    # Minute to Second
-    if left_combobox.get() == 'Minute' and right_combobox.get() == 'Second':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 60)
-
-    # Minute to Minute
-    if left_combobox.get() == 'Minute' and right_combobox.get() == 'Minute':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Minute to Hour
-    if left_combobox.get() == 'Minute' and right_combobox.get() == 'Hour':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 60)
-
-    # Minute to Day
-    if left_combobox.get() == 'Minute' and right_combobox.get() == 'Day':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1440)
-
-    # Minute to Week
-    if left_combobox.get() == 'Minute' and right_combobox.get() == 'Week':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 10080)
-
-    # Minute to Month
-    if left_combobox.get() == 'Minute' and right_combobox.get() == 'Month':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 43830)
-
-    # Minute to Year
-    if left_combobox.get() == 'Minute' and right_combobox.get() == 'Year':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 525600)
-
-    # Minute to Decade
-    if left_combobox.get() == 'Minute' and right_combobox.get() == 'Decade':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 5259492)
-
-    # Minute to Century
-    if left_combobox.get() == 'Minute' and right_combobox.get() == 'Century':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 52594920)
-
-    # Hour
-
-    # Hour to Nanosecond
-    if left_combobox.get() == 'Hour' and right_combobox.get() == 'Nanosecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 3600000000000)
-
-    # Hour to Microsecond
-    if left_combobox.get() == 'Hour' and right_combobox.get() == 'Microsecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 3600000000)
-
-    # Hour to Millisecond
-    if left_combobox.get() == 'Hour' and right_combobox.get() == 'Millisecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 3600000)
-
-    # Hour to Second
-    if left_combobox.get() == 'Hour' and right_combobox.get() == 'Second':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 3600)
-
-    # Hour to Minute
-    if left_combobox.get() == 'Hour' and right_combobox.get() == 'Minute':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 60)
-
-    # Hour to Hour
-    if left_combobox.get() == 'Hour' and right_combobox.get() == 'Hour':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Hour to Day
-    if left_combobox.get() == 'Hour' and right_combobox.get() == 'Day':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 24)
-
-    # Hour to Week
-    if left_combobox.get() == 'Hour' and right_combobox.get() == 'Week':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 168)
-
-    # Hour to Month
-    if left_combobox.get() == 'Hour' and right_combobox.get() == 'Month':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 730.5)
-
-    # Hour to Year
-    if left_combobox.get() == 'Hour' and right_combobox.get() == 'Year':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 8760)
-
-    # Hour to Decade
-    if left_combobox.get() == 'Hour' and right_combobox.get() == 'Decade':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 87600)
-
-    # Hour to Century
-    if left_combobox.get() == 'Hour' and right_combobox.get() == 'Century':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 876582)
-
-    # Day
-
-    # Day to Nanosecond
-    if left_combobox.get() == 'Day' and right_combobox.get() == 'Nanosecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 86400000000000)
-
-    # Day to Microsecond
-    if left_combobox.get() == 'Day' and right_combobox.get() == 'Microsecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 86400000000)
-
-    # Day to Millisecond
-    if left_combobox.get() == 'Day' and right_combobox.get() == 'Millisecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 86400000)
-
-    # Day to Second
-    if left_combobox.get() == 'Day' and right_combobox.get() == 'Second':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 86400)
-
-    # Day to Minute
-    if left_combobox.get() == 'Day' and right_combobox.get() == 'Minute':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1440)
-
-    # Day to Hour
-    if left_combobox.get() == 'Day' and right_combobox.get() == 'Hour':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 24)
-
-    # Day to Day
-    if left_combobox.get() == 'Day' and right_combobox.get() == 'Day':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Day to Week
-    if left_combobox.get() == 'Day' and right_combobox.get() == 'Week':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 7)
-
-    # Day to Month
-    if left_combobox.get() == 'Day' and right_combobox.get() == 'Month':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 30.5)
-
-    # Day to Year
-    if left_combobox.get() == 'Day' and right_combobox.get() == 'Year':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 365)
-
-    # Day to Decade
-    if left_combobox.get() == 'Day' and right_combobox.get() == 'Decade':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 3650)
-
-    # Day to Century
-    if left_combobox.get() == 'Day' and right_combobox.get() == 'Century':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 36500)
-
-    # Week
-
-    # Week to Nanosecond
-    if left_combobox.get() == 'Week' and right_combobox.get() == 'Nanosecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 604800000000000)
-
-    # Week to Microsecond
-    if left_combobox.get() == 'Week' and right_combobox.get() == 'Microsecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 604800000000)
-
-    # Week to Millisecond
-    if left_combobox.get() == 'Week' and right_combobox.get() == 'Millisecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 604800000)
-
-    # Week to Second
-    if left_combobox.get() == 'Week' and right_combobox.get() == 'Second':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 604800)
-
-    # Week to Minute
-    if left_combobox.get() == 'Week' and right_combobox.get() == 'Minute':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 10080)
-
-    # Week to Hour
-    if left_combobox.get() == 'Week' and right_combobox.get() == 'Hour':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 168)
-
-    # Week to Day
-    if left_combobox.get() == 'Week' and right_combobox.get() == 'Day':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 7)
-
-    # Week to Week
-    if left_combobox.get() == 'Week' and right_combobox.get() == 'Week':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Week to Month
-    if left_combobox.get() == 'Week' and right_combobox.get() == 'Month':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 4.345)
-
-    # Week to Year
-    if left_combobox.get() == 'Week' and right_combobox.get() == 'Year':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 52)
-
-    # Week to Decade
-    if left_combobox.get() == 'Week' and right_combobox.get() == 'Decade':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 520)
-
-    # Week to Century
-    if left_combobox.get() == 'Week' and right_combobox.get() == 'Century':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 5200)
-
-    # Month
-
-    # Month to Nanosecond
-    if left_combobox.get() == 'Month' and right_combobox.get() == 'Nanosecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 2592000000000000)
-
-    # Month to Microsecond
-    if left_combobox.get() == 'Month' and right_combobox.get() == 'Microsecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 2592000000000)
-
-    # Month to Millisecond
-    if left_combobox.get() == 'Month' and right_combobox.get() == 'Millisecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 2592000000)
-
-    # Month to Second
-    if left_combobox.get() == 'Month' and right_combobox.get() == 'Second':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 2592000)
-
-    # Month to Minute
-    if left_combobox.get() == 'Month' and right_combobox.get() == 'Minute':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 43800)
-
-    # Month to Hour
-    if left_combobox.get() == 'Month' and right_combobox.get() == 'Hour':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 730)
-
-    # Month to Day
-    if left_combobox.get() == 'Month' and right_combobox.get() == 'Day':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 30.5)
-
-    # Month to Week
-    if left_combobox.get() == 'Month' and right_combobox.get() == 'Week':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 4.345)
-
-    # Month to Month
-    if left_combobox.get() == 'Month' and right_combobox.get() == 'Month':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Month to Year
-    if left_combobox.get() == 'Month' and right_combobox.get() == 'Year':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 12)
-
-    # Month to Decade
-    if left_combobox.get() == 'Month' and right_combobox.get() == 'Decade':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 120)
-
-    # Month to Century
-    if left_combobox.get() == 'Month' and right_combobox.get() == 'Century':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1200)
-
-    # Year
-
-    # Year to Nanosecond
-    if left_combobox.get() == 'Year' and right_combobox.get() == 'Nanosecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 31557000000000000)
-
-    # Year to Microsecond
-    if left_combobox.get() == 'Year' and right_combobox.get() == 'Microsecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 31557000000000)
-
-    # Year to Millisecond
-    if left_combobox.get() == 'Year' and right_combobox.get() == 'Millisecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 31557000000)
-
-    # Year to Second
-    if left_combobox.get() == 'Year' and right_combobox.get() == 'Second':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 31557000)
-
-    # Year to Minute
-    if left_combobox.get() == 'Year' and right_combobox.get() == 'Minute':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 525600)
-
-    # Year to Hour
-    if left_combobox.get() == 'Year' and right_combobox.get() == 'Hour':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 8760)
-
-    # Year to Day
-    if left_combobox.get() == 'Year' and right_combobox.get() == 'Day':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 365)
-
-    # Year to Week
-    if left_combobox.get() == 'Year' and right_combobox.get() == 'Week':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 52)
-
-    # Year to Month
-    if left_combobox.get() == 'Year' and right_combobox.get() == 'Month':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 12)
-
-    # Year to Year
-    if left_combobox.get() == 'Year' and right_combobox.get() == 'Year':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Year to Decade
-    if left_combobox.get() == 'Year' and right_combobox.get() == 'Decade':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 10)
-
-    # Year to Century
-    if left_combobox.get() == 'Year' and right_combobox.get() == 'Century':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 100)
-
-    # Decade
-
-    # Decade to Nanosecond
-    if left_combobox.get() == 'Decade' and right_combobox.get() == 'Nanosecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 315570000000000000)
-
-    # Decade to Microsecond
-    if left_combobox.get() == 'Decade' and right_combobox.get() == 'Microsecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 315570000000000)
-
-    # Decade to Millisecond
-    if left_combobox.get() == 'Decade' and right_combobox.get() == 'Millisecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 315570000000)
-
-    # Decade to Second
-    if left_combobox.get() == 'Decade' and right_combobox.get() == 'Second':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 315570000000)
-
-    # Decade to Minute
-    if left_combobox.get() == 'Decade' and right_combobox.get() == 'Minute':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 5259492)
-
-    # Decade to Hour
-    if left_combobox.get() == 'Decade' and right_combobox.get() == 'Hour':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 87600)
-
-    # Decade to Day
-    if left_combobox.get() == 'Decade' and right_combobox.get() == 'Day':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 3650)
-
-    # Decade to Week
-    if left_combobox.get() == 'Decade' and right_combobox.get() == 'Week':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 520)
-
-    # Decade to Month
-    if left_combobox.get() == 'Decade' and right_combobox.get() == 'Month':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 120)
-
-    # Decade to Year
-    if left_combobox.get() == 'Decade' and right_combobox.get() == 'Year':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 10)
-
-    # Decade to Decade
-    if left_combobox.get() == 'Decade' and right_combobox.get() == 'Decade':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Decade to Century
-    if left_combobox.get() == 'Decade' and right_combobox.get() == 'Century':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 10)
-
-    # Century
-
-    # Century to Nanosecond
-    if left_combobox.get() == 'Century' and right_combobox.get() == 'Nanosecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 3155700000000000000)
-
-    # Century to Microsecond
-    if left_combobox.get() == 'Century' and right_combobox.get() == 'Microsecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 31557000000000000)
-
-    # Century to Millisecond
-    if left_combobox.get() == 'Century' and right_combobox.get() == 'Millisecond':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 31557000000000)
-
-    # Century to Second
-    if left_combobox.get() == 'Century' and right_combobox.get() == 'Second':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 31557000000)
-
-    # Century to Minute
-    if left_combobox.get() == 'Century' and right_combobox.get() == 'Minute':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 52594920)
-
-    # Century to Hour
-    if left_combobox.get() == 'Century' and right_combobox.get() == 'Hour':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 876000)
-
-    # Century to Day
-    if left_combobox.get() == 'Century' and right_combobox.get() == 'Day':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 36500)
-
-    # Century to Week
-    if left_combobox.get() == 'Century' and right_combobox.get() == 'Week':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 5200)
-
-    # Century to Month
-    if left_combobox.get() == 'Century' and right_combobox.get() == 'Month':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1200)
-
-    # Century to Year
-    if left_combobox.get() == 'Century' and right_combobox.get() == 'Year':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 100)
-
-    # Century to Decade
-    if left_combobox.get() == 'Century' and right_combobox.get() == 'Decade':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 10)
-
-    # Century to Century
-    if left_combobox.get() == 'Century' and right_combobox.get() == 'Century':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Volume 'Imperial tablespoon', 'Imperial teaspoon'
-
-    # Liter
-
-    # Liter to Liter
-    if left_combobox.get() == 'Liter' and right_combobox.get() == 'Liter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Liter to Milliliter
-    if left_combobox.get() == 'Liter' and right_combobox.get() == 'Milliliter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000000)
-
-    # Liter to Cubic Meter
-    if left_combobox.get() == 'Liter' and right_combobox.get() == 'Cubic Meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 0.001)
-
-    # Liter to Imperial tablespoon
-    if left_combobox.get() == 'Liter' and right_combobox.get() == 'Imperial tablespoon':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 56.3121)
-
-    # Liter to Imperial teaspoon
-    if left_combobox.get() == 'Liter' and right_combobox.get() == 'Imperial teaspoon':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 168.936)
-
-    # Milliliter
-
-    # Milliliter to Liter
-    if left_combobox.get() == 'Milliliter' and right_combobox.get() == 'Liter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 1000)
-
-    # Milliliter to Milliliter
-    if left_combobox.get() == 'Milliliter' and right_combobox.get() == 'Milliliter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Milliliter to Cubic Meter
-    if left_combobox.get() == 'Milliliter' and right_combobox.get() == 'Cubic Meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000000)
-
-    # Milliliter to Imperial tablespoon
-    if left_combobox.get() == 'Milliliter' and right_combobox.get() == 'Imperial tablespoon':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 17.758)
-
-    # Milliliter to Imperial teaspoon
-    if left_combobox.get() == 'Milliliter' and right_combobox.get() == 'Imperial teaspoon':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 5.919)
-
-    # Cubic Meter
-
-    # Cubic Meter to Liter
-    if left_combobox.get() == 'Cubic Meter' and right_combobox.get() == 'Liter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000)
-
-    # Cubic Meter to Milliliter
-    if left_combobox.get() == 'Cubic Meter' and right_combobox.get() == 'Milliliter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 1000000)
-
-    # Cubic Meter to Cubic Meter
-    if left_combobox.get() == 'Cubic Meter' and right_combobox.get() == 'Cubic Meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Cubic Meter to Imperial tablespoon
-    if left_combobox.get() == 'Cubic Meter' and right_combobox.get() == 'Imperial tablespoon':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 56312)
-
-    # Cubic Meter to Imperial teaspoon
-    if left_combobox.get() == 'Cubic Meter' and right_combobox.get() == 'Imperial teaspoon':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 168936)
-
-    # Imperial tablespoon
-
-    # Imperial tablespoon to Liter
-    if left_combobox.get() == 'Imperial tablespoon' and right_combobox.get() == 'Liter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 56.312)
-
-    # Imperial tablespoon to Milliliter
-    if left_combobox.get() == 'Imperial tablespoon' and right_combobox.get() == 'Milliliter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 17.758)
-
-    # Imperial tablespoon to Cubic Meter
-    if left_combobox.get() == 'Imperial tablespoon' and right_combobox.get() == 'Cubic Meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 56312)
-
-    # Imperial tablespoon to Imperial tablespoon
-    if left_combobox.get() == 'Imperial tablespoon' and right_combobox.get() == 'Imperial tablespoon':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    # Imperial tablespoon to Imperial teaspoon
-    if left_combobox.get() == 'Imperial tablespoon' and right_combobox.get() == 'Imperial teaspoon':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 3)
-
-    # Imperial teaspoon
-
-    # Imperial teaspoon to Liter
-    if left_combobox.get() == 'Imperial teaspoon' and right_combobox.get() == 'Liter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 169)
-
-    # Imperial teaspoon to Milliliter
-    if left_combobox.get() == 'Imperial teaspoon' and right_combobox.get() == 'Milliliter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) * 5.91939)
-
-    # Imperial teaspoon to Cubic Meter
-    if left_combobox.get() == 'Imperial teaspoon' and right_combobox.get() == 'Cubic Meter':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 168936)
-
-    # Imperial teaspoon to Imperial tablespoon
-    if left_combobox.get() == 'Imperial teaspoon' and right_combobox.get() == 'Imperial tablespoon':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()) / 3)
-
-    # Imperial teaspoon to Imperial teaspoon
-    if left_combobox.get() == 'Imperial teaspoon' and right_combobox.get() == 'Imperial teaspoon':
-        unit_converter_right_entry.insert(0, float(unit_converter_left_entry.get()))
-
-    unit_converter_right_entry.config(state=DISABLED)
-
-
-### ALARM CLOCK ###
+### ALARM CLOCK FUNCTION ###
 def clock_time():
     global alarm_toggle_on, filename
 
@@ -2729,7 +979,9 @@ def clock_time():
                 winsound.PlaySound("Music.wav", winsound.SND_ASYNC)
 
             if alarm_type_combobox.get() == 'custom message only':
-                messagebox.askokcancel("Custom Alarm Message", alarm_clock_entry.get())
+                msg_box = messagebox.askokcancel("Custom Alarm Message", alarm_clock_entry.get())
+                if msg_box in ['OK', 'Cancel']:
+                    stop_music_button()
 
             if alarm_type_combobox.get() == 'custom .mp3 only':
                 try:
@@ -2743,10 +995,16 @@ def clock_time():
             if alarm_type_combobox.get() == 'custom .mp3 and custom message':
                 try:
                     pygame.mixer.music.play(loops=0)
-                    messagebox.askokcancel("Custom Alarm Message", alarm_clock_entry.get())
+                    msg_box = messagebox.askokcancel("Custom Alarm Message", alarm_clock_entry.get())
+
                 except pygame.error:
                     winsound.PlaySound("Music.wav", winsound.SND_ASYNC)
-                    messagebox.askokcancel("Custom Alarm Message", alarm_clock_entry.get())
+                    msg_box = messagebox.askokcancel("Custom Alarm Message", alarm_clock_entry.get())
+
+                if msg_box:
+                    stop_music_button()
+                elif not msg_box:
+                    stop_music_button()
 
             alarm_on_button.config(text='Alarm Off', fg='snow2')
             alarm_toggle_on = False
@@ -2770,21 +1028,23 @@ def alarm_on_off_button():
 def custom_mp3_button():
     global filename
 
-    filename = filedialog.askopenfilename(initialdir="C:/Users",
-                                          title=f"Select .mp3 file",
-                                          filetypes=(("mp3 files", "*.mp3*"), ("all files", "*.*")))
+    mp3_selected_entry.delete(0, END)
+
+    filename = filedialog.askopenfilename(initialdir="C:/Users", title=f"Select .mp3 file", filetypes=(("mp3 files", "*.mp3*"), ("all files", "*.*")))
 
     if filename == '':
-        mp3_selected_label.config(text='No custom song selected')
+        mp3_selected_entry.insert(END, 'No custom song selected')
 
     else:
         file_only = os.path.basename(filename)
-        mp3_selected_label.config(text=file_only)
+        mp3_selected_entry.delete(0, END)
+        mp3_selected_entry.insert(END, file_only)
         pygame.mixer.music.load(filename)
 
 
 def stop_music_button():
     pygame.mixer.music.stop()
+### END OF ALARM CLOCK FUNCTION ###
 
 
 ### DISTANCE TWO CITIES ###
@@ -2802,17 +1062,17 @@ def refresh_connection():
 
         list_of_cities = sorted(set(list_of_cities))
 
-        from_entry = AutocompleteCombobox(distance_two_cities_frame, font=('helvetica', 20),
-                                          completevalues=list_of_cities)
-        from_entry.grid(row=2, column=1, sticky='W')
+        # From Entry
+        from_entry = AutocompleteCombobox(distance_two_cities_frame, font=('helvetica', 20), completevalues=list_of_cities)
+        from_entry.grid(row=2, sticky='W', padx=(150, 0))
 
-        to_entry = AutocompleteCombobox(distance_two_cities_frame, font=('helvetica', 20),
-                                        completevalues=list_of_cities)
-        to_entry.grid(row=2, column=3, sticky='W')
+        # To Entry
+        to_entry = AutocompleteCombobox(distance_two_cities_frame, font=('helvetica', 20), completevalues=list_of_cities)
+        to_entry.grid(row=2)
 
-        in_entry = AutocompleteCombobox(distance_two_cities_frame, font=('helvetica', 20),
-                                        completevalues=['kilometers', 'miles'])
-        in_entry.grid(row=2, column=5, sticky='W')
+        # In Entry
+        in_entry = AutocompleteCombobox(distance_two_cities_frame, font=('helvetica', 20), completevalues=['kilometers', 'miles'])
+        in_entry.grid(row=2, sticky='E', padx=(0, 150))
 
         distance_two_cities_internet_status.config(text="Connected to the internet", fg='green')
 
@@ -2856,54 +1116,77 @@ def distance_two_cities_calculator():
     except NameError:
         distance_two_cities_internet_status.config(text='No internet connection, Please try again', fg='red')
         distance_two_cities_results.config(text='')
+### END OF DISTANCE TWO CITIES ###
 
 
-### Credit Card validator ###
-
+### CREDIT CARD VALIDATOR ###
 def credit_card_validation():
-    try:
-        credit_card_number_list = [int(num) for num in card_validator_entry.get() if num != ' ']
 
-        if 13 <= len(credit_card_number_list) <= 16:
+    if card_validator_combobox.get() == 'Visa card example':
+        card_validator_entry.delete(0, END)
+        card_validator_entry.insert(END, '4111111111111111')
+        card_validator_results.config(text='Valid Visa card number', fg='green')
 
-            sum_odd_credit_numbers = sum(credit_card_number_list[-1::-2])
+    elif card_validator_combobox.get() == 'Master card example':
+        card_validator_entry.delete(0, END)
+        card_validator_entry.insert(END, '5555555555554444')
+        card_validator_results.config(text='Valid Master card number', fg='green')
 
-            doubled_reverse_even_list = [num * 2 for num in credit_card_number_list[-2::-2]]
+    elif card_validator_combobox.get() == 'Discover card example':
+        card_validator_entry.delete(0, END)
+        card_validator_entry.insert(END, '6011111111111117')
+        card_validator_results.config(text='Valid Discover card number', fg='green')
 
-            doubled_reverse_even_list_after_adding_digits_over_nine = []
+    elif card_validator_combobox.get() == 'American Express card example':
+        card_validator_entry.delete(0, END)
+        card_validator_entry.insert(END, '371449635398431')
+        card_validator_results.config(text='Valid American Express card number', fg='green')
 
-            for num in doubled_reverse_even_list:
-                if num > 9:
-                    doubled_reverse_even_list_after_adding_digits_over_nine.append(int(str(num)[0]) + int(str(num)[1]))
+    elif card_validator_combobox.get() == 'Custom':
+        try:
+            credit_card_number_list = [int(num) for num in card_validator_entry.get() if num != ' ']
+
+            if 13 <= len(credit_card_number_list) <= 16:
+
+                sum_odd_credit_numbers = sum(credit_card_number_list[-1::-2])
+
+                doubled_reverse_even_list = [num * 2 for num in credit_card_number_list[-2::-2]]
+
+                doubled_reverse_even_list_after_adding_digits_over_nine = []
+
+                for num in doubled_reverse_even_list:
+                    if num > 9:
+                        doubled_reverse_even_list_after_adding_digits_over_nine.append(int(str(num)[0]) + int(str(num)[1]))
+                    else:
+                        doubled_reverse_even_list_after_adding_digits_over_nine.append(num)
+
+                sum_even_credit_numbers = sum(doubled_reverse_even_list_after_adding_digits_over_nine)
+
+                sum_of_odd_and_even = sum_even_credit_numbers + sum_odd_credit_numbers
+
+                if sum_of_odd_and_even % 10 == 0 and credit_card_number_list[0] == 4:
+                    card_validator_results.config(text='Valid Visa card number', fg='green')
+
+                elif sum_of_odd_and_even % 10 == 0 and credit_card_number_list[0] == 5:
+                    card_validator_results.config(text='Valid Master card number', fg='green')
+
+                elif sum_of_odd_and_even % 10 == 0 and credit_card_number_list[0] == 6:
+                    card_validator_results.config(text='Valid Discover card number', fg='green')
+
+                elif sum_of_odd_and_even % 10 == 0 and credit_card_number_list[0] == 3 and credit_card_number_list[1] == 7:
+                    card_validator_results.config(text='Valid American Express card number', fg='green')
+
                 else:
-                    doubled_reverse_even_list_after_adding_digits_over_nine.append(num)
-
-            sum_even_credit_numbers = sum(doubled_reverse_even_list_after_adding_digits_over_nine)
-
-            sum_of_odd_and_even = sum_even_credit_numbers + sum_odd_credit_numbers
-
-            if sum_of_odd_and_even % 10 == 0 and credit_card_number_list[0] == 4:
-                card_validator_results.config(text='Valid Visa card number', fg='green')
-
-            elif sum_of_odd_and_even % 10 == 0 and credit_card_number_list[0] == 5:
-                card_validator_results.config(text='Valid Master card number', fg='green')
-
-            elif sum_of_odd_and_even % 10 == 0 and credit_card_number_list[0] == 6:
-                card_validator_results.config(text='Valid Discover card number', fg='green')
-
-            elif sum_of_odd_and_even % 10 == 0 and credit_card_number_list[0] == 3 and credit_card_number_list[1] == 7:
-                card_validator_results.config(text='Valid American Express card number', fg='green')
+                    card_validator_results.config(
+                        text='Invalid credit card number. Fails the Luhn check (Modulus 10 check).', fg='red')
 
             else:
                 card_validator_results.config(
-                    text='Invalid credit card number. Fails the Luhn check (Modulus 10 check).', fg='red')
+                    text='Invalid credit card number. A credit card must have between 13 and 16 digits.', fg='red')
 
-        else:
-            card_validator_results.config(
-                text='Invalid credit card number. A credit card must have between 13 and 16 digits.', fg='red')
-
-    except ValueError:
-        card_validator_results.config(text='Invalid credit card number. Must only contain numbers', fg='red')
+        except ValueError:
+            card_validator_results.config(text='Invalid credit card number. Must only contain numbers', fg='red')
+### END OF CREDIT CARD VALIDATOR ###
 
 
 ### INCOME TAX CALCULATOR ###
@@ -2997,8 +1280,7 @@ def three_digits_to_text(group_of_three, number_amount):
     try:
 
         # Three digit numbers if all digits are a 0 (skip text)
-        if len(group_of_three) == 3 and group_of_three[0] == '0' and group_of_three[1] == '0' and group_of_three[
-            2] == '0':
+        if len(group_of_three) == 3 and group_of_three[0] == '0' and group_of_three[1] == '0' and group_of_three[2] == '0':
             group_of_three = group_of_three[3:]
 
         # Three digit numbers if the first digit is a zero (delete zero, add an 'and')
@@ -3587,52 +1869,56 @@ ten_cent_result.grid(row=16, sticky='W', padx=725)
 
 five_cent_result = Label(change_return_frame, text='0', bg='royalblue4', fg='snow1', font=('helvetica', 20))
 five_cent_result.grid(row=17, sticky='W', padx=725)
-### END OF CHANGE RETURN PROGRAM TKINTER CONFIG###
+### END OF CHANGE RETURN PROGRAM TKINTER CONFIG ###
 
 
-### binary to decimal converter ###
+### BINARY TO DECIMAL CONVERTER TKINTER CONFIG ###
+# Frame config
 binary_to_decimal_frame.columnconfigure(0, weight=1)
 
-binary_to_decimal_title = Label(binary_to_decimal_frame, text="Binary and Decimal Convertor", bg='royalblue4',
-                                fg='snow1', font=('helvetica', 50))
-binary_to_decimal_title.grid(row=0, sticky='N')
+# Title Label
+binary_to_decimal_title = Label(binary_to_decimal_frame, text="Binary and Decimal Convertor", bg='royalblue4', fg='snow1', font=('helvetica', 50))
+binary_to_decimal_title.grid(row=0)
 
-binary_to_decimal_instructions = Label(binary_to_decimal_frame,
-                                       text='Use the drop down menu to select conversion type, enter a figure then click submit',
-                                       bg='royalblue4', fg='snow1', font=('helvetica', 20))
+# Instructions Label
+binary_to_decimal_instructions = Label(binary_to_decimal_frame, text='Use the drop down menu to select conversion type, enter a figure then click submit', bg='royalblue4', fg='snow1', font=('helvetica', 20))
 binary_to_decimal_instructions.grid(row=1, pady=50)
 
-binary_to_decimal_combobox_label = Label(binary_to_decimal_frame, text='Select a conversion type:  ',
-                                         bg='royalblue4', fg='snow1', font=('helvetica', 20))
-binary_to_decimal_combobox_label.grid(row=2)
+# Combobox Label
+binary_to_decimal_combobox_label = Label(binary_to_decimal_frame, text='Select a conversion type:', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+binary_to_decimal_combobox_label.grid(row=2, sticky='w', padx=533)
 
-selected_binary = StringVar()
-binary_combobox = ttk.Combobox(binary_to_decimal_frame, textvariable=selected_binary, width=20, font=('helvetica', 20))
+# Combobox
+binary_combobox = ttk.Combobox(binary_to_decimal_frame, width=24, font=('helvetica', 25))
 binary_combobox['values'] = ('Decimal to Binary', 'Binary to Decimal')
 binary_combobox['state'] = 'readonly'
 binary_combobox.current(0)
 binary_combobox.grid(row=3, pady=5)
 
-binary_to_decimal_num_label = Label(binary_to_decimal_frame, text='Enter binary or number:    ',
-                                    bg='royalblue4', fg='snow1', font=('helvetica', 20))
-binary_to_decimal_num_label.grid(row=4, pady=(20, 0))
+# Conversion Label
+binary_to_decimal_num_label = Label(binary_to_decimal_frame, text='Enter binary or number:', bg='royalblue4', fg='snow1', font=('helvetica', 20))
+binary_to_decimal_num_label.grid(row=4, pady=(20, 0), sticky='w', padx=533)
 
-binary_to_decimal_entry = Entry(binary_to_decimal_frame, font=('helvetica', 20), width=21)
+# Conversion Entry
+binary_to_decimal_entry = Entry(binary_to_decimal_frame, font=('helvetica', 25), relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2', width=25)
 binary_to_decimal_entry.grid(row=5)
 
-binary_to_decimal_button = Button(binary_to_decimal_frame, text='Submit', font=('helvetica', 20),
-                                  command=binary_to_decimal_submit)
+# Submit Button
+binary_to_decimal_button = Button(binary_to_decimal_frame, text='Submit', font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=binary_to_decimal_submit)
 binary_to_decimal_button.grid(row=6, pady=2)
 
-binary_to_decimal_results = Label(binary_to_decimal_frame, text='', bg='royalblue4', fg='snow1', font=('helvetica', 40))
+# Scrolled results box
+binary_to_decimal_results = scrolledtext.ScrolledText(binary_to_decimal_frame, bg='royalblue4', fg='snow1', font=('helvetica', 20), height=7, wrap=WORD)
 binary_to_decimal_results.grid(row=7, pady=50)
+### END OF BINARY TO DECIMAL CONVERTER TKINTER CONFIG ###
 
-### Scientific Calculator ###
 
-calculator_title = Label(calculator_frame, text="Scientific Calculator", bg='royalblue4', fg='snow1',
-                         font=('helvetica', 50))
+### SCIENTIFIC CALCULATOR TKINTER CONFIG ###
+# Title Label
+calculator_title = Label(calculator_frame, text="Scientific Calculator", bg='royalblue4', fg='snow1', font=('helvetica', 50))
 calculator_title.grid(row=0, columnspan=6, padx=200, sticky="nsew")
 
+# Calculator Screen
 calculator_entry = Entry(calculator_frame, font=('helvetica', 50), width=41, relief=RIDGE, justify=RIGHT, bd=10,
                          bg='Dodger Blue', fg='snow2', disabledbackground='Dodger Blue', disabledforeground='snow2',
                          state=DISABLED)
@@ -3644,398 +1930,363 @@ calculator_abs_button = Button(calculator_frame, font=('helvetica', 25), text='A
                                bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_abs)
 calculator_abs_button.grid(row=2, column=0, sticky="nsew")
 
-# log button
-calculator_log_button = Button(calculator_frame, font=('helvetica', 25), text='log', relief=RAISED, bd=4,
-                               bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_log)
+# log Button
+calculator_log_button = Button(calculator_frame, font=('helvetica', 25), text='log', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_log)
 calculator_log_button.grid(row=2, column=1, sticky="nsew")
 
-# ln button
-calculator_ln_button = Button(calculator_frame, font=('helvetica', 25), text='ln', relief=RAISED, bd=4,
-                              bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_ln)
+# ln Button
+calculator_ln_button = Button(calculator_frame, font=('helvetica', 25), text='ln', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_ln)
 calculator_ln_button.grid(row=2, column=2, sticky="nsew")
 
 # e button
-calculator_e_button = Button(calculator_frame, font=('helvetica', 25), text='e', relief=RAISED, bd=4, bg='Dodger Blue',
-                             fg='snow2', width=4, height=1, command=calc_e)
+calculator_e_button = Button(calculator_frame, font=('helvetica', 25), text='e', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_e)
 calculator_e_button.grid(row=2, column=3, sticky="nsew")
 
 # x! button
-calculator_factorial_button = Button(calculator_frame, font=('helvetica', 25), text='x!', relief=RAISED, bd=4,
-                                     bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_factorial)
+calculator_factorial_button = Button(calculator_frame, font=('helvetica', 25), text='x!', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_factorial)
 calculator_factorial_button.grid(row=2, column=4, sticky="nsew")
 
 # ANS button
-calculator_ans_button = Button(calculator_frame, font=('helvetica', 25), text='Ans', relief=RAISED, bd=4,
-                               bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_ans)
+calculator_ans_button = Button(calculator_frame, font=('helvetica', 25), text='Ans', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_ans)
 calculator_ans_button.grid(row=2, column=5, sticky="nsew")
 
 # Row 3
 # Squared button
-calculator_squared_button = Button(calculator_frame, font=('helvetica', 25), text='x^2', relief=RAISED, bd=4,
-                                   bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_square)
+calculator_squared_button = Button(calculator_frame, font=('helvetica', 25), text='x^2', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_square)
 calculator_squared_button.grid(row=3, column=0, sticky="nsew")
 
 # Cubed button
-calculator_cubed_button = Button(calculator_frame, font=('helvetica', 25), text='x^3', relief=RAISED, bd=4,
-                                 bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_cube)
+calculator_cubed_button = Button(calculator_frame, font=('helvetica', 25), text='x^3', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_cube)
 calculator_cubed_button.grid(row=3, column=1, sticky="nsew")
 
 # x to the power of y button
-calculator_power_button = Button(calculator_frame, font=('helvetica', 25), text='x^y', relief=RAISED, bd=4,
-                                 bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_power)
+calculator_power_button = Button(calculator_frame, font=('helvetica', 25), text='x^y', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_power)
 calculator_power_button.grid(row=3, column=2, sticky="nsew")
 
 # square root button
-calculator_sqrt_button = Button(calculator_frame, font=('helvetica', 25), text='√x', relief=RAISED, bd=4,
-                                bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_sqrt)
+calculator_sqrt_button = Button(calculator_frame, font=('helvetica', 25), text='√x', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_sqrt)
 calculator_sqrt_button.grid(row=3, column=3, sticky="nsew")
 
 # 3rd root button
-calculator_third_root_button = Button(calculator_frame, font=('helvetica', 25), text='3√x', relief=RAISED, bd=4,
-                                      bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_third_root)
+calculator_third_root_button = Button(calculator_frame, font=('helvetica', 25), text='3√x', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_third_root)
 calculator_third_root_button.grid(row=3, column=4, sticky="nsew")
 
 # inverse button
-calculator_inverse_button = Button(calculator_frame, font=('helvetica', 25), text='x^-1', relief=RAISED, bd=4,
-                                   bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_inverse)
+calculator_inverse_button = Button(calculator_frame, font=('helvetica', 25), text='x^-1', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_inverse)
 calculator_inverse_button.grid(row=3, column=5, sticky="nsew")
 
 # Row 4
 # sin button
-calculator_sin_button = Button(calculator_frame, font=('helvetica', 25), text='sin', relief=RAISED, bd=4,
-                               bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_sin)
+calculator_sin_button = Button(calculator_frame, font=('helvetica', 25), text='sin', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_sin)
 calculator_sin_button.grid(row=4, column=0, sticky="nsew")
 
 # cos button
-calculator_cos_button = Button(calculator_frame, font=('helvetica', 25), text='cos', relief=RAISED, bd=4,
-                               bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_cos)
+calculator_cos_button = Button(calculator_frame, font=('helvetica', 25), text='cos', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_cos)
 calculator_cos_button.grid(row=4, column=1, sticky="nsew")
 
 # tan button
-calculator_tan_button = Button(calculator_frame, font=('helvetica', 25), text='tan', relief=RAISED, bd=4,
-                               bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_tan)
+calculator_tan_button = Button(calculator_frame, font=('helvetica', 25), text='tan', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_tan)
 calculator_tan_button.grid(row=4, column=2, sticky="nsew")
 
 # pi button
-calculator_pi_button = Button(calculator_frame, font=('helvetica', 25), text='π', relief=RAISED, bd=4, bg='Dodger Blue',
-                              fg='snow2', width=4, height=1, command=calc_pi)
+calculator_pi_button = Button(calculator_frame, font=('helvetica', 25), text='π', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_pi)
 calculator_pi_button.grid(row=4, column=3, sticky="nsew")
 
 # left bracket button
-calculator_left_bracket_button = Button(calculator_frame, font=('helvetica', 25), text='(', relief=RAISED, bd=4,
-                                        bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_left_bracket)
+calculator_left_bracket_button = Button(calculator_frame, font=('helvetica', 25), text='(', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_left_bracket)
 calculator_left_bracket_button.grid(row=4, column=4, sticky="nsew")
 
 # right bracket button
-calculator_right_bracket_button = Button(calculator_frame, font=('helvetica', 25), text=')', relief=RAISED, bd=4,
-                                         bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_right_bracket)
+calculator_right_bracket_button = Button(calculator_frame, font=('helvetica', 25), text=')', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_right_bracket)
 calculator_right_bracket_button.grid(row=4, column=5, sticky="nsew")
 
 # Row 5
 # 7 button
-calculator_7_button = Button(calculator_frame, font=('helvetica', 25), text='7', relief=RAISED, bd=4, bg='Dodger Blue',
-                             fg='snow2', width=4, height=1, command=calc_7)
+calculator_7_button = Button(calculator_frame, font=('helvetica', 25), text='7', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_7)
 calculator_7_button.grid(row=5, column=0, sticky="nsew")
 
 # 8 button
-calculator_8_button = Button(calculator_frame, font=('helvetica', 25), text='8', relief=RAISED, bd=4, bg='Dodger Blue',
-                             fg='snow2', width=4, height=1, command=calc_8)
+calculator_8_button = Button(calculator_frame, font=('helvetica', 25), text='8', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_8)
 calculator_8_button.grid(row=5, column=1, sticky="nsew")
 
 # 9 button
-calculator_9_button = Button(calculator_frame, font=('helvetica', 25), text='9', relief=RAISED, bd=4, bg='Dodger Blue',
-                             fg='snow2', width=4, height=1, command=calc_9)
+calculator_9_button = Button(calculator_frame, font=('helvetica', 25), text='9', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_9)
 calculator_9_button.grid(row=5, column=2, sticky="nsew")
 
 # % button
-calculator_percent_button = Button(calculator_frame, font=('helvetica', 25), text='%', relief=RAISED, bd=4,
-                                   bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_percent)
+calculator_percent_button = Button(calculator_frame, font=('helvetica', 25), text='%', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_percent)
 calculator_percent_button.grid(row=5, column=3, sticky="nsew")
 
 # AC button
-calculator_ac_button = Button(calculator_frame, font=('helvetica', 25), text='AC', relief=RAISED, bd=4, bg='orange',
-                              fg='snow2', width=4, height=1, command=calc_all_clear)
+calculator_ac_button = Button(calculator_frame, font=('helvetica', 25), text='AC', relief=RAISED, bd=4, bg='orange', fg='snow2', width=4, height=1, command=calc_all_clear)
 calculator_ac_button.grid(row=5, column=4, columnspan=2, sticky="nsew")
 
 # Row 6
 # 4 button
-calculator_4_button = Button(calculator_frame, font=('helvetica', 25), text='4', relief=RAISED, bd=4, bg='Dodger Blue',
-                             fg='snow2', width=4, height=1, command=calc_4)
+calculator_4_button = Button(calculator_frame, font=('helvetica', 25), text='4', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_4)
 calculator_4_button.grid(row=6, column=0, sticky="nsew")
 
 # 5 button
-calculator_5_button = Button(calculator_frame, font=('helvetica', 25), text='5', relief=RAISED, bd=4, bg='Dodger Blue',
-                             fg='snow2', width=4, height=1, command=calc_5)
+calculator_5_button = Button(calculator_frame, font=('helvetica', 25), text='5', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_5)
 calculator_5_button.grid(row=6, column=1, sticky="nsew")
 
 # 6 button
-calculator_6_button = Button(calculator_frame, font=('helvetica', 25), text='6', relief=RAISED, bd=4, bg='Dodger Blue',
-                             fg='snow2', width=4, height=1, command=calc_6)
+calculator_6_button = Button(calculator_frame, font=('helvetica', 25), text='6', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_6)
 calculator_6_button.grid(row=6, column=2, sticky="nsew")
 
 # x button
-calculator_x_button = Button(calculator_frame, font=('helvetica', 25), text='x', relief=RAISED, bd=4, bg='Dodger Blue',
-                             fg='snow2', width=4, height=1, command=calc_multiply)
+calculator_x_button = Button(calculator_frame, font=('helvetica', 25), text='x', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_multiply)
 calculator_x_button.grid(row=6, column=3, sticky="nsew")
 
 # DEL button
-calculator_del_button = Button(calculator_frame, font=('helvetica', 25), text='DEL', relief=RAISED, bd=4, bg='orange',
-                               fg='snow2', width=4, height=1, command=calc_delete_last)
+calculator_del_button = Button(calculator_frame, font=('helvetica', 25), text='DEL', relief=RAISED, bd=4, bg='orange', fg='snow2', width=4, height=1, command=calc_delete_last)
 calculator_del_button.grid(row=6, column=4, columnspan=2, sticky="nsew")
 
 # Row 7
 # 1 button
-calculator_1_button = Button(calculator_frame, font=('helvetica', 25), text='1', relief=RAISED, bd=4, bg='Dodger Blue',
-                             fg='snow2', width=4, height=1, command=calc_1)
+calculator_1_button = Button(calculator_frame, font=('helvetica', 25), text='1', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_1)
 calculator_1_button.grid(row=7, column=0, sticky="nsew")
 
 # 2 button
-calculator_2_button = Button(calculator_frame, font=('helvetica', 25), text='2', relief=RAISED, bd=4, bg='Dodger Blue',
-                             fg='snow2', width=4, height=1, command=calc_2)
+calculator_2_button = Button(calculator_frame, font=('helvetica', 25), text='2', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_2)
 calculator_2_button.grid(row=7, column=1, sticky="nsew")
 
 # 3 button
-calculator_3_button = Button(calculator_frame, font=('helvetica', 25), text='3', relief=RAISED, bd=4, bg='Dodger Blue',
-                             fg='snow2', width=4, height=1, command=calc_3)
+calculator_3_button = Button(calculator_frame, font=('helvetica', 25), text='3', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_3)
 calculator_3_button.grid(row=7, column=2, sticky="nsew")
 
 # ÷ button
-calculator_divide_button = Button(calculator_frame, font=('helvetica', 25), text='÷', relief=RAISED, bd=4,
-                                  bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_divide)
+calculator_divide_button = Button(calculator_frame, font=('helvetica', 25), text='÷', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_divide)
 calculator_divide_button.grid(row=7, column=3, sticky="nsew")
 
 # = button
-calculator_equal_button = Button(calculator_frame, font=('helvetica', 25), text='=', relief=RAISED, bd=4,
-                                 bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_equals)
+calculator_equal_button = Button(calculator_frame, font=('helvetica', 25), text='=', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_equals)
 calculator_equal_button.grid(row=7, column=4, columnspan=2, rowspan=2, sticky="nsew")
 
 # Row 8
 # 0 button
-calculator_0_button = Button(calculator_frame, font=('helvetica', 25), text='0', relief=RAISED, bd=4, bg='Dodger Blue',
-                             fg='snow2', width=4, height=1, command=calc_0)
+calculator_0_button = Button(calculator_frame, font=('helvetica', 25), text='0', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_0)
 calculator_0_button.grid(row=8, column=0, sticky="nsew")
 
 # . button
-calculator_period_button = Button(calculator_frame, font=('helvetica', 25), text='.', relief=RAISED, bd=4,
-                                  bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_decimal)
+calculator_period_button = Button(calculator_frame, font=('helvetica', 25), text='.', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_decimal)
 calculator_period_button.grid(row=8, column=1, sticky="nsew")
 
 # + button
-calculator_plus_button = Button(calculator_frame, font=('helvetica', 25), text='+', relief=RAISED, bd=4,
-                                bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_plus)
+calculator_plus_button = Button(calculator_frame, font=('helvetica', 25), text='+', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_plus)
 calculator_plus_button.grid(row=8, column=2, sticky="nsew")
 
 # - button
-calculator_minus_button = Button(calculator_frame, font=('helvetica', 25), text='-', relief=RAISED, bd=4,
-                                 bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_minus)
+calculator_minus_button = Button(calculator_frame, font=('helvetica', 25), text='-', relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', width=4, height=1, command=calc_minus)
 calculator_minus_button.grid(row=8, column=3, sticky="nsew")
+### END OF SCIENTIFIC CALCULATOR TKINTER CONFIG ###
 
-### Unit Converter ###
 
-# Title
-unit_converter_title = Label(unit_converter_frame, text="Unit Converter", bg='royalblue4', fg='snow1',
-                             font=('helvetica', 50))
-unit_converter_title.grid(row=0, sticky='N', column=0, padx=100, columnspan=3)
+### UNIT CONVERTER TKINTER CONFIG ###
+# Frame config
+unit_converter_frame.columnconfigure(0, weight=1)
 
-# Instructions
-unit_converter_instructions = Label(unit_converter_frame,
-                                    text="Use the drop down menu's to select conversion type, enter a figure then click submit.",
-                                    bg='royalblue4', fg='snow1', font=('helvetica', 20))
-unit_converter_instructions.grid(row=1, pady=50, column=0, padx=200, columnspan=3)
+# Title Label
+unit_converter_title = Label(unit_converter_frame, text="Unit Converter", bg='royalblue4', fg='snow1', font=('helvetica', 50))
+unit_converter_title.grid(row=0)
+
+# Instructions Label
+unit_converter_instructions = Label(unit_converter_frame, text="Use the drop down menu's to select conversion type, enter a figure then click submit.", bg='royalblue4', fg='snow1', font=('helvetica', 20))
+unit_converter_instructions.grid(row=1, pady=50)
 
 # Top combo box
-selected_unit = StringVar()
-top_combobox = ttk.Combobox(unit_converter_frame, textvariable=selected_unit, width=20, font=('helvetica', 20))
+top_combobox = ttk.Combobox(unit_converter_frame, width=20, font=('helvetica', 20))
 top_combobox['values'] = ('Area', 'Energy', 'Frequency', 'Length', 'Mass', 'Pressure', 'Temperature', 'Time', 'Volume')
 top_combobox['state'] = 'readonly'
 top_combobox.current(0)
-top_combobox.grid(row=2, pady=5, column=0, padx=100, columnspan=3)
+top_combobox.grid(row=2, pady=5, sticky='s')
 top_combobox.bind('<<ComboboxSelected>>', unit_converter_top_combobox)
 
 # Equals label
-unit_converter_equals_label = Label(unit_converter_frame, text="=", bg='royalblue4', fg='snow1',
-                                    font=('helvetica', 100))
-unit_converter_equals_label.grid(row=3, rowspan=2, column=1)
+unit_converter_equals_label = Label(unit_converter_frame, text="=", bg='royalblue4', fg='snow1', font=('helvetica', 100))
+unit_converter_equals_label.grid(row=3, rowspan=2)
 
 # Left entry
-unit_converter_left_entry = Entry(unit_converter_frame, font=('helvetica', 20), width=21, justify=RIGHT, relief=RIDGE,
-                                  bd=5, bg='Dodger Blue', fg='snow2', disabledbackground='Dodger Blue',
-                                  disabledforeground='snow2', state=NORMAL)
-unit_converter_left_entry.grid(row=3, column=0, sticky='E', rowspan=2)
+unit_converter_left_entry = Entry(unit_converter_frame, font=('helvetica', 20), width=23, justify=RIGHT, relief=RIDGE, bd=5, bg='Dodger Blue', fg='snow2', disabledbackground='Dodger Blue', disabledforeground='snow2', state=NORMAL)
+unit_converter_left_entry.grid(row=3, sticky='sw', padx=(200, 0))
 
 # Left combo box
-selected_left_unit = StringVar()
-left_combobox = ttk.Combobox(unit_converter_frame, textvariable=selected_left_unit, width=20, font=('helvetica', 20))
-left_combobox['values'] = (
-    'Square kilometer', 'Square meter', 'Square mile', 'Square yard', 'Square foot', 'Square inch', 'Hectare', 'Acre')
+left_combobox = ttk.Combobox(unit_converter_frame, width=20, font=('helvetica', 21))
+left_combobox['values'] = ('Square kilometer', 'Square meter', 'Square mile', 'Square yard', 'Square foot', 'Square inch', 'Hectare', 'Acre')
 left_combobox['state'] = 'readonly'
 left_combobox.current(0)
-left_combobox.grid(row=4, column=0, sticky='E', pady=(50, 0))
+left_combobox.grid(row=4, sticky='NW', padx=(200, 0))
 
 # Right entry
-unit_converter_right_entry = Entry(unit_converter_frame, font=('helvetica', 20), width=21, relief=RIDGE, bd=5,
-                                   bg='Dodger Blue', fg='snow2', disabledbackground='Dodger Blue',
-                                   disabledforeground='snow2', state=DISABLED)
-unit_converter_right_entry.grid(row=3, column=2, rowspan=2, sticky='W')
+unit_converter_right_entry = Entry(unit_converter_frame, font=('helvetica', 20), width=23, relief=RIDGE, bd=5, bg='Dodger Blue', fg='snow2', disabledbackground='Dodger Blue', disabledforeground='snow2')
+unit_converter_right_entry.grid(row=3, sticky='SE', padx=(0, 200))
 
 # Right combo box
-selected_right_unit = StringVar()
-right_combobox = ttk.Combobox(unit_converter_frame, textvariable=selected_right_unit, width=20, font=('helvetica', 20))
-right_combobox['values'] = (
-'Square kilometer', 'Square meter', 'Square mile', 'Square yard', 'Square foot', 'Square inch', 'Hectare', 'Acre')
+right_combobox = ttk.Combobox(unit_converter_frame, width=20, font=('helvetica', 21))
+right_combobox['values'] = ('Square kilometer', 'Square meter', 'Square mile', 'Square yard', 'Square foot', 'Square inch', 'Hectare', 'Acre')
 right_combobox['state'] = 'readonly'
 right_combobox.current(0)
-right_combobox.grid(row=4, column=2, sticky='W', pady=(50, 0))
+right_combobox.grid(row=4, sticky='NE', padx=(0, 200))
 
 # Submit button
-unit_converter_button = Button(unit_converter_frame, text='Submit', font=('helvetica', 20), relief=RAISED, bd=4,
-                               bg='Dodger Blue', fg='snow2', command=unit_converter_submit)
-unit_converter_button.grid(row=5, pady=2, column=1)
+unit_converter_button = Button(unit_converter_frame, text='Submit', font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=unit_converter_submit)
+unit_converter_button.grid(row=5, pady=2)
 
-### Alarm Clock ###
+# Internet Connection Label
+unit_converter_internet_label = Label(unit_converter_frame, text="Connected to the internet", bg='royalblue4', fg='green', font=('helvetica', 20))
+unit_converter_internet_label.grid(row=6, pady=50)
 
-# Title
+# Refresh Connection Button
+unit_converter_button = Button(unit_converter_frame, text='Refresh', font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=unit_converter_refresh)
+unit_converter_button.grid(row=7, pady=2)
+### END OF UNIT CONVERTER TKINTER CONFIG ###
+
+
+### ALARM CLOCK TKINTER CONFIG ###
+# Title Label
 alarm_clock_title = Label(alarm_clock_frame, text="Alarm Clock", bg='royalblue4', fg='snow1', font=('helvetica', 50))
 alarm_clock_title.grid(row=0, columnspan=6, padx=200, sticky="nsew")
 
 # Clock face
-alarm_clock_clockface = Entry(alarm_clock_frame, font=('helvetica', 97), width=21, relief=RIDGE, justify=CENTER, bd=10,
-                              bg='Dodger Blue', fg='snow2', disabledbackground='Dodger Blue',
-                              disabledforeground='snow2', state=NORMAL)
+alarm_clock_clockface = Entry(alarm_clock_frame, font=('helvetica', 97), width=21, relief=RIDGE, justify=CENTER, bd=10, bg='Dodger Blue', fg='snow2', disabledbackground='Dodger Blue', disabledforeground='snow2', state=NORMAL)
 alarm_clock_clockface.grid(row=1, columnspan=6, pady=20, sticky="nsew")
 
-# Alarm labels
-set_alarm_time_label = Label(alarm_clock_frame, text="Set alarm time:", bg='royalblue4', fg='snow1',
-                             font=('helvetica', 25))
+# Set Alarm labels
+set_alarm_time_label = Label(alarm_clock_frame, text="Set alarm time:", bg='royalblue4', fg='snow1', font=('helvetica', 25))
 set_alarm_time_label.grid(row=2, column=0, columnspan=2, sticky='W', pady=(25, 0))
 
+# Hour Label
 set_alarm_label_hour = Label(alarm_clock_frame, text="Hour", bg='royalblue4', fg='snow1', font=('helvetica', 25))
 set_alarm_label_hour.grid(row=3, column=0)
 
+# Min Label
 set_alarm_label_min = Label(alarm_clock_frame, text="Min", bg='royalblue4', fg='snow1', font=('helvetica', 25))
 set_alarm_label_min.grid(row=3, column=1)
 
+# Sec Label
 set_alarm_label_sec = Label(alarm_clock_frame, text="Sec", bg='royalblue4', fg='snow1', font=('helvetica', 25))
 set_alarm_label_sec.grid(row=3, column=2)
 
+# AM/PM Label
 set_alarm_label_am_pm = Label(alarm_clock_frame, text="AM / PM", bg='royalblue4', fg='snow1', font=('helvetica', 25))
 set_alarm_label_am_pm.grid(row=3, column=3)
 
-alarm_on_button = Button(alarm_clock_frame, text='Alarm Off', font=('helvetica', 20), relief=RAISED, bd=4,
-                         bg='Dodger Blue', fg='snow2', command=None)
+# Alarm on Button
+alarm_on_button = Button(alarm_clock_frame, text='Alarm Off', font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2')
 alarm_on_button.grid(row=3, column=4)
 
-set_alarm_type_label = Label(alarm_clock_frame, text="Set alarm type:", bg='royalblue4', fg='snow1',
-                             font=('helvetica', 25))
+# Set Alarm Type Label
+set_alarm_type_label = Label(alarm_clock_frame, text="Set alarm type:", bg='royalblue4', fg='snow1', font=('helvetica', 25))
 set_alarm_type_label.grid(row=5, column=0, columnspan=2, sticky='W', pady=(25, 0))
 
-set_alarm_type_label = Label(alarm_clock_frame, text="Set custom message (optional):", bg='royalblue4', fg='snow1',
-                             font=('helvetica', 25))
-set_alarm_type_label.grid(row=7, column=0, columnspan=2, sticky='W', pady=(25, 0))
+# Set Alarm Message Label
+set_alarm_message_label = Label(alarm_clock_frame, text="Set custom message (optional):", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+set_alarm_message_label.grid(row=7, column=0, columnspan=2, sticky='W', pady=(25, 0))
 
-mp3_selected_label = Label(alarm_clock_frame, text="No custom song selected", bg='royalblue4', fg='gray',
-                           font=('helvetica', 25))
-mp3_selected_label.grid(row=5, column=3, columnspan=4, pady=25)
+# MP3 Selected Label
+mp3_selected_label = Label(alarm_clock_frame, text="MP3 Selected:", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+mp3_selected_label.grid(row=7, column=3, columnspan=2, sticky='W', pady=(25, 0))
 
-# Combo boxes for alarms
-selected_hour = StringVar()
-hour_combobox = ttk.Combobox(alarm_clock_frame, textvariable=selected_hour, font=('helvetica', 50), width=3)
+# MP3 Selected Entry
+mp3_selected_entry = Entry(alarm_clock_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2')
+mp3_selected_entry.grid(row=8, column=3, columnspan=2, sticky='W')
+mp3_selected_entry.insert(END, 'No custom song selected')
+
+# Hour Combo Box
+hour_combobox = ttk.Combobox(alarm_clock_frame, font=('helvetica', 50), width=3)
 hour_combobox['values'] = ([str(num).zfill(2) for num in range(0, 13)])
 hour_combobox['state'] = 'readonly'
 hour_combobox.current(0)
 hour_combobox.grid(row=4, column=0)
 
-selected_min = StringVar()
-min_combobox = ttk.Combobox(alarm_clock_frame, textvariable=selected_min, font=('helvetica', 50), width=3)
+# Min Combo Box
+min_combobox = ttk.Combobox(alarm_clock_frame, font=('helvetica', 50), width=3)
 min_combobox['values'] = ([str(num).zfill(2) for num in range(0, 60)])
 min_combobox['state'] = 'readonly'
 min_combobox.current(0)
 min_combobox.grid(row=4, column=1)
 
-selected_sec = StringVar()
-sec_combobox = ttk.Combobox(alarm_clock_frame, textvariable=selected_sec, font=('helvetica', 50), width=3)
+# Sec Combo Box
+sec_combobox = ttk.Combobox(alarm_clock_frame, font=('helvetica', 50), width=3)
 sec_combobox['values'] = ([str(num).zfill(2) for num in range(0, 60)])
 sec_combobox['state'] = 'readonly'
 sec_combobox.current(0)
 sec_combobox.grid(row=4, column=2)
 
-selected_am_pm = StringVar()
-am_pm_combobox = ttk.Combobox(alarm_clock_frame, textvariable=selected_am_pm, font=('helvetica', 50), width=3)
+# AM/PM Combo Box
+am_pm_combobox = ttk.Combobox(alarm_clock_frame, font=('helvetica', 50), width=3)
 am_pm_combobox['values'] = ('AM', 'PM')
 am_pm_combobox['state'] = 'readonly'
 am_pm_combobox.current(0)
 am_pm_combobox.grid(row=4, column=3)
 
-selected_alarm_type = StringVar()
-alarm_type_combobox = ttk.Combobox(alarm_clock_frame, textvariable=selected_alarm_type, font=('helvetica', 20),
-                                   width=30)
-alarm_type_combobox['values'] = (
-    'default sound only', 'custom message only', 'custom .mp3 only', 'default sound and custom message',
-    'custom .mp3 and custom message')
+# Alarm Type Combo Box
+alarm_type_combobox = ttk.Combobox(alarm_clock_frame, font=('helvetica', 20), width=30)
+alarm_type_combobox['values'] = ('default sound only', 'custom message only', 'custom .mp3 only', 'default sound and custom message', 'custom .mp3 and custom message')
 alarm_type_combobox['state'] = 'readonly'
 alarm_type_combobox.current(0)
 alarm_type_combobox.grid(row=6, column=0, columnspan=2, pady=10)
 
-# Custom entry
-alarm_clock_entry = Entry(alarm_clock_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4, bg='Dodger Blue',
-                          fg='snow2')
+# Custom Message Entry
+alarm_clock_entry = Entry(alarm_clock_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2')
 alarm_clock_entry.grid(row=8, column=0, columnspan=2)
 
-# Buttons
-alarm_on_button = Button(alarm_clock_frame, text='Alarm Off', width=15, font=('helvetica', 20), relief=RAISED, bd=4,
-                         bg='Dodger Blue', fg='snow2', command=alarm_on_off_button)
+# Alarm OFF Button
+alarm_on_button = Button(alarm_clock_frame, text='Alarm Off', width=15, font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=alarm_on_off_button)
 alarm_on_button.grid(row=3, column=4)
 
-select_mp3_button = Button(alarm_clock_frame, text='Select custom mp3', font=('helvetica', 20), relief=RAISED, bd=4,
-                           bg='Dodger Blue', fg='snow2', command=custom_mp3_button)
+# Select MP3 Button
+select_mp3_button = Button(alarm_clock_frame, text='Select custom mp3', font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=custom_mp3_button)
 select_mp3_button.grid(row=4, column=4)
 
-alarm_stop_music_button = Button(alarm_clock_frame, text='Stop music', width=15, font=('helvetica', 20), relief=RAISED,
-                                 bd=4, bg='Dodger Blue', fg='snow2', command=stop_music_button)
+# Stop Music Button
+alarm_stop_music_button = Button(alarm_clock_frame, text='Stop music', width=15, font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=stop_music_button)
 alarm_stop_music_button.grid(row=6, column=4)
+### END OF ALARM CLOCK TKINTER CONFIG ###
 
-### Distance Between Two Cities ###
-distance_two_cities_title = Label(distance_two_cities_frame, text="Distance Between Two Cities", bg='royalblue4',
-                                  fg='snow1', font=('helvetica', 50))
-distance_two_cities_title.grid(row=0, column=0, sticky="nsew", padx=300, columnspan=6)
 
-distance_two_cities_instructions = Label(distance_two_cities_frame,
-                                         text="Ensure you are connected to the internet, then click submit once you have made your selection",
-                                         bg='royalblue4', fg='snow1', font=('helvetica', 25))
-distance_two_cities_instructions.grid(row=1, column=0, columnspan=6, pady=50)
+### DISTANCE BETWEEN TWO CITIES TKINTER CONFIG ###
+# Frame config
+distance_two_cities_frame.columnconfigure(0, weight=1)
 
-distance_two_cities_from_label = Label(distance_two_cities_frame, text="From:", bg='royalblue4', fg='snow1',
-                                       font=('helvetica', 25))
-distance_two_cities_from_label.grid(row=2, column=0)
+# Title Label
+distance_two_cities_title = Label(distance_two_cities_frame, text="Distance Between Two Cities", bg='royalblue4', fg='snow1', font=('helvetica', 50))
+distance_two_cities_title.grid(row=0)
 
-distance_two_cities_to_label = Label(distance_two_cities_frame, text="To:", bg='royalblue4', fg='snow1',
-                                     font=('helvetica', 25))
-distance_two_cities_to_label.grid(row=2, column=2)
+# Instructions Label
+distance_two_cities_instructions = Label(distance_two_cities_frame, text="Ensure you are connected to the internet, then click submit once you have made your selection", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+distance_two_cities_instructions.grid(row=1, pady=50)
 
-distance_two_cities_in_label = Label(distance_two_cities_frame, text="In:", bg='royalblue4', fg='snow1',
-                                     font=('helvetica', 25))
-distance_two_cities_in_label.grid(row=2, column=4)
+# From Label
+distance_two_cities_from_label = Label(distance_two_cities_frame, text="From:", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+distance_two_cities_from_label.grid(row=2, sticky='w', padx=(50, 0))
 
-distance_two_cities_button = Button(distance_two_cities_frame, text='Submit', width=7, font=('helvetica', 20),
-                                    relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2',
-                                    command=distance_two_cities_calculator)
+# To Label
+distance_two_cities_to_label = Label(distance_two_cities_frame, text="To:", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+distance_two_cities_to_label.grid(row=2, sticky='w', padx=(540, 0))
+
+# In Label
+distance_two_cities_in_label = Label(distance_two_cities_frame, text="In:", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+distance_two_cities_in_label.grid(row=2, sticky='e', padx=(0, 500))
+
+# Submit Button
+distance_two_cities_button = Button(distance_two_cities_frame, text='Submit', width=7, font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=distance_two_cities_calculator)
 distance_two_cities_button.grid(row=4, column=0, columnspan=7)
 
-distance_two_cities_results = Label(distance_two_cities_frame, text="", bg='royalblue4', fg='snow1',
-                                    font=('helvetica', 25))
-distance_two_cities_results.grid(row=6, column=0, columnspan=7, pady=25)
+# Results Label
+distance_two_cities_results = Label(distance_two_cities_frame, text="", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+distance_two_cities_results.grid(row=6, pady=25)
 
-distance_two_cities_internet_status = Label(distance_two_cities_frame, text="Connected to the internet",
-                                            bg='royalblue4', fg='green', font=('helvetica', 25))
-distance_two_cities_internet_status.grid(row=3, column=0, columnspan=7, pady=25)
+# Internet Status Label
+distance_two_cities_internet_status = Label(distance_two_cities_frame, text="Connected to the internet", bg='royalblue4', fg='green', font=('helvetica', 25))
+distance_two_cities_internet_status.grid(row=3, pady=25)
 
-distance_two_cities_refresh_button = Button(distance_two_cities_frame, text='Refresh', width=7, font=('helvetica', 20),
-                                            relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2',
-                                            command=refresh_connection)
+# Refresh Button
+distance_two_cities_refresh_button = Button(distance_two_cities_frame, text='Refresh', width=7, font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=refresh_connection)
 distance_two_cities_refresh_button.grid(row=5, pady=2, column=0, columnspan=7)
 
-# Create a list of major cities and country from the following website: 'https://worldpopulationreview.com/world-cities'
 
+# Create a list of major cities and country from the following website: 'https://worldpopulationreview.com/world-cities'
 cities_url = 'https://worldpopulationreview.com/world-cities'
 
 try:
@@ -4051,96 +2302,131 @@ try:
 
 except requests.exceptions.ConnectionError:
     distance_two_cities_internet_status.config(text='No internet connection, Please try again', fg='red')
+    unit_converter_internet_label.config(text='No internet connection, Please try again', fg='red')
 
-# Distance between two countries entry boxes
+# Entry Boxes (attempt to create these with the above list if internet is connected)
 try:
+    # From Entry
     from_entry = AutocompleteCombobox(distance_two_cities_frame, font=('helvetica', 20), completevalues=list_of_cities)
-    from_entry.grid(row=2, column=1, sticky='W')
+    from_entry.grid(row=2, sticky='W', padx=(150, 0))
 
+    # To Entry
     to_entry = AutocompleteCombobox(distance_two_cities_frame, font=('helvetica', 20), completevalues=list_of_cities)
-    to_entry.grid(row=2, column=3, sticky='W')
+    to_entry.grid(row=2)
 
-    in_entry = AutocompleteCombobox(distance_two_cities_frame, font=('helvetica', 20),
-                                    completevalues=['kilometers', 'miles'])
-    in_entry.grid(row=2, column=5, sticky='W')
+    # In Entry
+    in_entry = AutocompleteCombobox(distance_two_cities_frame, font=('helvetica', 20), completevalues=['kilometers', 'miles'])
+    in_entry.grid(row=2, sticky='E', padx=(0, 150))
 
 except NameError:
     distance_two_cities_internet_status.config(text='No internet connection, Please try again', fg='red')
+### END OF DISTANCE BETWEEN TWO CITIES TKINTER CONFIG ###
 
-### Credit Card validator ###
-card_validator_title = Label(credit_card_validator_frame, text="Credit Card Validator", bg='royalblue4', fg='snow1',
-                             font=('helvetica', 50))
-card_validator_title.grid(row=0, column=0, sticky="nsew", padx=300, columnspan=6)
 
-card_validator_instructions = Label(credit_card_validator_frame,
-                                    text="Enter a credit card number between 13 and 16 digits and click submit",
-                                    bg='royalblue4', fg='snow1', font=('helvetica', 25))
-card_validator_instructions.grid(row=1, column=0, columnspan=6, pady=50)
+### CREDIT CARD VALIDATOR TKINTER CONFIG ###
+# Frame config
+credit_card_validator_frame.columnconfigure(0, weight=1)
 
-card_validator_entry = Entry(credit_card_validator_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4,
-                             bg='Dodger Blue', fg='snow2')
-card_validator_entry.grid(row=2, column=0, columnspan=6)
+# Title Label
+card_validator_title = Label(credit_card_validator_frame, text="Credit Card Validator", bg='royalblue4', fg='snow1', font=('helvetica', 50))
+card_validator_title.grid(row=0)
 
-card_validator_button = Button(credit_card_validator_frame, text='Submit', width=7, font=('helvetica', 20),
-                               relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=credit_card_validation)
-card_validator_button.grid(row=3, column=0, columnspan=6, pady=2)
+# Instructions Label
+card_validator_instructions = Label(credit_card_validator_frame, text="Enter a credit card number between 13 and 16 digits and click submit", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+card_validator_instructions.grid(row=1, pady=50)
 
-card_validator_results = Label(credit_card_validator_frame, text="", bg='royalblue4', fg='snow1',
-                               font=('helvetica', 25))
-card_validator_results.grid(row=4, column=0, columnspan=6, pady=20)
+# Entry Box
+card_validator_entry = Entry(credit_card_validator_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2')
+card_validator_entry.grid(row=2)
 
-card_validator_further_instructions = Label(credit_card_validator_frame,
-                                            text="This validator works using Luhn Algorithm (Mod10 Check)\n"
-                                                 "Luhn algorithm consists of the following five steps:          \n"
-                                                 "1) Double every second digit from right to left. If this “doubling” results in a two-digit number, add the two-digit number to get a single digit.\n"
-                                                 "2) Now add all single digit numbers from step 1.                                                                                                                                          \n"
-                                                 "3) Add all digits in the odd places from right to left in the credit card number.                                                                                               \n"
-                                                 "4) Sum the results from steps 2 & 3.                                                                                                                                                             \n"
-                                                 "5) If the result from step 4 is divisible by 10, the card number is valid; otherwise, it is invalid.                                                                         \n\n"
-                                                 "Note:                                                                                           \n "
-                                                 "-Numbers beginning with a 4 are a visa card                   \n"
-                                                 "-Numbers beginning with a 5 are a Master card              \n"
-                                                 "-Numbers beginning with a 7 are Discover cards             \n"
-                                                 "-Numbers beginning with 37 are American Express cards",
-                                            bg='royalblue4', fg='snow1', font=('helvetica', 18))
-card_validator_further_instructions.grid(row=5, column=0, columnspan=6, sticky='W')
+# Submit button
+card_validator_button = Button(credit_card_validator_frame, text='Submit', width=7, font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=credit_card_validation)
+card_validator_button.grid(row=3, pady=2)
 
-### INCOME TAX CALCULATOR ###
-simple_tax_title = Label(tax_calculator_frame, text="Simple Tax Calculator", bg='royalblue4', fg='snow1',
-                         font=('helvetica', 50))
-simple_tax_title.grid(row=0, column=0, sticky="nsew", padx=450, columnspan=6)
+# Results Label
+card_validator_results = Label(credit_card_validator_frame, text="", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+card_validator_results.grid(row=4, pady=50)
 
-simple_tax_instructions = Label(tax_calculator_frame,
-                                text="Enter your total taxible income in dollars for the year and click submit",
-                                bg='royalblue4',
-                                fg='snow1', font=('helvetica', 25))
-simple_tax_instructions.grid(row=1, column=0, columnspan=6, pady=50)
+# Example Combo box
+# Payment frequency Combobox
+card_validator_combobox = ttk.Combobox(credit_card_validator_frame, width=24, font=('helvetica', 25))
+card_validator_combobox['values'] = ('Custom', 'Visa card example', 'Master card example', 'Discover card example', 'American Express card example')
+card_validator_combobox['state'] = 'readonly'
+card_validator_combobox.current(0)
+card_validator_combobox.grid(row=5)
+### END OF CREDIT CARD VALIDATOR TKINTER CONFIG ###
 
-simple_tax_entry = Entry(tax_calculator_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4, bg='Dodger Blue',
-                         fg='snow2')
-simple_tax_entry.grid(row=2, column=0, columnspan=6)
 
-simple_tax_button = Button(tax_calculator_frame, text='Submit', width=7, font=('helvetica', 20), relief=RAISED, bd=4,
-                           bg='Dodger Blue', fg='snow2', command=income_tax_calc)
-simple_tax_button.grid(row=3, column=0, columnspan=6, pady=2)
+### INCOME TAX CALCULATOR TKINTER CONFIG ###
+# Frame config
+tax_calculator_frame.columnconfigure(0, weight=1)
 
-simple_tax_results = Label(tax_calculator_frame, text="", bg='royalblue4', fg='snow1',
-                           font=('helvetica', 25))
-simple_tax_results.grid(row=4, column=0, columnspan=6, pady=20)
+# Title Label
+simple_tax_title = Label(tax_calculator_frame, text="Simple Tax Calculator", bg='royalblue4', fg='snow1', font=('helvetica', 50))
+simple_tax_title.grid(row=0)
 
-simple_tax_further_instructions = Label(tax_calculator_frame, text="Australian Resident tax rates 2021–22\n\n"
-                                                                   "Taxable income                 Tax on this income\n"
-                                                                   "------------------------------------------------------------------------------------------------\n"
-                                                                   "0 – $18,200                       Nil\n"
-                                                                   "$18,201 – $45,000            19 cents for each $1 over $18,200\n"
-                                                                   "$45,001 – $120,000          $5,092 plus 32.5 cents for each $1 over $45,000\n"
-                                                                   "$120,001 – $180,000        $29,467 plus 37 cents for each $1 over $120,000\n"
-                                                                   "$180,001 and over            $51,667 plus 45 cents for each $1 over $180,000",
-                                        bg='royalblue4', fg='snow1', font=('helvetica', 25),
-                                        justify=LEFT, anchor="w")
-simple_tax_further_instructions.grid(row=5, column=1, columnspan=6, sticky='W')
+# Instructions Label
+simple_tax_instructions = Label(tax_calculator_frame, text="Enter your total taxable income in dollars for the year and click submit", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_instructions.grid(row=1, pady=25)
 
-### Factorial Finder ###
+# Entry Box
+simple_tax_entry = Entry(tax_calculator_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2')
+simple_tax_entry.grid(row=2)
+
+# Submit Button
+simple_tax_button = Button(tax_calculator_frame, text='Submit', width=7, font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=income_tax_calc)
+simple_tax_button.grid(row=3, pady=2)
+
+# Results Label
+simple_tax_results = Label(tax_calculator_frame, text="", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_results.grid(row=4, pady=20)
+
+# Further Instructions Labels
+simple_tax_further_instructions_row_1 = Label(tax_calculator_frame, text="Australian Resident tax rates 2021–22", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_1.grid(row=5, sticky='W', pady=(0, 10), padx=(230, 0))
+
+simple_tax_further_instructions_row_2 = Label(tax_calculator_frame, text="Income", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_2.grid(row=6, sticky='W', padx=(230, 0))
+
+simple_tax_further_instructions_row_2_a = Label(tax_calculator_frame, text="Tax on this income", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_2_a.grid(row=6, sticky='W', padx=(600, 0))
+
+simple_tax_further_instructions_row_2 = Label(tax_calculator_frame, text="--------------------------------------------------------------------------------------------------", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_2.grid(row=7, sticky='W', padx=(230, 0))
+
+simple_tax_further_instructions_row_3 = Label(tax_calculator_frame, text="0 – $18,200", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_3.grid(row=8, sticky='W', padx=(230, 0))
+
+simple_tax_further_instructions_row_3_a = Label(tax_calculator_frame, text="Nil", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_3_a.grid(row=8, sticky='W', padx=(600, 0))
+
+simple_tax_further_instructions_row_4 = Label(tax_calculator_frame, text="$18,201 – $45,000", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_4.grid(row=9, sticky='W', padx=(230, 0))
+
+simple_tax_further_instructions_row_4_a = Label(tax_calculator_frame, text="19 cents for each $1 over $18,200", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_4_a.grid(row=9, sticky='W', padx=(600, 0))
+
+simple_tax_further_instructions_row_5 = Label(tax_calculator_frame, text="$45,001 – $120,000", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_5.grid(row=10, sticky='W', padx=(230, 0))
+
+simple_tax_further_instructions_row_5_a = Label(tax_calculator_frame, text="$5,092 plus 32.5 cents for each $1 over $45,000", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_5_a.grid(row=10, sticky='W', padx=(600, 0))
+
+simple_tax_further_instructions_row_6 = Label(tax_calculator_frame, text="$120,001 – $180,000", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_6.grid(row=11, sticky='W', padx=(230, 0))
+
+simple_tax_further_instructions_row_6_a = Label(tax_calculator_frame, text="$29,467 plus 37 cents for each $1 over $120,000", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_6_a.grid(row=11, sticky='W', padx=(600, 0))
+
+simple_tax_further_instructions_row_7 = Label(tax_calculator_frame, text="$180,001 and over", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_7.grid(row=12, sticky='W', padx=(230, 0))
+
+simple_tax_further_instructions_row_7_a = Label(tax_calculator_frame, text="$51,667 plus 45 cents for each $1 over $180,000", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_7_a.grid(row=12, sticky='W', padx=(600, 0))
+### END OF INCOME TAX CALCULATOR TKINTER CONFIG ###
+
+
+### FACTORIAL FINDER TKINTER CONFIG ###
 factorial_finder_title = Label(factorial_finder_frame, text="Factorial Finder", bg='royalblue4', fg='snow1',
                                font=('helvetica', 50))
 factorial_finder_title.grid(row=0, column=0, sticky="nsew", padx=525, columnspan=6)
@@ -4271,12 +2557,10 @@ exponentiation_y_entry = Entry(exponentiation_frame, font=('helvetica', 25), wid
                                bg='Dodger Blue', fg='snow2')
 exponentiation_y_entry.grid(row=2, column=4, columnspan=6, sticky='W')
 
-exponentiation_button = Button(exponentiation_frame, text='Submit', width=7, font=('helvetica', 20), relief=RAISED,
-                               bd=4, bg='Dodger Blue', fg='snow2', command=exponentiation_submit)
+exponentiation_button = Button(exponentiation_frame, text='Submit', width=7, font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=exponentiation_submit)
 exponentiation_button.grid(row=3, column=0, columnspan=6, pady=2)
 
-exponentiation_results = Label(exponentiation_frame, text="", bg='royalblue4', fg='snow1', font=('helvetica', 25),
-                               wraplength=1000, justify="center")
+exponentiation_results = Label(exponentiation_frame, text="", bg='royalblue4', fg='snow1', font=('helvetica', 25), wraplength=1000, justify="center")
 exponentiation_results.grid(row=4, column=0, columnspan=6, pady=50)
 
 window.config(menu=menubar)
