@@ -2,35 +2,6 @@
 # This will be a GUI program that showcases almost almost all the math projects located in the udemy course
 # Each project will be separated by a tab
 
-# The programs are as follows:
-
-# Find Pi to the nth digit [complete]
-# Find E to the nth digit  [complete]
-# Fibonacci sequence [complete]
-# Prime Factorization [complete]
-# Prime number generator [complete]
-# Find the cost to cover W x H floor [complete]
-# Mortgage calculator [complete]
-# Change return program [complete]
-# Binary to Decimal and Back Converter [complete]
-# Scientific Calculator [complete]
-# Unit Converter [complete]
-# Alarm Clock [complete]
-# Distance Between Two Cities [complete]
-# Credit Card Validator [complete]
-
-# Tax Calculator [incomplete] - Center instructions properly, perhaps split instructions up line by line
-
-# Factorial Finder [incomplete] - add scroll bar to results
-# Happy Numbers [incomplete] - add calculations to a scroll bar , add focus if needed
-
-# Number Names [complete]
-# Coin Flip Simulation [complete]
-
-# Exponentiation [incomplete] - add scrollable text box and increase limit
-
-# once all completed, upload to GITHUB
-
 ### IMPORTS ###
 from tkinter import *
 from mpmath import mp
@@ -69,6 +40,7 @@ window.columnconfigure(0, weight=1)
 # Initialise Pygame mixer
 pygame.mixer.init()
 
+
 # Initial text to speech engine
 engine = pyttsx3.init()
 ### END OF INITIALISE SOUND ###
@@ -98,7 +70,7 @@ number_name_frame = Frame(window, bg='royalblue4')
 coin_flip_frame = Frame(window, bg='royalblue4')
 exponentiation_frame = Frame(window, bg='royalblue4')
 
-# Stretches all frame to fit window
+# Stretches all frames to fit window
 for frame in (welcome_screen_frame,
               pi_to_nth_digit_frame,
               e_to_nth_digit_frame,
@@ -221,7 +193,7 @@ style.configure('Vertical.TScrollbar', arrowsize=28)
 ### END OF GLOBAL COMBOBOX THEME CONFIGURATION ###
 
 
-# Global variables for number to text: - potentially need to remove this once I get to it
+### Global variables for number to text function ###
 one_to_nine_dict = {'0': 'zero', '1': 'one', '2': 'two', '3': 'three', '4': 'four', '5': 'five', '6': 'six',
                     '7': 'seven', '8': 'eight', '9': 'nine'}
 ten_to_nineteen_dict = {'10': 'ten', '11': 'eleven', '12': 'twelve', '13': 'thirteen', '14': 'fourteen',
@@ -231,9 +203,11 @@ twenty_to_ninety_dict = {'2': 'twenty', '3': 'thirty', '4': 'forty', '5': 'fifty
 
 groups_of_three_list = []
 text_output = ''
+### END OF GLOBAL VARIABLES ###
 
 
 ### BUTTON FUNCTIONS ###
+
 
 ### PI TO THE NTH DIGIT FUNCTION ###
 def pi_to_nth_digit_submit():
@@ -1190,7 +1164,6 @@ def credit_card_validation():
 
 
 ### INCOME TAX CALCULATOR ###
-
 def income_tax_calc():
     try:
 
@@ -1227,32 +1200,34 @@ def income_tax_calc():
 
 ### FACTORIAL FINDER ###
 def factorial_finder():
+
+    factorial_finder_results.delete('1.0', END)
+
     try:
         if int(factorial_finder_entry.get()) == 0:
-            factorial_finder_results.config(text=f'The factorial of 0 is 1')
+            factorial_finder_results.insert(END, f'The factorial of 0 is 1')
 
         elif int(factorial_finder_entry.get()) == 1:
-            factorial_finder_results.config(text=f'The factorial of 1 is 1')
+            factorial_finder_results.insert(END, f'The factorial of 1 is 1')
 
-        elif 1 <= int(factorial_finder_entry.get()) <= 50:
+        elif 1 <= int(factorial_finder_entry.get()) <= 1000:
             factorial = 1
             for num in range(int(factorial_finder_entry.get()), 1, -1):
                 factorial = factorial * num
-                factorial_finder_results.config(
-                    text=f'The factorial of {factorial_finder_entry.get()} is: \n{factorial}')
+            factorial_finder_results.insert(END, f'The factorial of {factorial_finder_entry.get()} is: {factorial}')
 
         else:
-            factorial_finder_results.config(text='Please enter a valid number between 0 - 50.')
+            factorial_finder_results.insert(END, 'Please enter a valid number between 0 - 50.')
 
     except ValueError:
-        factorial_finder_results.config(text='Please enter a valid number.')
-
+        factorial_finder_results.insert(END, 'Please enter a valid number.')
+### END OF FACTORIAL FINDER ###
 
 
 ### HAPPY NUMBERS ###
-
 def happy_number_submit():
     try:
+        happy_numbers_results.delete('1.0', END)
         happy_number = happy_numbers_entry.get()
         original_number = happy_number
 
@@ -1262,18 +1237,18 @@ def happy_number_submit():
                 my_num += (int(digit) ** 2)
             happy_number = my_num
             if happy_number == 4:
-                happy_numbers_results.config(text=f'{original_number}: Not a happy number')
+                happy_numbers_results.insert(END, f'{original_number} is not a happy number')
                 break
             elif happy_number == 1:
-                happy_numbers_results.config(text=f'{original_number}: Happy number!!')
+                happy_numbers_results.insert(END, f'{original_number} is a happy number!!')
                 break
 
     except ValueError:
-        happy_numbers_results.config(text='Please enter a valid number')
+        happy_numbers_results.insert(END, 'Enter a valid number')
+### END OF HAPPY NUMBERS ###
 
 
 ### NUMBER NAMES ###
-
 def three_digits_to_text(group_of_three, number_amount):
     global text_output
 
@@ -1441,6 +1416,7 @@ def text_to_speech():
         engine.say(text)
         # play the speech
         engine.runAndWait()
+### END OF NUMBER NAMES ###
 
 
 ### COIN FLIP SIMULATOR ###
@@ -1498,30 +1474,36 @@ def coin_flip_submit():
 
     except ValueError:
         coin_flip_text_box.insert(END, 'Please insert a number between 1-1000')
+### END OF COIN FLIP SIMULATOR ###
 
 
+### EXPONENTIATION ###
 def exponentiation_submit():
-    exponentiation_results.config(text='')
+    exponentiation_results.delete('1.0', END)
 
     try:
 
-        if 0 <= int(exponentiation_x_entry.get()) <= 100 and 0 <= int(exponentiation_y_entry.get()) <= 100:
+        if 0 <= int(exponentiation_x_entry.get()) <= 1000 and 0 <= int(exponentiation_y_entry.get()) <= 1000:
 
             x_value = int(exponentiation_x_entry.get())
             y_value = int(exponentiation_y_entry.get())
 
             x_to_power_of_y_result = pow(x_value, y_value)
 
-            exponentiation_results.config(text=x_to_power_of_y_result)
+            exponentiation_results.insert(END, f'{x_value} to the power of {y_value} is: \n\n{x_to_power_of_y_result}')
 
         else:
-            exponentiation_results.config(text='Enter a valid number between 0-100')
+            exponentiation_results.insert(END, 'Enter a valid number between 0-1000')
 
     except ValueError:
-        exponentiation_results.config(text='Enter a valid number')
+        exponentiation_results.insert(END, 'Enter a valid number')
+### END OF EXPONENTIATION ###
 
 
-### WIDGET CONFIGURATION FOR EACH FRAME ###
+### END OF FUNCTIONS ###
+
+
+### TKINTER CONFIGURATION FOR EACH FRAME ###
 
 
 ### WELCOME FRAME TKINTER CONFIG ###
@@ -2382,191 +2364,237 @@ simple_tax_results = Label(tax_calculator_frame, text="", bg='royalblue4', fg='s
 simple_tax_results.grid(row=4, pady=20)
 
 # Further Instructions Labels
+# Row 1
 simple_tax_further_instructions_row_1 = Label(tax_calculator_frame, text="Australian Resident tax rates 2021–22", bg='royalblue4', fg='snow1', font=('helvetica', 25))
 simple_tax_further_instructions_row_1.grid(row=5, sticky='W', pady=(0, 10), padx=(230, 0))
 
+# Row 2 left
 simple_tax_further_instructions_row_2 = Label(tax_calculator_frame, text="Income", bg='royalblue4', fg='snow1', font=('helvetica', 25))
 simple_tax_further_instructions_row_2.grid(row=6, sticky='W', padx=(230, 0))
 
+# Row 2 right
 simple_tax_further_instructions_row_2_a = Label(tax_calculator_frame, text="Tax on this income", bg='royalblue4', fg='snow1', font=('helvetica', 25))
 simple_tax_further_instructions_row_2_a.grid(row=6, sticky='W', padx=(600, 0))
 
-simple_tax_further_instructions_row_2 = Label(tax_calculator_frame, text="--------------------------------------------------------------------------------------------------", bg='royalblue4', fg='snow1', font=('helvetica', 25))
-simple_tax_further_instructions_row_2.grid(row=7, sticky='W', padx=(230, 0))
+# Row 3
+simple_tax_further_instructions_row_3 = Label(tax_calculator_frame, text="--------------------------------------------------------------------------------------------------", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_3.grid(row=7, sticky='W', padx=(230, 0))
 
-simple_tax_further_instructions_row_3 = Label(tax_calculator_frame, text="0 – $18,200", bg='royalblue4', fg='snow1', font=('helvetica', 25))
-simple_tax_further_instructions_row_3.grid(row=8, sticky='W', padx=(230, 0))
+# Row 4 left
+simple_tax_further_instructions_row_4 = Label(tax_calculator_frame, text="0 – $18,200", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_4.grid(row=8, sticky='W', padx=(230, 0))
 
-simple_tax_further_instructions_row_3_a = Label(tax_calculator_frame, text="Nil", bg='royalblue4', fg='snow1', font=('helvetica', 25))
-simple_tax_further_instructions_row_3_a.grid(row=8, sticky='W', padx=(600, 0))
+# Row 4 right
+simple_tax_further_instructions_row_4_a = Label(tax_calculator_frame, text="Nil", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_4_a.grid(row=8, sticky='W', padx=(600, 0))
 
-simple_tax_further_instructions_row_4 = Label(tax_calculator_frame, text="$18,201 – $45,000", bg='royalblue4', fg='snow1', font=('helvetica', 25))
-simple_tax_further_instructions_row_4.grid(row=9, sticky='W', padx=(230, 0))
+# Row 5 left
+simple_tax_further_instructions_row_5 = Label(tax_calculator_frame, text="$18,201 – $45,000", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_5.grid(row=9, sticky='W', padx=(230, 0))
 
-simple_tax_further_instructions_row_4_a = Label(tax_calculator_frame, text="19 cents for each $1 over $18,200", bg='royalblue4', fg='snow1', font=('helvetica', 25))
-simple_tax_further_instructions_row_4_a.grid(row=9, sticky='W', padx=(600, 0))
+# Row 5 right
+simple_tax_further_instructions_row_5_a = Label(tax_calculator_frame, text="19 cents for each $1 over $18,200", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_5_a.grid(row=9, sticky='W', padx=(600, 0))
 
-simple_tax_further_instructions_row_5 = Label(tax_calculator_frame, text="$45,001 – $120,000", bg='royalblue4', fg='snow1', font=('helvetica', 25))
-simple_tax_further_instructions_row_5.grid(row=10, sticky='W', padx=(230, 0))
+# Row 6 left
+simple_tax_further_instructions_row_6 = Label(tax_calculator_frame, text="$45,001 – $120,000", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_6.grid(row=10, sticky='W', padx=(230, 0))
 
-simple_tax_further_instructions_row_5_a = Label(tax_calculator_frame, text="$5,092 plus 32.5 cents for each $1 over $45,000", bg='royalblue4', fg='snow1', font=('helvetica', 25))
-simple_tax_further_instructions_row_5_a.grid(row=10, sticky='W', padx=(600, 0))
+# Row 6 right
+simple_tax_further_instructions_row_6_a = Label(tax_calculator_frame, text="$5,092 plus 32.5 cents for each $1 over $45,000", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_6_a.grid(row=10, sticky='W', padx=(600, 0))
 
-simple_tax_further_instructions_row_6 = Label(tax_calculator_frame, text="$120,001 – $180,000", bg='royalblue4', fg='snow1', font=('helvetica', 25))
-simple_tax_further_instructions_row_6.grid(row=11, sticky='W', padx=(230, 0))
+# Row 7 left
+simple_tax_further_instructions_row_7 = Label(tax_calculator_frame, text="$120,001 – $180,000", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_7.grid(row=11, sticky='W', padx=(230, 0))
 
-simple_tax_further_instructions_row_6_a = Label(tax_calculator_frame, text="$29,467 plus 37 cents for each $1 over $120,000", bg='royalblue4', fg='snow1', font=('helvetica', 25))
-simple_tax_further_instructions_row_6_a.grid(row=11, sticky='W', padx=(600, 0))
+# Row 7 right
+simple_tax_further_instructions_row_7_a = Label(tax_calculator_frame, text="$29,467 plus 37 cents for each $1 over $120,000", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_7_a.grid(row=11, sticky='W', padx=(600, 0))
 
-simple_tax_further_instructions_row_7 = Label(tax_calculator_frame, text="$180,001 and over", bg='royalblue4', fg='snow1', font=('helvetica', 25))
-simple_tax_further_instructions_row_7.grid(row=12, sticky='W', padx=(230, 0))
+# Row 8 left
+simple_tax_further_instructions_row_8 = Label(tax_calculator_frame, text="$180,001 and over", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_8.grid(row=12, sticky='W', padx=(230, 0))
 
-simple_tax_further_instructions_row_7_a = Label(tax_calculator_frame, text="$51,667 plus 45 cents for each $1 over $180,000", bg='royalblue4', fg='snow1', font=('helvetica', 25))
-simple_tax_further_instructions_row_7_a.grid(row=12, sticky='W', padx=(600, 0))
+# Row 8 right
+simple_tax_further_instructions_row_8_a = Label(tax_calculator_frame, text="$51,667 plus 45 cents for each $1 over $180,000", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+simple_tax_further_instructions_row_8_a.grid(row=12, sticky='W', padx=(600, 0))
 ### END OF INCOME TAX CALCULATOR TKINTER CONFIG ###
 
 
 ### FACTORIAL FINDER TKINTER CONFIG ###
-factorial_finder_title = Label(factorial_finder_frame, text="Factorial Finder", bg='royalblue4', fg='snow1',
-                               font=('helvetica', 50))
-factorial_finder_title.grid(row=0, column=0, sticky="nsew", padx=525, columnspan=6)
+# Frame config
+factorial_finder_frame.columnconfigure(0, weight=1)
 
-factorial_finder_instructions = Label(factorial_finder_frame,
-                                      text="Enter a number and click submit to find its factorial. limit is 50",
-                                      bg='royalblue4', fg='snow1', font=('helvetica', 25))
-factorial_finder_instructions.grid(row=1, column=0, columnspan=6, pady=50)
+# Title Label
+factorial_finder_title = Label(factorial_finder_frame, text="Factorial Finder", bg='royalblue4', fg='snow1', font=('helvetica', 50))
+factorial_finder_title.grid(row=0)
 
-factorial_finder_entry = Entry(factorial_finder_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4,
-                               bg='Dodger Blue', fg='snow2')
-factorial_finder_entry.grid(row=2, column=0, columnspan=6)
+# Instructions Label
+factorial_finder_instructions = Label(factorial_finder_frame, text="Enter a number and click submit to find its factorial. limit is 1000.", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+factorial_finder_instructions.grid(row=1, pady=50)
 
-factorial_finder_button = Button(factorial_finder_frame, text='Submit', width=7, font=('helvetica', 20), relief=RAISED,
-                                 bd=4, bg='Dodger Blue', fg='snow2', command=factorial_finder)
-factorial_finder_button.grid(row=3, column=0, columnspan=6, pady=2)
+# Entry Box
+factorial_finder_entry = Entry(factorial_finder_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2')
+factorial_finder_entry.grid(row=2)
 
-factorial_finder_results = Label(factorial_finder_frame, text="", bg='royalblue4', fg='snow1', font=('helvetica', 25))
-factorial_finder_results.grid(row=4, column=0, columnspan=6, pady=20)
+# Submit button
+factorial_finder_button = Button(factorial_finder_frame, text='Submit', width=7, font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=factorial_finder)
+factorial_finder_button.grid(row=3, pady=2)
+
+# Scrolled results box
+factorial_finder_results = scrolledtext.ScrolledText(factorial_finder_frame, bg='royalblue4', fg='snow1', font=('helvetica', 20), height=12, wrap=WORD)
+factorial_finder_results.grid(row=4, pady=2)
+### END OF FACTORIAL FINDER TKINTER CONFIG ###
 
 
-# HAPPY NUMBERS #
-happy_numbers_title = Label(happy_number_frame, text="Happy numbers", bg='royalblue4', fg='snow1',
-                            font=('helvetica', 50))
-happy_numbers_title.grid(row=0, column=0, sticky="nsew", padx=525, columnspan=6)
+### HAPPY NUMBERS TKINTER CONFIG ###
+# Frame config
+happy_number_frame.columnconfigure(0, weight=1)
 
+# Title Label
+happy_numbers_title = Label(happy_number_frame, text="Happy numbers", bg='royalblue4', fg='snow1', font=('helvetica', 50))
+happy_numbers_title.grid(row=0)
+
+# Instructions Label
 happy_numbers_instructions = Label(happy_number_frame,
                                    text="A happy number is a number which eventually reaches 1 when replaced by\n"
-                                        " the sum of the square of each digit.                                                               \n"
-                                        "Enter a number and click submit to see if it is a happy or a sad number.      ",
+                                        " the sum of the square of each digit.\n"
+                                        "Enter a number and click submit to see if it is a happy or a sad number.",
                                    bg='royalblue4', fg='snow1', font=('helvetica', 25))
-happy_numbers_instructions.grid(row=1, column=0, columnspan=6, pady=50)
+happy_numbers_instructions.grid(row=1, pady=50)
 
-happy_numbers_entry = Entry(happy_number_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4, bg='Dodger Blue',
-                            fg='snow2')
-happy_numbers_entry.grid(row=2, column=0, columnspan=6)
+# Entry Box
+happy_numbers_entry = Entry(happy_number_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2')
+happy_numbers_entry.grid(row=2)
 
-happy_numbers_button = Button(happy_number_frame, text='Submit', width=7, font=('helvetica', 20), relief=RAISED, bd=4,
-                              bg='Dodger Blue', fg='snow2', command=happy_number_submit)
-happy_numbers_button.grid(row=3, column=0, columnspan=6, pady=2)
+# Submit Button
+happy_numbers_button = Button(happy_number_frame, text='Submit', width=7, font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=happy_number_submit)
+happy_numbers_button.grid(row=3, pady=2)
 
-happy_numbers_results = Label(happy_number_frame, text="", bg='royalblue4', fg='snow1', font=('helvetica', 25))
-happy_numbers_results.grid(row=4, column=0, columnspan=6, pady=20)
+# Scrolled results box
+happy_numbers_results = scrolledtext.ScrolledText(happy_number_frame, bg='royalblue4', fg='snow1', font=('helvetica', 20), height=10, wrap=WORD)
+happy_numbers_results.grid(row=4, pady=2)
+### END OF HAPPY NUMBERS TKINTER CONFIG ###
 
-### NUMBER NAMES ###
+
+### NUMBER NAMES TKINTER CONFIG ###
+# Frame config
+number_name_frame.columnconfigure(0, weight=1)
+
+# Title Label
 number_name_title = Label(number_name_frame, text="Number names", bg='royalblue4', fg='snow1', font=('helvetica', 50))
-number_name_title.grid(row=0, column=0, sticky="nsew", padx=525, columnspan=6)
+number_name_title.grid(row=0)
 
-number_name_instructions = Label(number_name_frame,
-                                 text="Enter a positive number in digit form and the program will return the number in written english.",
-                                 bg='royalblue4', fg='snow1', font=('helvetica', 25))
-number_name_instructions.grid(row=1, column=0, columnspan=6, pady=50)
+# Instructions Label
+number_name_instructions = Label(number_name_frame, text="Enter a positive number in digit form and the program will return the number in written english.", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+number_name_instructions.grid(row=1, pady=50)
 
-number_name_entry = Entry(number_name_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4, bg='Dodger Blue',
-                          fg='snow2')
-number_name_entry.grid(row=2, column=0, columnspan=6)
+# Entry Box
+number_name_entry = Entry(number_name_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2')
+number_name_entry.grid(row=2)
 
-number_name_button = Button(number_name_frame, text='Submit', width=7, font=('helvetica', 20), relief=RAISED, bd=4,
-                            bg='Dodger Blue', fg='snow2', command=number_name_submit)
-number_name_button.grid(row=3, column=0, columnspan=5, pady=2)
+# Submit Button
+number_name_button = Button(number_name_frame, text='Submit', width=7, font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=number_name_submit)
+number_name_button.grid(row=3, pady=2)
 
-number_name_speech_button = Button(number_name_frame, text='Read', width=7, font=('helvetica', 20), relief=RAISED, bd=4,
-                                   bg='Dodger Blue', fg='snow2',
-                                   command=lambda: threading.Thread(target=text_to_speech, daemon=True).start())
-number_name_speech_button.grid(row=3, column=1, columnspan=6, pady=2)
+# Speech Button
+number_name_speech_button = Button(number_name_frame, text='Read', width=7, font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=lambda: threading.Thread(target=text_to_speech, daemon=True).start())
+number_name_speech_button.grid(row=4)
 
-number_name_results = Label(number_name_frame, text="", bg='royalblue4', fg='snow1', font=('helvetica', 25),
-                            wraplength=1500, justify=CENTER)
-number_name_results.grid(row=4, column=0, columnspan=6, pady=20)
+# Results Label
+number_name_results = Label(number_name_frame, text="", bg='royalblue4', fg='snow1', font=('helvetica', 25), wraplength=1500, justify=CENTER)
+number_name_results.grid(row=5, pady=20)
+### END OF NUMBER NAMES TKINTER CONFIG ###
 
-### COIN FLIP SIMULATION ###
-coin_flip_title = Label(coin_flip_frame, text="Coin Flip Simulator", bg='royalblue4', fg='snow1',
-                        font=('helvetica', 50))
+
+### COIN FLIP SIMULATION TKINTER CONFIG ###
+# Title Label
+coin_flip_title = Label(coin_flip_frame, text="Coin Flip Simulator", bg='royalblue4', fg='snow1', font=('helvetica', 50))
 coin_flip_title.grid(row=0, column=0, sticky="nsew", padx=500, columnspan=6)
 
-coin_flip_instructions = Label(coin_flip_frame,
-                               text="Enter a postive number from 1-1000 to represent the number of coin flips you would like to simulate",
-                               bg='royalblue4', fg='snow1', font=('helvetica', 25))
+# Instructions Label
+coin_flip_instructions = Label(coin_flip_frame, text="Enter a postive number from 1-1000 to represent the number of coin flips you would like to simulate", bg='royalblue4', fg='snow1', font=('helvetica', 25))
 coin_flip_instructions.grid(row=1, column=0, columnspan=6, pady=50)
 
-coin_flip_entry = Entry(coin_flip_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4, bg='Dodger Blue',
-                        fg='snow2')
+# Entry Box
+coin_flip_entry = Entry(coin_flip_frame, font=('helvetica', 25), width=25, relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2')
 coin_flip_entry.grid(row=2, column=0, columnspan=6)
 
-coin_flip_button = Button(coin_flip_frame, text='Submit', width=7, font=('helvetica', 20), relief=RAISED, bd=4,
-                          bg='Dodger Blue', fg='snow2', command=coin_flip_submit)
+# Submit Button
+coin_flip_button = Button(coin_flip_frame, text='Submit', width=7, font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=coin_flip_submit)
 coin_flip_button.grid(row=3, column=0, columnspan=6, pady=2)
 
-coin_flip_head_count = Label(coin_flip_frame, text="HEAD COUNT: 0", justify=LEFT, bg='royalblue4', fg='snow1',
-                             font=('helvetica', 25))
+# Number of Heads Label
+coin_flip_head_count = Label(coin_flip_frame, text="HEAD COUNT: 0", justify=LEFT, bg='royalblue4', fg='snow1', font=('helvetica', 25))
 coin_flip_head_count.grid(row=4, column=1, columnspan=6, pady=25, sticky='W')
 
-coin_flip_head_percent = Label(coin_flip_frame, text="HEAD PERCENT: 0%", justify=LEFT, bg='royalblue4', fg='snow1',
-                               font=('helvetica', 25))
+# Heads Percent Label
+coin_flip_head_percent = Label(coin_flip_frame, text="HEAD PERCENT: 0%", justify=LEFT, bg='royalblue4', fg='snow1', font=('helvetica', 25))
 coin_flip_head_percent.grid(row=5, column=1, columnspan=6, pady=25, sticky='W')
 
-coin_flip_tail_count = Label(coin_flip_frame, text="TAIL COUNT: 0", justify=LEFT, bg='royalblue4', fg='snow1',
-                             font=('helvetica', 25))
+# Number of Tails Label
+coin_flip_tail_count = Label(coin_flip_frame, text="TAIL COUNT: 0", justify=LEFT, bg='royalblue4', fg='snow1', font=('helvetica', 25))
 coin_flip_tail_count.grid(row=6, column=1, columnspan=6, pady=25, sticky='W')
 
-coin_flip_tail_percent = Label(coin_flip_frame, text="TAIL PERCENT: 0%", justify=LEFT, bg='royalblue4', fg='snow1',
-                               font=('helvetica', 25))
+# Tails Percent Label
+coin_flip_tail_percent = Label(coin_flip_frame, text="TAIL PERCENT: 0%", justify=LEFT, bg='royalblue4', fg='snow1', font=('helvetica', 25))
 coin_flip_tail_percent.grid(row=7, column=1, columnspan=6, pady=25, sticky='W')
 
-coin_flip_text_box = scrolledtext.ScrolledText(coin_flip_frame, bg='royalblue4', fg='snow1', font=('helvetica', 15),
-                                               height=15, wrap=WORD)
+# Scrolled Results Box
+coin_flip_text_box = scrolledtext.ScrolledText(coin_flip_frame, bg='royalblue4', fg='snow1', font=('helvetica', 15), height=15, wrap=WORD)
 coin_flip_text_box.grid(row=4, column=5, columnspan=1, rowspan=10, pady=25, sticky='W')
+### END OF COIN FLIP SIMULATION TKINTER CONFIG ###
 
-### Exponentiation ###
-exponentiation_title = Label(exponentiation_frame, text="Exponentiation", bg='royalblue4', fg='snow1',
-                             font=('helvetica', 50))
-exponentiation_title.grid(row=0, column=0, sticky="nsew", padx=500, columnspan=6)
 
-exponentiation_instructions = Label(exponentiation_frame,
-                                    text="Enter x to the power of y in the entry boxes and click submit to get the result.",
-                                    bg='royalblue4', fg='snow1', font=('helvetica', 25))
-exponentiation_instructions.grid(row=1, column=0, columnspan=6, pady=50)
+### EXPONENTIATION TKINTER CONFIG ###
+# Frame config
+exponentiation_frame.columnconfigure(0, weight=1)
 
-exponentiation_x_entry = Entry(exponentiation_frame, font=('helvetica', 25), width=15, relief=RIDGE, bd=4,
-                               bg='Dodger Blue', fg='snow2')
-exponentiation_x_entry.grid(row=2, column=1, columnspan=6, sticky='W')
+# Title Label
+exponentiation_title = Label(exponentiation_frame, text="Exponentiation", bg='royalblue4', fg='snow1', font=('helvetica', 50))
+exponentiation_title.grid(row=0)
 
-exponentiation_to_the_power_of_label = Label(exponentiation_frame, text="to the power of", bg='royalblue4',
-                                             fg='snow1', font=('helvetica', 25))
-exponentiation_to_the_power_of_label.grid(row=2, column=0, columnspan=6, pady=25)
+# Instructions Label
+exponentiation_instructions = Label(exponentiation_frame, text="Enter x to the power of y in the entry boxes and click submit to get the result.", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+exponentiation_instructions.grid(row=1)
 
-exponentiation_y_entry = Entry(exponentiation_frame, font=('helvetica', 25), width=15, relief=RIDGE, bd=4,
-                               bg='Dodger Blue', fg='snow2')
-exponentiation_y_entry.grid(row=2, column=4, columnspan=6, sticky='W')
+# Left Entry Box
+exponentiation_x_entry = Entry(exponentiation_frame, font=('helvetica', 25), width=15, relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2')
+exponentiation_x_entry.grid(row=2, sticky='W', padx=(300, 0))
 
+# To the power of Label
+exponentiation_to_the_power_of_label = Label(exponentiation_frame, text="to the power of", bg='royalblue4', fg='snow1', font=('helvetica', 25))
+exponentiation_to_the_power_of_label.grid(row=2, pady=25)
+
+# Right Entry Box
+exponentiation_y_entry = Entry(exponentiation_frame, font=('helvetica', 25), width=15, relief=RIDGE, bd=4, bg='Dodger Blue', fg='snow2')
+exponentiation_y_entry.grid(row=2, sticky='E', padx=(0, 300))
+
+# Submit Button
 exponentiation_button = Button(exponentiation_frame, text='Submit', width=7, font=('helvetica', 20), relief=RAISED, bd=4, bg='Dodger Blue', fg='snow2', command=exponentiation_submit)
-exponentiation_button.grid(row=3, column=0, columnspan=6, pady=2)
+exponentiation_button.grid(row=3, pady=2)
 
-exponentiation_results = Label(exponentiation_frame, text="", bg='royalblue4', fg='snow1', font=('helvetica', 25), wraplength=1000, justify="center")
-exponentiation_results.grid(row=4, column=0, columnspan=6, pady=50)
+# Scrolled results box
+exponentiation_results = scrolledtext.ScrolledText(exponentiation_frame, bg='royalblue4', fg='snow1', font=('helvetica', 20), height=10, wrap=WORD)
+exponentiation_results.grid(row=4, pady=2)
+### END OF EXPONENTIATION TKINTER CONFIG ###
 
+
+### MENU BAR CONFIG ###
 window.config(menu=menubar)
 
+
+### SHOW FRAME FUNCTION ###
 show_frame(welcome_screen_frame)
 
+
+### START CLOCK FUNCTION ###
 clock_time()
 
+
+### TKINTER MAINLOOP ###
 window.mainloop()
+
+
+### END OF PROGRAM ###

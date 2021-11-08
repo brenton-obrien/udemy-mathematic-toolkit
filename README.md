@@ -1,8 +1,8 @@
 # udemy-mathematic-toolkit
 
-This is GUI program that showcases almost all the math projects located in the Udemy course.
+This is a GUI program that showcases almost all the math projects located in the Udemy course.
 
-This projects purpose is mainly for my personal python coding experience, and also my first upload to github.
+The purpose of this project is mainly to enhance my personal python coding abilities, and also serve as my first upload to github.
 The individual tools in this toolkit are as follows:  
 
 Find Pi to the nth digit 
@@ -44,3 +44,6 @@ Number Names
 Coin Flip Simulation 
 
 Exponentiation
+
+Thanks for visiting my page :)
+I'm open to any and all constructive criticism or suggestions, cheers! 
